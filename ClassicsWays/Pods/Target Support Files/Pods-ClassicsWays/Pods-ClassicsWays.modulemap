@@ -1,0 +1,6 @@
+framework module Pods_ClassicsWays {
+  umbrella header "Pods-ClassicsWays-umbrella.h"
+
+  export *
+  module * { export * }
+}

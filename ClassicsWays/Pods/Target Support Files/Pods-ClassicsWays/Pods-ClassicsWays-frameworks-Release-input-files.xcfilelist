@@ -1,0 +1,20 @@
+${PODS_ROOT}/Target Support Files/Pods-ClassicsWays/Pods-ClassicsWays-frameworks.sh
+${BUILT_PRODUCTS_DIR}/AWSAutoScaling/AWSAutoScaling.framework
+${BUILT_PRODUCTS_DIR}/AWSCloudWatch/AWSCloudWatch.framework
+${BUILT_PRODUCTS_DIR}/AWSCognito/AWSCognito.framework
+${BUILT_PRODUCTS_DIR}/AWSCognitoIdentityProvider/AWSCognitoIdentityProvider.framework
+${BUILT_PRODUCTS_DIR}/AWSCognitoIdentityProviderASF/AWSCognitoIdentityProviderASF.framework
+${BUILT_PRODUCTS_DIR}/AWSCore/AWSCore.framework
+${BUILT_PRODUCTS_DIR}/AWSDynamoDB/AWSDynamoDB.framework
+${BUILT_PRODUCTS_DIR}/AWSEC2/AWSEC2.framework
+${BUILT_PRODUCTS_DIR}/AWSElasticLoadBalancing/AWSElasticLoadBalancing.framework
+${BUILT_PRODUCTS_DIR}/AWSIoT/AWSIoT.framework
+${BUILT_PRODUCTS_DIR}/AWSKinesis/AWSKinesis.framework
+${BUILT_PRODUCTS_DIR}/AWSLambda/AWSLambda.framework
+${BUILT_PRODUCTS_DIR}/AWSMachineLearning/AWSMachineLearning.framework
+${BUILT_PRODUCTS_DIR}/AWSMobileAnalytics/AWSMobileAnalytics.framework
+${BUILT_PRODUCTS_DIR}/AWSS3/AWSS3.framework
+${BUILT_PRODUCTS_DIR}/AWSSES/AWSSES.framework
+${BUILT_PRODUCTS_DIR}/AWSSNS/AWSSNS.framework
+${BUILT_PRODUCTS_DIR}/AWSSQS/AWSSQS.framework
+${BUILT_PRODUCTS_DIR}/AWSSimpleDB/AWSSimpleDB.framework
