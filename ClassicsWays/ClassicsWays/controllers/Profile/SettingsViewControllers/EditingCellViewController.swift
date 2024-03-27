@@ -34,6 +34,7 @@ class EditingCellViewController: UIViewController {
     private func configureText() {
         view.addSubview(text)
         
+        text.textColor = .black
         text.pinTop(to: ok.bottomAnchor, 10)
         text.pinHorizontal(to: view, 10)
     }

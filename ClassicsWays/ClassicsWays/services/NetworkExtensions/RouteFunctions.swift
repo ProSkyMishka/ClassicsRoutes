@@ -35,7 +35,7 @@ extension NetworkService {
                      pictures: [String],
                      raiting: [String],
                      locations: [String]) async throws -> Route {
-        let dto = RouteDTOAll(avatar: avatar, person: person, name: name, description: description, theme: theme, time: time, start: start, pictures: pictures, raiting: raiting, locations: locations/*, Username: Vars.user!.email, Password: Vars.password*/)
+        let dto = RouteDTOAll(avatar: avatar, person: person, name: name, description: description, theme: theme, time: time, start: start, pictures: pictures, raiting: raiting, locations: locations)
         let idUrl = "/\(id)"
         guard let url = URL(string: "\(localhost)\(APIMethod.getAllRoutes.rawValue)\(idUrl)")
         else {
@@ -85,6 +85,19 @@ extension NetworkService {
         let route = try decoder.decode(Route.self, from: routeData)
         return route
     }
+    
+    func deleteRoute(id: String) async throws {
+        let idUrl = "/\(id)"
+        guard let url = URL(string: "\(localhost)\(APIMethod.getAllRoutes.rawValue)\(idUrl)")
+        else {
+            throw NetworkError.badURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "DELETE"
+        let userResponce = try await URLSession.shared.data(for: request)
+    }
 }
 
 struct RouteDTOAll: Encodable {
@@ -98,6 +111,4 @@ struct RouteDTOAll: Encodable {
     let pictures: [String]
     let raiting: [String]
     let locations: [String]
-//    let Username: String
-//    let Password: String
 }

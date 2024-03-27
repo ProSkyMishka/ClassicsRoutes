@@ -1,5 +1,5 @@
 //
-//  SuggestController\.swift
+//  SuggestViewController.swift
 //  ClassicsWays
 //
 //  Created by Михаил Прозорский on 13.03.2024.
@@ -8,37 +8,45 @@
 import UIKit
 
 class SuggestViewController: UIViewController {
-    private var startButton = UIButton()
+    private var infoView = UIScrollView()
+    private lazy var contentView = UIView()
+    private var contentSize: CGSize?
+    private var coef = 0.0
+    private var rest: Int = 0
+    
+    private var makeButton = UIButton()
+    
+    private var raiting: [String] = []
+    private var id = ""
     private var name = UITextField()
     private var person = UITextField()
     private var desc = UITextField()
     private var time = UITextField()
     private var place = UITextField()
-    private var raiting = UITextField()
-    private var photo = UILabel()
-    private var locations: [String] = []
-    private var coordinatesCount = UILabel()
-    private var addButton = UIButton()
-    private var descView = UITextView()
-    private var infoView = UIScrollView()
-    private lazy var contentView = UIView()
     private var stackField = UIStackView()
+    
+    var locations: [String] = []
+    private var addButton = UIButton()
+    private var table = UITableView(frame: .zero)
+    
+    private let imagePicker = ImagePicker()
+    
+    private var photo = UILabel()
+    var pictures: [UIImageView] = []
+    private var picturesPath: [String] = []
+    private var picturesResource: [String] = []
+    private let selectPhotoButton = UIButton()
     private var picturesCollection = UICollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
     )
-    private var table = UITableView(frame: .zero)
-    private var avatar = UIImageView()
-    private var contentSize: CGSize?
-    private var coef = 0.0
-    private var pictures: [String] = []
-    private var rest: Int = 0
-    private let imagePicker = ImagePicker()
-    private let selectButton = UIButton()
+    
     private let avatarLabel = UILabel()
-    private let picturesPathes: [String] = []
+    private var avatar = UIImageView()
     private var avatarPath: String = ""
     private var avatarResource: String = ""
+    private let selectButton = UIButton()
+    
     private var themeView = UIView()
     private var themeLabel = UILabel()
     private var theme = -1
@@ -46,6 +54,9 @@ class SuggestViewController: UIViewController {
     private var themeTwo = UIButton()
     private var themeThree = UIButton()
     private var themeStack = UIStackView()
+    
+    private lazy var error = UILabel()
+    private lazy var errorView = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +71,34 @@ class SuggestViewController: UIViewController {
         configureBackButton()
         configureInfoView()
         hideKeyboardOnTapAround()
+    }
+    
+    func configure(id: String, name : String, person : String, desc : String, time : String, place : String, locations: [String], avatar: String, pictures: [String], theme: Int, raiting: [String]) {
+        self.name.text = name
+        self.name.isEnabled = false
+        self.person.text = person
+        self.desc.text = desc
+        self.time.text = time
+        self.place.text = place
+        self.locations = locations
+        self.raiting = raiting
+        returnImage(imageView: self.avatar, key: avatar)
+        let avatarCopy = "/" + String(avatar.split(separator: "\(name)/")[0])
+        self.avatarPath = avatarCopy
+        self.avatarResource = avatarCopy
+        for image in pictures {
+            let newPicture = UIImageView()
+            returnImage(imageView: newPicture, key: image)
+            self.pictures.append(newPicture)
+            let imageCopy = "/" + String(image.split(separator: "\(name)/")[0])
+            self.picturesPath.append(imageCopy)
+            self.picturesResource.append(imageCopy)
+            i += 1
+        }
+        self.theme = theme
+        self.id = id
+        configureUI()
+        configurePicturesCollection()
     }
     
     private func configureInfoView() {
@@ -80,7 +119,7 @@ class SuggestViewController: UIViewController {
         infoView.translatesAutoresizingMaskIntoConstraints = false
         infoView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
         infoView.pinWidth(to: view, 0.95)
-        infoView.pinBottom(to: startButton.topAnchor, view.bounds.height * 0.01)
+        infoView.pinBottom(to: makeButton.topAnchor, view.bounds.height * 0.01)
         infoView.pinCenterX(to: view)
         
         configureContentView()
@@ -95,8 +134,8 @@ class SuggestViewController: UIViewController {
         configureStackField()
         configureThemeView()
         configureAddButton()
-        configurePicturesCollection()
         configureTableLocations()
+        configurePhoto()
     }
     
     private func configureAvatarLabel() {
@@ -109,25 +148,24 @@ class SuggestViewController: UIViewController {
         avatarLabel.pinCenterX(to: contentView)
         avatarLabel.pinTop(to: contentView, 10)
         
-        configureSelectButton()
+        configureSelectButton(button: selectButton, text: "выбрать", topView: avatarLabel)
+        selectButton.addTarget(self, action: #selector(selectButtonWasPressed), for: .touchUpInside)
         configureAvatar()
     }
     
-    private func configureSelectButton() {
-        contentView.addSubview(selectButton)
+    private func configureSelectButton(button: UIButton, text: String, topView: UIView) {
+        contentView.addSubview(button)
         
-        selectButton.setTitle("выбрать", for: .normal)
-        selectButton.setTitleColor(Constants.color, for: .normal)
-        selectButton.backgroundColor = .lightGray
-        selectButton.layer.cornerRadius = Constants.radius
+        button.setTitle(text, for: .normal)
+        button.setTitleColor(Constants.color, for: .normal)
+        button.backgroundColor = .lightGray
+        button.layer.cornerRadius = Constants.radius
         
-        selectButton.translatesAutoresizingMaskIntoConstraints = false
-        selectButton.setHeight(50)
-        selectButton.setWidth(view.bounds.width * 0.7)
-        selectButton.pinCenterX(to: contentView)
-        selectButton.pinTop(to: avatarLabel.bottomAnchor, 20)
-        
-        selectButton.addTarget(self, action: #selector(selectButtonWasPressed), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setHeight(50)
+        button.setWidth(view.bounds.width * 0.7)
+        button.pinCenterX(to: contentView)
+        button.pinTop(to: topView.bottomAnchor, 20)
     }
     
     @objc
@@ -143,7 +181,6 @@ class SuggestViewController: UIViewController {
             let type: String = String(urlArray[1])
             self.avatarResource = "/\(body).\(type)"
             self.avatarPath = String(copy)
-            //            self.uploadFile(with: resource, path: String(copy))
         }
     }
     
@@ -157,7 +194,7 @@ class SuggestViewController: UIViewController {
     }
     
     private func configurePerson() {
-        person.attributedPlaceholder = NSAttributedString(string: "человек, к которому относится", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+        person.attributedPlaceholder = NSAttributedString(string: "деятель", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     }
     
     private func configureName() {
@@ -175,19 +212,6 @@ class SuggestViewController: UIViewController {
     private func configurePlace() {
         place.attributedPlaceholder = NSAttributedString(string: "введите точку старта", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     }
-    
-//    private func configurePhoto() {
-//        photo.text = "Добавьте места из маршрута"
-//        
-//        view.addSubview(coordLabel)
-//        
-//        coordLabel.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.03)
-//        coordLabel.text = "Введите координаты"
-//        coordLabel.textColor = Constants.color
-//        
-//        coordLabel.pinCenterX(to: view)
-//        coordLabel.pinTop(to: view, view.bounds.height * 0.03)
-//    }
     
     private func configureStackField() {
         contentView.addSubview(stackField)
@@ -229,52 +253,6 @@ class SuggestViewController: UIViewController {
         stackField.pinCenterX(to: contentView)
     }
     
-    private func configurePicturesCollection() {
-        contentView.addSubview(picturesCollection)
-        
-        picturesCollection.register(PictureCell.self, forCellWithReuseIdentifier: PictureCell.reuseIdentifier)
-        
-        picturesCollection.dataSource = self
-        picturesCollection.delegate = self
-        picturesCollection.alwaysBounceVertical = true
-        picturesCollection.isScrollEnabled = false
-        picturesCollection.backgroundColor = Constants.color
-        picturesCollection.layer.cornerRadius = Constants.radius
-        
-        if let layout = picturesCollection.collectionViewLayout as?
-            UICollectionViewFlowLayout {
-            layout.minimumInteritemSpacing = .zero
-            layout.minimumLineSpacing = .zero
-            layout.invalidateLayout()
-        }
-        
-        picturesCollection.translatesAutoresizingMaskIntoConstraints = false
-        let heightRest = pictures.count / 2 + pictures.count % 2
-        let heightCoef = Double(heightRest) * 0.25
-        picturesCollection.pinHeight(to: view, 0.85 * heightCoef)
-        picturesCollection.pinHorizontal(to: contentView, view.bounds.width * 0.05)
-        picturesCollection.pinTop(to: stackField.bottomAnchor, view.bounds.height * 0.02)
-    }
-    
-    private func configureStartButton() {
-        view.addSubview(startButton)
-        
-        startButton.setTitle("CОЗДАТЬ", for: .normal)
-        startButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.05)
-        startButton.setTitleColor(.black, for: .normal)
-        startButton.setTitleColor(.lightGray, for: .disabled)
-        startButton.layer.borderColor = UIColor.black.cgColor
-        startButton.layer.borderWidth = 2
-        startButton.backgroundColor = Constants.color
-        
-        startButton.translatesAutoresizingMaskIntoConstraints = false
-        startButton.pinWidth(to: view)
-        startButton.pinHeight(to: view, 0.07)
-        startButton.pinBottom(to: view)
-        
-        startButton.addTarget(self, action: #selector(startButtonWasPressed), for: .touchUpInside)
-    }
-    
     private func configureThemeView() {
         contentView.addSubview(themeView)
         
@@ -305,14 +283,23 @@ class SuggestViewController: UIViewController {
     
     private func configureThemeOne() {
         themeOne.setTitle("Писатели", for: .normal)
+        if theme == 1 {
+            themeOne.layer.borderColor = UIColor.green.cgColor
+        }
     }
     
     private func configureThemeTwo() {
         themeTwo.setTitle("Художники", for: .normal)
+        if theme == 2 {
+            themeTwo.layer.borderColor = UIColor.green.cgColor
+        }
     }
     
     private func configureThemeThree() {
         themeThree.setTitle("Исторические лица", for: .normal)
+        if theme == 3 {
+            themeThree.layer.borderColor = UIColor.green.cgColor
+        }
     }
     
     private func configureThemeStack() {
@@ -360,14 +347,14 @@ class SuggestViewController: UIViewController {
         if self.theme == theme {
             sender.layer.borderColor = UIColor.black.cgColor
             self.theme = -1
-            startButton.isEnabled = false
+            makeButton.isEnabled = false
         } else {
             for button in [themeOne, themeTwo, themeThree] {
                 button.layer.borderColor = UIColor.black.cgColor
             }
             sender.layer.borderColor = UIColor.green.cgColor
             self.theme = theme
-            startButton.isEnabled = true
+            makeButton.isEnabled = true
         }
     }
     
@@ -411,14 +398,13 @@ class SuggestViewController: UIViewController {
         table.dataSource = self
         table.delegate = self
         table.separatorStyle = .singleLine
-        table.headerView(forSection: 0)?.tintColor = .gray
         
         table.pinTop(to: addButton.bottomAnchor, 20)
         table.pinHorizontal(to: contentView, 10)
         table.setHeight(view.bounds.height * 0.3)
     }
     
-    private func handleDelete(indexPath: IndexPath) {
+    func handleDelete(indexPath: IndexPath) {
         if !locations.isEmpty {
             if indexPath.row % 2 == 0 {
                 locations.remove(at: indexPath.row)
@@ -431,10 +417,10 @@ class SuggestViewController: UIViewController {
         }
     }
     
-    var variant: IndexPath = []
-    let popUp = UIView()
-    let text = UITextField()
-    private func handleEdit(indexPath: IndexPath) {
+    private var variant: IndexPath = []
+    private let popUp = UIView()
+    private let text = UITextField()
+    func handleEdit(indexPath: IndexPath) {
         if !locations.isEmpty {
             let vc = EditingCellViewController()
             vc.configure(with: locations[indexPath.row], with: indexPath.row % 2)
@@ -446,118 +432,163 @@ class SuggestViewController: UIViewController {
         }
     }
     
+    
+    private func configurePhoto() {
+        contentView.addSubview(photo)
+        
+        photo.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.03)
+        photo.text = "Места из маршрута"
+        photo.textColor = .black
+        
+        photo.pinCenterX(to: contentView)
+        photo.pinTop(to: table.bottomAnchor, 10)
+        
+        configureSelectButton(button: selectPhotoButton, text: "добавить фото", topView: photo)
+        selectPhotoButton.addTarget(self, action: #selector(selectPhotoButtonWasPressed), for: .touchUpInside)
+    }
+    
+    private var i = 0
+    @objc
+    private func selectPhotoButtonWasPressed() {
+        var imageUrl: Any?
+        imagePicker.showImagePicker(in: self) { image, url in
+            self.pictures.append(UIImageView(image: image))
+            imageUrl = url
+            var copy = imageUrl.debugDescription.split(separator: "(file:")[1]
+            copy.removeLast()
+            let urlArray = copy.split(separator: ".")
+            let body: String = String(urlArray[0].split(separator: "/").last!)
+            let type: String = String(urlArray[1])
+            self.picturesResource.append("/\(body).\(type)")
+            self.picturesPath.append(String(copy))
+            if (self.i == 0) {
+                self.i += 1
+                self.configurePicturesCollection()
+            } else {
+                self.picturesCollection.reloadData()
+            }
+        }
+    }
+    
+    private func configurePicturesCollection() {
+        contentView.addSubview(picturesCollection)
+        
+        picturesCollection.register(MakePictureCell.self, forCellWithReuseIdentifier: MakePictureCell.reuseIdentifier)
+        
+        picturesCollection.dataSource = self
+        picturesCollection.delegate = self
+        picturesCollection.alwaysBounceVertical = true
+        picturesCollection.backgroundColor = Constants.color
+        picturesCollection.layer.cornerRadius = Constants.radius
+        
+        if let layout = picturesCollection.collectionViewLayout as?
+            UICollectionViewFlowLayout {
+            layout.minimumInteritemSpacing = .zero
+            layout.minimumLineSpacing = .zero
+            layout.invalidateLayout()
+        }
+        
+        picturesCollection.translatesAutoresizingMaskIntoConstraints = false
+        picturesCollection.pinHeight(to: view, 0.5)
+        picturesCollection.pinHorizontal(to: contentView, view.bounds.width * 0.05)
+        picturesCollection.pinTop(to: selectPhotoButton.bottomAnchor, 10)
+    }
+    
+    @objc
+    func trashPressed(_ sender: UIButton) {
+        pictures.remove(at: sender.tag)
+        picturesResource.remove(at: sender.tag)
+        picturesPath.remove(at: sender.tag)
+        picturesCollection.reloadData()
+    }
+    
+    private func configureStartButton() {
+        view.addSubview(makeButton)
+        
+        if (id.isEmpty) {
+            makeButton.setTitle("CОЗДАТЬ", for: .normal)
+        } else {
+            makeButton.setTitle("ИЗМЕНИТЬ", for: .normal)
+        }
+        makeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.05)
+        makeButton.setTitleColor(.black, for: .normal)
+        makeButton.setTitleColor(.lightGray, for: .disabled)
+        makeButton.layer.borderColor = UIColor.black.cgColor
+        makeButton.layer.borderWidth = 2
+        makeButton.backgroundColor = Constants.color
+        
+        makeButton.translatesAutoresizingMaskIntoConstraints = false
+        makeButton.pinWidth(to: view)
+        makeButton.pinHeight(to: view, 0.07)
+        makeButton.pinBottom(to: view)
+        
+        makeButton.addTarget(self, action: #selector(startButtonWasPressed), for: .touchUpInside)
+    }
+    
     @objc
     private func startButtonWasPressed() {
-        if (name.text != "" && desc.text != "" && time.text != "" && place.text != "" && avatarPath != "" && theme != -1) {
+        if (person.text != "" && name.text != "" && desc.text != "" && time.text != "" && place.text != "" && avatarPath != "" && theme != -1 && locations.count != 0) {
             guard let timeInt = Int(self.time.text!) else {
+                time.backgroundColor = Constants.red
                 return
             }
-            print("yes")
+            makeButton.isEnabled = false
+            var routes: [Route] = []
+            Task {
+                do {
+                    if (id.isEmpty) {
+                        routes = try await NetworkService.shared.getAllRoutes()
+                        DispatchQueue.main.async {
+                            for route in routes {
+                                if self.name.text == route.name {
+                                    self.error.text = "error - Пользователь с таким именем уже существует"
+                                    self.configureErrorView(errorView: self.errorView, error: self.error)
+                                    self.errorView.isHidden = false
+                                    self.name.attributedPlaceholder = NSAttributedString(string: "название занято", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+                                    self.name.backgroundColor = .red
+                                    self.makeButton.isEnabled = true
+                                    return
+                                }
+                            }
+                            self.avatarResource = "\(self.name.text!)\(self.avatarResource)"
+                            for index in 0...self.picturesResource.count - 1 {
+                                self.picturesResource[index] = "\(self.name.text!)\(self.picturesResource[index])"
+                            }
+                            Task {
+                                do {
+                                    _ = try await NetworkService.shared.createRoute(avatar: self.avatarResource, person: self.person.text!, name: self.name.text!, description: self.desc.text!, theme: self.theme, time: timeInt, start: self.place.text!, pictures: self.picturesResource, raiting: self.raiting, locations: self.locations)
+                                    DispatchQueue.main.async {
+                                        self.uploadFile(with: self.avatarResource, path: self.avatarPath)
+                                        for index in 0...self.picturesPath.count - 1 {
+                                            self.uploadFile(with: self.picturesResource[index], path: self.picturesPath[index])
+                                        }
+                                        self.navigationController?.pushViewController(RoutesViewController(), animated: true)
+                                    }
+                                } catch {
+                                    print("Произошла ошибка: \(error)")
+                                    self.navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                                }
+                            }
+                        }
+                    } else {
+                        self.avatarResource = "\(self.name.text!)\(self.avatarResource)"
+                        for index in 0...self.picturesResource.count - 1 {
+                            self.picturesResource[index] = "\(self.name.text!)\(self.picturesResource[index])"
+                        }
+                        _ = try await NetworkService.shared.updateRoute(id: id, avatar: self.avatarResource, person: self.person.text!, name: self.name.text!, description: self.desc.text!, theme: self.theme, time: timeInt, start: self.place.text!, pictures: self.picturesResource, raiting: self.raiting, locations: self.locations)
+                        DispatchQueue.main.async {
+                            self.uploadFile(with: self.avatarResource, path: self.avatarPath)
+                            for index in 0...self.picturesPath.count - 1 {
+                                self.uploadFile(with: self.picturesResource[index], path: self.picturesPath[index])
+                            }
+                            self.navigationController?.pushViewController(RoutesViewController(), animated: true)
+                        }
+                    }
+                } catch {
+                    navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                    print("Произошла ошибка: \(error)")
+                }
+            }
         }
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-extension SuggestViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return pictures.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PictureCell.reuseIdentifier, for: indexPath)
-        guard let pictureCell = cell as? PictureCell else {
-            return cell
-        }
-        pictureCell.configure(with: pictures[indexPath.row])
-        return cell
-    }
-}
-
-// MARK: - UICollectionViewDelegateFlowLayout
-extension SuggestViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = view.bounds.width * 0.35
-        return CGSize(width: width, height: width * 0.89)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return view.bounds.width * 0.1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return view.bounds.width * 0.1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: view.bounds.height * 0.02, left: 0, bottom: view.bounds.height * 0.02, right: 0)
-    }
-}
-
-extension SuggestViewController: UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt
-                   indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
-        let deleteAction = UIContextualAction(
-            style: .destructive,
-            title: .none
-        ) { [weak self] (action, view, completion) in
-            self?.handleDelete(indexPath: indexPath)
-            completion(true)
-        }
-        
-        deleteAction.image = UIImage(
-            systemName: "trash.fill",
-            withConfiguration: UIImage.SymbolConfiguration(weight: .bold)
-        )?.withTintColor(.white)
-        deleteAction.backgroundColor = .red
-        return UISwipeActionsConfiguration(actions: [deleteAction])
-    }
-    
-    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt
-                   indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
-        let editAction = UIContextualAction(
-            style: .destructive,
-            title: .none
-        ) { [weak self] (action, view, completion) in
-            self?.handleEdit(indexPath: indexPath)
-            completion(true)
-        }
-        editAction.image = UIImage(
-            systemName: "square.and.pencil",
-            withConfiguration: UIImage.SymbolConfiguration(weight: .bold)
-        )?.withTintColor(.white)
-        editAction.backgroundColor = UIColor(red: 0.6, green: 1, blue: 0.6, alpha: 1)
-        return UISwipeActionsConfiguration(actions: [editAction])
-    }
-}
-
-extension SuggestViewController: UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection
-                   section: Int) -> String? {
-        return "Here is a list of the locations"
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return Int(Constants.one)
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return locations.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let note = locations[indexPath.row]
-        if let noteCell = tableView.dequeueReusableCell(withIdentifier: LocationCell.reuseId, for: indexPath) as? LocationCell {
-            noteCell.configure(with: note)
-            return noteCell
-        }
-        return UITableViewCell()
     }
 }

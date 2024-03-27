@@ -453,7 +453,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
                 }
             } catch {
                 print("Произошла ошибка: \(error)")
-                navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                navigationController?.pushViewController(RoutesViewController(), animated: true)
             }
         }
     }

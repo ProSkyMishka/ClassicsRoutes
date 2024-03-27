@@ -1,5 +1,5 @@
 //
-//  Extentions.swift
+//  UIViewControllerExtention.swift
 //  Class'Ways
 //
 //  Created by Михаил Прозорский on 14.02.2024.

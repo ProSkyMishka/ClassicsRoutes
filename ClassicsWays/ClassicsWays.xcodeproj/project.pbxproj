@@ -20,7 +20,7 @@
 		2E50DA852B8AB35D000DB071 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA842B8AB35D000DB071 /* User.swift */; };
 		2E50DA872B8AB36C000DB071 /* Vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA862B8AB36C000DB071 /* Vars.swift */; };
 		2E50DA8A2B8AB3EA000DB071 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA892B8AB3EA000DB071 /* NetworkService.swift */; };
-		2E50DA8C2B8AB431000DB071 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA8B2B8AB431000DB071 /* Extensions.swift */; };
+		2E50DA8C2B8AB431000DB071 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA8B2B8AB431000DB071 /* UIViewControllerExtension.swift */; };
 		2E50DA8E2B8AB45A000DB071 /* UIView+Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA8D2B8AB45A000DB071 /* UIView+Pin.swift */; };
 		2E50DA922B8AC55E000DB071 /* TemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA912B8AC55E000DB071 /* TemplateViewController.swift */; };
 		2E50DA942B8B98E2000DB071 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA932B8B98E2000DB071 /* ChatsViewController.swift */; };
@@ -51,6 +51,8 @@
 		2E722D6E2BA48AC80032561A /* AddingPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E722D6D2BA48AC80032561A /* AddingPlaceViewController.swift */; };
 		2EA940FE2BAD8421004E103F /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA940FD2BAD8421004E103F /* LocationCell.swift */; };
 		2EA941002BAD9C44004E103F /* EditingCellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA940FF2BAD9C44004E103F /* EditingCellViewController.swift */; };
+		2EA941282BB3279D004E103F /* MakePictureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA941272BB3279D004E103F /* MakePictureCell.swift */; };
+		2EA9412B2BB332ED004E103F /* SuggestViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA9412A2BB332EC004E103F /* SuggestViewControllerExtension.swift */; };
 		2EEFB0F82BA1B76C00D370BA /* SuggestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEFB0F72BA1B76C00D370BA /* SuggestViewController.swift */; };
 		2EEFB0FA2BA1CA7400D370BA /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEFB0F92BA1CA7400D370BA /* ImagePicker.swift */; };
 		760AAC6228AFC992D5028927 /* Pods_ClassicsWays.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAF1A4D267529043336C5CAE /* Pods_ClassicsWays.framework */; };
@@ -91,7 +93,7 @@
 		2E50DA842B8AB35D000DB071 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		2E50DA862B8AB36C000DB071 /* Vars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vars.swift; sourceTree = "<group>"; };
 		2E50DA892B8AB3EA000DB071 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
-		2E50DA8B2B8AB431000DB071 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		2E50DA8B2B8AB431000DB071 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		2E50DA8D2B8AB45A000DB071 /* UIView+Pin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Pin.swift"; sourceTree = "<group>"; };
 		2E50DA912B8AC55E000DB071 /* TemplateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateViewController.swift; sourceTree = "<group>"; };
 		2E50DA932B8B98E2000DB071 /* ChatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsViewController.swift; sourceTree = "<group>"; };
@@ -122,6 +124,8 @@
 		2E722D6D2BA48AC80032561A /* AddingPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddingPlaceViewController.swift; sourceTree = "<group>"; };
 		2EA940FD2BAD8421004E103F /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
 		2EA940FF2BAD9C44004E103F /* EditingCellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingCellViewController.swift; sourceTree = "<group>"; };
+		2EA941272BB3279D004E103F /* MakePictureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakePictureCell.swift; sourceTree = "<group>"; };
+		2EA9412A2BB332EC004E103F /* SuggestViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestViewControllerExtension.swift; sourceTree = "<group>"; };
 		2EEFB0F72BA1B76C00D370BA /* SuggestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestViewController.swift; sourceTree = "<group>"; };
 		2EEFB0F92BA1CA7400D370BA /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		8B3F084EA94B7E5EA9E2E87E /* Pods-ClassicsWays.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClassicsWays.release.xcconfig"; path = "Target Support Files/Pods-ClassicsWays/Pods-ClassicsWays.release.xcconfig"; sourceTree = "<group>"; };
@@ -317,6 +321,7 @@
 				2E50DB3C2B90141A000DB071 /* PictureCell.swift */,
 				2E50DB612B971BCA000DB071 /* MessageCell.swift */,
 				2EA940FD2BAD8421004E103F /* LocationCell.swift */,
+				2EA941272BB3279D004E103F /* MakePictureCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -362,10 +367,19 @@
 			path = NetworkExtensions;
 			sourceTree = "<group>";
 		};
+		2EA941292BB332B2004E103F /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				2E50DA8B2B8AB431000DB071 /* UIViewControllerExtension.swift */,
+				2EA9412A2BB332EC004E103F /* SuggestViewControllerExtension.swift */,
+			);
+			path = extensions;
+			sourceTree = "<group>";
+		};
 		2EEFB0F52B97BCA000D370BA /* helper */ = {
 			isa = PBXGroup;
 			children = (
-				2E50DA8B2B8AB431000DB071 /* Extensions.swift */,
+				2EA941292BB332B2004E103F /* extensions */,
 				2EEFB0F92BA1CA7400D370BA /* ImagePicker.swift */,
 				2E50DA8D2B8AB45A000DB071 /* UIView+Pin.swift */,
 			);
@@ -600,13 +614,15 @@
 				2EEFB0F82BA1B76C00D370BA /* SuggestViewController.swift in Sources */,
 				2E50DA832B8AB327000DB071 /* Constants.swift in Sources */,
 				2E50DA872B8AB36C000DB071 /* Vars.swift in Sources */,
+				2EA941282BB3279D004E103F /* MakePictureCell.swift in Sources */,
 				2E50DB322B8F5A60000DB071 /* RouteCell.swift in Sources */,
 				2E722D6E2BA48AC80032561A /* AddingPlaceViewController.swift in Sources */,
 				2E50DB3B2B900EB2000DB071 /* RouteWithGrade.swift in Sources */,
 				2E50DB452B91FE40000DB071 /* MapViewController.swift in Sources */,
 				2E50DA7C2B8AB275000DB071 /* MainRegistrationViewController.swift in Sources */,
-				2E50DA8C2B8AB431000DB071 /* Extensions.swift in Sources */,
+				2E50DA8C2B8AB431000DB071 /* UIViewControllerExtension.swift in Sources */,
 				2E50DB4D2B933E8D000DB071 /* Chat.swift in Sources */,
+				2EA9412B2BB332ED004E103F /* SuggestViewControllerExtension.swift in Sources */,
 				2E50DB1F2B8CB21B000DB071 /* ChangeAvatarViewController.swift in Sources */,
 				2E50DB222B8E62BF000DB071 /* ChangeNameViewController.swift in Sources */,
 				2E50DB512B933EB8000DB071 /* UserFunctions.swift in Sources */,

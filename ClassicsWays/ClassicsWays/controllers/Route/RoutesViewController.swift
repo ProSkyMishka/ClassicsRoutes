@@ -124,6 +124,50 @@ class RoutesViewController: TemplateViewController {
         table.pinWidth(to: view)
         table.pinBottom(to: bar.topAnchor)
     }
+    
+    func handleDelete(indexPath: IndexPath) {
+        if !routes.isEmpty {
+            var array: [RouteWithGrade] = []
+            switch indexPath[0] {
+            case 0:
+                array = first
+            case 1:
+                array = second
+            default:
+                array = third
+            }
+            var route = array[indexPath[1]]
+            let id = route.route?.id
+            Task {
+                do {
+                    try await NetworkService.shared.deleteRoute(id: id!)
+                    DispatchQueue.main.async {
+                        self.navigationController?.pushViewController(RoutesViewController(), animated: false)
+                    }
+                } catch {
+                    print("Произошла ошибка: \(error)")
+                }
+            }
+        }
+    }
+    
+    func handleEdit(indexPath: IndexPath) {
+        if !routes.isEmpty {
+            var array: [RouteWithGrade] = []
+            switch indexPath[0] {
+            case 0:
+                array = first
+            case 1:
+                array = second
+            default:
+                array = third
+            }
+            var route = array[indexPath[1]].route
+            let vc = SuggestViewController()
+            vc.configure(id: route!.id, name: route!.name, person: route!.person, desc: route!.description, time: String(route!.time), place: route!.start, locations: route!.locations, avatar: route!.avatar, pictures: route!.pictures, theme: route!.theme, raiting: route!.raiting)
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -132,22 +176,18 @@ extension RoutesViewController: UITableViewDataSource {
                    section: Int) -> String? {
         if (section == 0) {
             return firstHeader
-        }
-        else if (section == 1) {
+        } else if (section == 1) {
             return secondHeader
         }
-        
         return thirdHeader
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return first.count
-        }
-        else if section == 1 {
+        } else if section == 1 {
             return second.count
         }
-        
         return third.count
     }
     
@@ -198,5 +238,46 @@ extension RoutesViewController: UITableViewDelegate {
         Vars.route = array[indexPath[1]]
         let vc = RouteViewController()
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt
+                   indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if (Vars.user?.role == "admin") {
+            let deleteAction = UIContextualAction(
+                style: .destructive,
+                title: .none
+            ) { [weak self] (action, view, completion) in
+                self?.handleDelete(indexPath: indexPath)
+                completion(true)
+            }
+            
+            deleteAction.image = UIImage(
+                systemName: "trash.fill",
+                withConfiguration: UIImage.SymbolConfiguration(weight: .bold)
+            )?.withTintColor(.white)
+            deleteAction.backgroundColor = Constants.red
+            return UISwipeActionsConfiguration(actions: [deleteAction])
+        }
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt
+                   indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if (Vars.user?.role == "admin") {
+            let editAction = UIContextualAction(
+                style: .destructive,
+                title: .none
+            ) { [weak self] (action, view, completion) in
+                self?.handleEdit(indexPath: indexPath)
+                completion(true)
+            }
+            editAction.image = UIImage(
+                systemName: "square.and.pencil",
+                withConfiguration: UIImage.SymbolConfiguration(weight: .bold)
+            )?.withTintColor(.white)
+            editAction.backgroundColor = Constants.green
+            return UISwipeActionsConfiguration(actions: [editAction])
+        }
+        return nil
     }
 }
