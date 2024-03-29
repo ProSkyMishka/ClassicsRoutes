@@ -72,12 +72,14 @@ final class RatingCell: UITableViewCell {
         name.translatesAutoresizingMaskIntoConstraints = false
         name.pinLeft(to: circle.trailingAnchor, 25)
         name.pinTop(to: self, 10)
+        name.setWidth(self.bounds.width * 0.8)
         
         wrap.addSubview(count)
         count.textColor = .black
-        count.font = UIFont.boldSystemFont(ofSize: 20)
+        count.font = UIFont.boldSystemFont(ofSize: 15)
         count.translatesAutoresizingMaskIntoConstraints = false
         count.pinLeft(to: name)
+        count.setWidth(self.bounds.width * 0.8)
         count.pinBottom(to: self, 10)
     }
 }

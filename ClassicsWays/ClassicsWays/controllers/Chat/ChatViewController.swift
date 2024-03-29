@@ -42,7 +42,7 @@ class ChatViewController: UIViewController {
                     configureGrayView()
                 }
             } catch {
-                navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                 print("Произошла ошибка: \(error)")
             }
         }
@@ -53,7 +53,16 @@ class ChatViewController: UIViewController {
     
     @objc
     override func backButtonTapped() {
-        navigationController?.pushViewController(ChatsViewController(), animated: false)
+        if messages.isEmpty {
+            Task {
+                try await NetworkService.shared.deleteChat(id: Vars.chat!.id)
+                DispatchQueue.main.async {
+                    self.navigationController?.pushViewController(ChatsViewController(), animated: false)
+                }
+            }
+        } else {
+            navigationController?.pushViewController(ChatsViewController(), animated: false)
+        }
     }
     
     private func configureUserView() {
@@ -215,19 +224,20 @@ class ChatViewController: UIViewController {
                     DispatchQueue.main.async { [self] in
                         messages.append(newMessageDB!)
                         messagesCollection.reloadData()
+                        messagesCollection.scrollToItem(at: IndexPath(row: messages.count - 1, section: 0), at: .top, animated: true)
                         Vars.chat?.messages.append(newMessageDB!.id)
                         Task {
                             do {
                                 try await NetworkService.shared.sendMessages(webSocketTask: webSocketTask!, message: message)
                                 Vars.chat = try await NetworkService.shared.updateChat(id: Vars.chat!.id, users: Vars.chat!.users, messages: Vars.chat!.messages, last: Constants.format.string(from: newMessageDB!.time))
                             } catch {
-                                navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                                navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                                 print("Произошла ошибка: \(error)")
                             }
                         }
                     }
                 } catch {
-                    self.navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                    self.navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                     print("Произошла ошибка: \(error)")
                 }
             }
@@ -252,6 +262,7 @@ class ChatViewController: UIViewController {
                         self.messages.append(newMessageDB)
                         DispatchQueue.main.async {
                             self.messagesCollection.reloadData()
+                            self.messagesCollection.scrollToItem(at: IndexPath(row: self.messages.count - 1, section: 0), at: .bottom, animated: true)
                         }
                     }
                 case .string(let message):

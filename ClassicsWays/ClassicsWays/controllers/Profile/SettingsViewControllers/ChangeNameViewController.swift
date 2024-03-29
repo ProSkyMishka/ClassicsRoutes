@@ -134,17 +134,16 @@ final class ChangeNameViewController: UIViewController {
                             do {
                                 Vars.user = try await NetworkService.shared.updateUser(id: Vars.user!.id, name: self.nameField.text!, email: Vars.user!.email, date: Vars.user!.date, avatar: Vars.user!.avatar, routes: Vars.user!.routes, role: Vars.user!.role, likes: Vars.user!.likes, themes: Vars.user!.themes, chats: Vars.user!.chats, password: Vars.password)
                                 DispatchQueue.main.async {
-                                    
                                     self.navigationController?.pushViewController(ProfileViewController(), animated: true)
                                 }
                             } catch {
                                 print("Произошла ошибка: \(error)")
-                                self.navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                                self.navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                             }
                         }
                     }
                 } catch {
-                    navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                    navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                     print("Произошла ошибка: \(error)")
                 }
             }

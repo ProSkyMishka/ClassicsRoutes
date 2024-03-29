@@ -196,7 +196,7 @@ final class ChangePasswordViewController: UIViewController {
                             }
                         } catch {
                             print("Произошла ошибка: \(error)")
-                            self.navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                            self.navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                         }
                     }
                 } else {

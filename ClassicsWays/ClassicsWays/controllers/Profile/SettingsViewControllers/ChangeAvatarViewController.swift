@@ -105,7 +105,7 @@ final class ChangeAvatarViewController: UIViewController {
                     }
                 } catch {
                     print("Произошла ошибка: \(error)")
-                    navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                    navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                 }
             }
         }

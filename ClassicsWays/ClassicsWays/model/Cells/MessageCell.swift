@@ -76,23 +76,13 @@ final class MessageCell: UICollectionViewCell {
         self.message.textColor = .black
         self.message.font = UIFont.boldSystemFont(ofSize: 18)
         self.message.lineBreakMode = .byWordWrapping
-        self.message.numberOfLines = .zero
+        self.message.numberOfLines = 5
         self.message.translatesAutoresizingMaskIntoConstraints = false
         self.message.backgroundColor = Constants.color
         self.message.layer.cornerCurve = CALayerCornerCurve.circular
 
-        self.message.setWidth(190)
+        self.message.setWidth(self.bounds.width * 0.6)
         self.message.pinBottom(to: self, 5)
-        
-//        wrap.addSubview(messageView)
-//        messageView.backgroundColor = Constants.color
-//        messageView.layer.borderWidth = CGFloat(Constants.one)
-//        messageView.layer.borderColor = UIColor.black.cgColor
-//        messageView.layer.cornerRadius = Constants.radius
-//        messageView.translatesAutoresizingMaskIntoConstraints = false
-//        messageView.pinVertical(to: message, -5)
-//        messageView.pinCenterX(to: message)
-//        messageView.setWidth(200)
     }
 }
 

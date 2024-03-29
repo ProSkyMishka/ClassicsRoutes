@@ -94,7 +94,7 @@ class RoutesViewController: TemplateViewController {
                     self.configureTable()
                 }
             } catch {
-                navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                 print("Произошла ошибка: \(error)")
             }
         }

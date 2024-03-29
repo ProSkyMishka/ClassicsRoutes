@@ -187,6 +187,9 @@ class SuggestViewController: UIViewController {
     private func configureAvatar() {
         contentView.addSubview(avatar)
         
+        avatar.layer.cornerRadius = Constants.radius
+        avatar.layer.masksToBounds = true
+        
         avatar.pinCenterX(to: contentView)
         avatar.pinTop(to: selectButton.bottomAnchor, 10)
         avatar.setHeight(150)
@@ -566,7 +569,7 @@ class SuggestViewController: UIViewController {
                                     }
                                 } catch {
                                     print("Произошла ошибка: \(error)")
-                                    self.navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                                    self.navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                                 }
                             }
                         }
@@ -585,7 +588,7 @@ class SuggestViewController: UIViewController {
                         }
                     }
                 } catch {
-                    navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                    navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                     print("Произошла ошибка: \(error)")
                 }
             }

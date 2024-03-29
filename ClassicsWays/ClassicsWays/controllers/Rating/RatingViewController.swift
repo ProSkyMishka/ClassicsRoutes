@@ -23,7 +23,7 @@ class RatingViewController: TemplateViewController {
                     self.configureTable()
                 }
             } catch {
-                navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                 print("Произошла ошибка: \(error)")
             }
         }
@@ -128,7 +128,7 @@ extension RatingViewController: UITableViewDelegate {
                         }
                     }
                 } catch {
-                    navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                    navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                     print("Произошла ошибка: \(error)")
                 }
             }

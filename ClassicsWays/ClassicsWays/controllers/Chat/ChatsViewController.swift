@@ -21,24 +21,13 @@ class ChatsViewController: TemplateViewController {
             do {
                 chats = try await NetworkService.shared.getAllChats()
                 users = try await NetworkService.shared.getAllUsers()
-                DispatchQueue.main.async {
-                    for chat in self.chats {
-                        if chat.messages.isEmpty {
-                            Task {
-                                try await NetworkService.shared.deleteChat(id: chat.id)
-                                DispatchQueue.main.async {
-                                    self.chats.sort(by: {$0.last > $1.last})
-                                    self.configureUI()
-                                }
-                            }
-                        } else {
-                            self.chats.sort(by: {$0.last > $1.last})
-                            self.configureUI()
-                        }
-                    }
+                DispatchQueue.main.async { [self] in
+                    chats.removeAll(where: {$0.messages.isEmpty})
+                    chats.sort(by: {$0.last > $1.last})
+                    configureUI()
                 }
             } catch {
-                navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                 print("Произошла ошибка: \(error)")
             }
         }
@@ -122,14 +111,19 @@ extension ChatsViewController: UITableViewDataSource {
                 messages = try await NetworkService.shared.getAllMessages(chat: chat)
                 DispatchQueue.main.async {
                     messages.sort(by: {$0.time < $1.time})
-                    var message = ""
+                    var messageText = ""
                     if messages.count > 0 {
-                        message = messages[messages.count - 1].text
+                        let message = messages[messages.count - 1]
+                        if message.user == Vars.user!.id {
+                            messageText = "Вы: \(message.text)"
+                        } else {
+                            messageText = message.text
+                        }
                     }
-                    raitingCell.configure(with: name, with: message, with: avatar)
+                    raitingCell.configure(with: name, with: messageText, with: avatar)
                 }
             } catch {
-                navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                 print("Произошла ошибка: \(error)")
             }
         }

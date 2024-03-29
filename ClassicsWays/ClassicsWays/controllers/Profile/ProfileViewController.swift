@@ -17,7 +17,6 @@ class ProfileViewController: TemplateViewController {
     var settingsLabel = UILabel()
     var changeAvatar = UIButton()
     var changeName = UIButton()
-    var changeEmail = UIButton()
     var changePassword = UIButton()
     var suggest = UIButton()
     var settings = UIView()
@@ -142,13 +141,6 @@ class ProfileViewController: TemplateViewController {
         changeName.addTarget(self, action: #selector(changeNameWasPressed), for: .touchUpInside)
     }
     
-    private func configureChangeEmail() {
-        changeEmail.isHidden = true
-        changeEmail.setTitle("email", for: .normal)
-        
-        changeEmail.addTarget(self, action: #selector(changeEmailWasPressed), for: .touchUpInside)
-    }
-    
     private func configureChangePassword() {
         changePassword.setTitle("пароль", for: .normal)
         
@@ -168,7 +160,7 @@ class ProfileViewController: TemplateViewController {
         settingsStack.axis = .vertical
         settingsStack.spacing = view.bounds.height * 0.005
         
-        for button in [changeAvatar, changeName, changeEmail, changePassword, suggest] {
+        for button in [changeAvatar, changeName, changePassword, suggest] {
             button.setTitleColor(Constants.color, for: .normal)
             button.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.03)
             button.backgroundColor = .gray
@@ -182,7 +174,6 @@ class ProfileViewController: TemplateViewController {
         
         configureChangeAvatar()
         configureChangeName()
-        configureChangeEmail()
         configureChangePassword()
         configureSuggest()
         
@@ -222,11 +213,6 @@ class ProfileViewController: TemplateViewController {
     }
     
     @objc
-    private func changeEmailWasPressed() {
-        
-    }
-    
-    @objc
     private func changePasswordWasPressed() {
         navigationController?.pushViewController(ChangePasswordViewController(), animated: true)
     }
@@ -235,6 +221,31 @@ class ProfileViewController: TemplateViewController {
     private func suggestWasPressed() {
         if Vars.user?.role == "admin" {
             navigationController?.pushViewController(SuggestViewController(), animated: true)
+        } else {
+            Task {
+                do {
+                    let users = try await NetworkService.shared.getAllUsers()
+                    DispatchQueue.main.async {
+                        var usersId: [String] = []
+                        for user in users {
+                            if user.role == "admin" {
+                                usersId.append(user.id)
+                            }
+                        }
+                        usersId.append(Vars.user!.id)
+                        Task {
+                            var chat = try await NetworkService.shared.createChat(users: usersId, messages: [], last: "01.01.0001 01:00:00")
+                            DispatchQueue.main.async {
+                                Vars.chat = ChatDate(id: chat.id, users: chat.users, messages: [], last: Constants.format.date(from: chat.last)!)
+                                self.navigationController?.pushViewController(ChatViewController(), animated: true)
+                            }
+                        }
+                    }
+                } catch {
+                    print("Произошла ошибка: \(error)")
+                    navigationController?.pushViewController(ServerErrorViewController(), animated: false)
+                }
+            }
         }
     }
 }
