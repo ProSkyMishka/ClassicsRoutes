@@ -101,33 +101,36 @@ extension RatingViewController: UITableViewDataSource {
 extension RatingViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let userId = users[indexPath.row].id
-        Task {
-            do {
-                let chats = try await NetworkService.shared.getAllChats()
-                DispatchQueue.main.async {
-                    Vars.chat = nil
-                    for chat in chats {
-                        if chat.users.count == 2 && chat.users.contains(userId) && chat.users.contains(Vars.user!.id) {
-                            Vars.chat = chat
-                            break
-                        }
-                    }
-                    if Vars.chat == nil {
-                        print("hi")
-                        Task {
-                            let chat = try await NetworkService.shared.createChat(users: [Vars.user!.id, userId], messages: [], last: "01.01.0001")
-                            Vars.chat = ChatDate(id: chat.id, users: chat.users, messages: chat.messages, last: Constants.format.date(from: chat.last)!)
-                            DispatchQueue.main.async {
-                                self.navigationController?.pushViewController(ChatViewController(), animated: true)
+        if (userId == Vars.user!.id) {
+            navigationController?.pushViewController(ProfileViewController(), animated: true)
+        } else {
+            Task {
+                do {
+                    let chats = try await NetworkService.shared.getAllChats()
+                    DispatchQueue.main.async {
+                        Vars.chat = nil
+                        for chat in chats {
+                            if chat.users.count == 2 && chat.users.contains(userId) && chat.users.contains(Vars.user!.id) {
+                                Vars.chat = chat
+                                break
                             }
                         }
-                    } else {
-                        self.navigationController?.pushViewController(ChatViewController(), animated: true)
+                        if Vars.chat == nil {
+                            Task {
+                                let chat = try await NetworkService.shared.createChat(users: [Vars.user!.id, userId], messages: [], last: "01.01.0001 01:00:00")
+                                Vars.chat = ChatDate(id: chat.id, users: chat.users, messages: chat.messages, last: Constants.format.date(from: chat.last)!)
+                                DispatchQueue.main.async {
+                                    self.navigationController?.pushViewController(ChatViewController(), animated: true)
+                                }
+                            }
+                        } else {
+                            self.navigationController?.pushViewController(ChatViewController(), animated: true)
+                        }
                     }
+                } catch {
+                    navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                    print("Произошла ошибка: \(error)")
                 }
-            } catch {
-                navigationController?.pushViewController(ServerErrorViewController(), animated: true)
-                print("Произошла ошибка: \(error)")
             }
         }
     }

@@ -23,7 +23,7 @@ extension NetworkService {
         let chats = try decoder.decode([Chat].self, from: chatData)
         var chatsDate: [ChatDate] = []
         for chat in chats {
-            if Vars.user!.chats.contains(chat.id) {
+            if chat.users.contains(Vars.user!.id) {
                 let chatDate = ChatDate(id: chat.id, users: chat.users, messages: chat.messages, last: Constants.format.date(from: chat.last)!)
                 chatsDate.append(chatDate)
             }

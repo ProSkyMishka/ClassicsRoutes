@@ -11,8 +11,6 @@ class Vars {
     static var password: String = ""
     static var user: User?
     static var chat: ChatDate?
-    static var chatName: String = ""
-    static var chatAvatar: String = ""
     static var previous = -1
     static var route: RouteWithGrade?
 }

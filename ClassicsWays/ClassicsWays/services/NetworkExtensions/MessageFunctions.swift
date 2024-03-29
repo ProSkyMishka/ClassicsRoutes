@@ -8,7 +8,7 @@
 import Foundation
 
 extension NetworkService {
-    func getAllMessages() async throws -> [MessageDate] {
+    func getAllMessages(chat: ChatDate) async throws -> [MessageDate] {
         guard let url = URL(string: "\(localhost)\(APIMethod.getAllMessages.rawValue)")
         else {
             throw NetworkError.badURL
@@ -23,7 +23,7 @@ extension NetworkService {
         let messages = try decoder.decode([Message].self, from: messageData)
         var messagesDate: [MessageDate] = []
         for message in messages {
-            if Vars.chat!.messages.contains(message.id) {
+            if chat.messages.contains(message.id) {
                 let messageDate = MessageDate(id: message.id, user: message.user, route: message.route, routeSuggest: message.routeSuggest, time: Constants.format.date(from: message.time)!, text: message.text)
                 messagesDate.append(messageDate)
             }

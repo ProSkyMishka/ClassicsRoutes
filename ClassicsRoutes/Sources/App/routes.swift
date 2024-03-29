@@ -18,16 +18,15 @@ func routes(_ app: Application) throws {
                 print("Couldn't decode user")
                 return
             }
-            print(text)
             app.console.wait(seconds: 5)
-            room.connections[message.user] = ws
-            room.send(user: message.user, message: text)
-            print(message.text)
+            room.connections["\(message.chatId) \(message.user)"] = ws
+            room.send(info: message, message: text)
         }
     }
 }
 
 struct ChatMessage: Codable {
+    let chatId: String
     let id: String
     let user: String
     let route: String
@@ -37,10 +36,11 @@ struct ChatMessage: Codable {
 }
 
 class Room {
-    var connections = [String: WebSocket ]()
-    func send(user: String, message: ByteBuffer) {
-        for (username, websocket) in connections {
-            if (username == user) {
+    var connections = [String: WebSocket]()
+    func send(info: ChatMessage, message: ByteBuffer) {
+        for (str, websocket) in connections {
+            let compon = str.components(separatedBy: " ")
+            if (info.chatId != String(compon[0]) || info.user == String(compon[1])) {
                 continue
             }
             websocket.send(message)

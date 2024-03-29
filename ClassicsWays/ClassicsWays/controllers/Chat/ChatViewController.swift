@@ -29,13 +29,14 @@ class ChatViewController: UIViewController {
         Task {
             do {
                 webSocketTask = try await NetworkService.shared.setUpWebSocket()
-                try await NetworkService.shared.sendMessages(webSocketTask: webSocketTask!, message: URLSessionWebSocketTask.Message.data(JSONEncoder().encode(MessageDate(id: "", user: "", route: "", routeSuggest: "", time: Constants.format.date(from: "01.01.0001")!, text: ""))
+                try await NetworkService.shared.sendMessages(webSocketTask: webSocketTask!, message: URLSessionWebSocketTask.Message.data(JSONEncoder().encode(MessageSocket(chatId: Vars.chat!.id, id: "", user: "", route: "", routeSuggest: "", time: Constants.format.date(from: "01.01.0001 01:00:00")!, text: ""))
                 ))
                 try await receiveMessages()
                 users = try await NetworkService.shared.getAllUsers()
-                messages = try await NetworkService.shared.getAllMessages()
+                messages = try await NetworkService.shared.getAllMessages(chat: Vars.chat!)
                 DispatchQueue.main.async { [self] in
                     messages.sort(by: {$0.time < $1.time})
+                    configureUserView()
                     configureNewMessageView()
                     configureMessagesCollection()
                     configureGrayView()
@@ -46,7 +47,6 @@ class ChatViewController: UIViewController {
             }
         }
         configureBackGroundImage()
-        configureUserView()
         configureBackButton()
         hideKeyboardOnTapAround()
     }
@@ -78,9 +78,20 @@ class ChatViewController: UIViewController {
         circle.pinBottom(to: userView, 5)
         circle.pinRight(to: userView, 20)
         
+        var nameChat = ""
+        var avatarChat = ""
+        for user in Vars.chat!.users {
+            if user == Vars.user!.id {
+                continue
+            }
+            nameChat += "\(users[(users.firstIndex(where: {$0.id == user})!)].name) "
+            avatarChat = users[users.firstIndex(where: {$0.id == user})!].avatar
+        }
         let avatar = UIImageView()
         circle.addSubview(avatar)
-        returnImage(imageView: avatar, key: Vars.chatAvatar)
+        let chatAvatar = ""
+        
+        returnImage(imageView: avatar, key: avatarChat)
         avatar.setHeight(view.bounds.height * 0.04)
         avatar.setWidth(view.bounds.height * 0.05)
         avatar.translatesAutoresizingMaskIntoConstraints = false
@@ -88,7 +99,7 @@ class ChatViewController: UIViewController {
         
         let name = UILabel()
         userView.addSubview(name)
-        name.text = Vars.chatName
+        name.text = nameChat
         name.textColor = .black
         name.font = UIFont.boldSystemFont(ofSize: 30)
         name.translatesAutoresizingMaskIntoConstraints = false
@@ -199,7 +210,8 @@ class ChatViewController: UIViewController {
                 do {
                     newMessageDB = try await NetworkService.shared.createMessage(user: Vars.user!.id, route: "", routeSuggest: "", time: Constants.format.string(from: Date.now), text: newMessageString!)
                     Vars.chat = try await NetworkService.shared.getChat(id: Vars.chat!.id)
-                    let message = URLSessionWebSocketTask.Message.data(try JSONEncoder().encode(newMessageDB))
+                    let messageSocket = MessageSocket(chatId: Vars.chat!.id, id: newMessageDB!.id, user: newMessageDB!.user, route: newMessageDB!.route, routeSuggest: newMessageDB!.routeSuggest, time: newMessageDB!.time, text: newMessageDB!.text)
+                    let message = URLSessionWebSocketTask.Message.data(try JSONEncoder().encode(messageSocket))
                     DispatchQueue.main.async { [self] in
                         messages.append(newMessageDB!)
                         messagesCollection.reloadData()
@@ -231,10 +243,11 @@ class ChatViewController: UIViewController {
                 switch message {
                 case .data(let data): 
                     print ("Data: \(data)")
-                    guard let newMessageDB = try? JSONDecoder().decode(MessageDate.self, from: data)
+                    guard let newMessageSocket = try? JSONDecoder().decode(MessageDate.self, from: data)
                     else {
                         return
                     }
+                    let newMessageDB = MessageDate(id: newMessageSocket.id, user: newMessageSocket.user, route: newMessageSocket.route, routeSuggest: newMessageSocket.routeSuggest, time: newMessageSocket.time, text: newMessageSocket.text)
                     if newMessageDB.id != "" && !self.messages.contains(where: {$0.id == newMessageDB.id}) {
                         self.messages.append(newMessageDB)
                         DispatchQueue.main.async {

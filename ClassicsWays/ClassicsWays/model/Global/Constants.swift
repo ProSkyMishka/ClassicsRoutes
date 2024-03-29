@@ -39,5 +39,5 @@ class Constants {
     static let digits = "1234567890"
     
     static let format = DateFormatter()
-    static let dateFormat = "dd.MM.yyyy"
+    static let dateFormat = "dd.MM.yyyy hh:mm:ss"
 }

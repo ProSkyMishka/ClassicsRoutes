@@ -13,10 +13,10 @@ class ChatsViewController: TemplateViewController {
     private var table: UITableView = UITableView(frame: .zero)
     var chats: [ChatDate] = []
     var users: [User] = []
-    var chatsVars: [(String, String)] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        status = 1
         Task {
             do {
                 chats = try await NetworkService.shared.getAllChats()
@@ -27,13 +27,13 @@ class ChatsViewController: TemplateViewController {
                             Task {
                                 try await NetworkService.shared.deleteChat(id: chat.id)
                                 DispatchQueue.main.async {
-                                    self.chats.sort(by: {$0.last < $1.last})
-                                    self.configureTable()
+                                    self.chats.sort(by: {$0.last > $1.last})
+                                    self.configureUI()
                                 }
                             }
                         } else {
-                            self.chats.sort(by: {$0.last < $1.last})
-                            self.configureTable()
+                            self.chats.sort(by: {$0.last > $1.last})
+                            self.configureUI()
                         }
                     }
                 }
@@ -42,8 +42,6 @@ class ChatsViewController: TemplateViewController {
                 print("Произошла ошибка: \(error)")
             }
         }
-        status = 1
-        configureUI()
     }
     
     private func configureUI() {
@@ -51,6 +49,7 @@ class ChatsViewController: TemplateViewController {
         configureBar()
         configureLabel()
         configureStick()
+        configureTable()
     }
     
     private func configureLabel() {
@@ -117,17 +116,16 @@ extension ChatsViewController: UITableViewDataSource {
             avatar = users[users.firstIndex(where: {$0.id == user})!].avatar
         }
         var messages: [MessageDate] = []
+        let chat = chats[indexPath.row]
         Task {
             do {
-                Vars.chat = chats[indexPath.row]
-                messages = try await NetworkService.shared.getAllMessages()
+                messages = try await NetworkService.shared.getAllMessages(chat: chat)
                 DispatchQueue.main.async {
                     messages.sort(by: {$0.time < $1.time})
                     var message = ""
                     if messages.count > 0 {
                         message = messages[messages.count - 1].text
                     }
-                    self.chatsVars.append((name, avatar))
                     raitingCell.configure(with: name, with: message, with: avatar)
                 }
             } catch {
@@ -143,9 +141,9 @@ extension ChatsViewController: UITableViewDataSource {
 extension ChatsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         Vars.chat = chats[indexPath.row]
-        Vars.chatName = chatsVars[indexPath.row].0
-        Vars.chatAvatar = chatsVars[indexPath.row].1
-        let vc = ChatViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        if (Vars.chat != nil) {
+            let vc = ChatViewController()
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
 }
