@@ -20,7 +20,7 @@ extension NetworkService {
         let chatResponce = try await URLSession.shared.data(for: request)
         let chatData = chatResponce.0
         let decoder = JSONDecoder()
-        var chats = try decoder.decode([Chat].self, from: chatData)
+        let chats = try decoder.decode([Chat].self, from: chatData)
         var chatsDate: [ChatDate] = []
         for chat in chats {
             if Vars.user!.chats.contains(chat.id) {
@@ -44,7 +44,7 @@ extension NetworkService {
         let chatResponce = try await URLSession.shared.data(for: request)
         let chatData = chatResponce.0
         let decoder = JSONDecoder()
-        var chat = try decoder.decode(Chat.self, from: chatData)
+        let chat = try decoder.decode(Chat.self, from: chatData)
         let chatDate = ChatDate(id: chat.id, users: chat.users, messages: chat.messages, last: Constants.format.date(from: chat.last)!)
         return chatDate
     }
@@ -96,6 +96,19 @@ extension NetworkService {
         let chat = try decoder.decode(Chat.self, from: chatData)
         
         return chat
+    }
+    
+    func deleteChat(id: String) async throws {
+        let idUrl = "/\(id)"
+        guard let url = URL(string: "\(localhost)\(APIMethod.getAllChats.rawValue)\(idUrl)")
+        else {
+            throw NetworkError.badURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "DELETE"
+        _ = try await URLSession.shared.data(for: request)
     }
 }
 

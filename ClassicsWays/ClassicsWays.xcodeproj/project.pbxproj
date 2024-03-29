@@ -24,8 +24,8 @@
 		2E50DA8E2B8AB45A000DB071 /* UIView+Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA8D2B8AB45A000DB071 /* UIView+Pin.swift */; };
 		2E50DA922B8AC55E000DB071 /* TemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA912B8AC55E000DB071 /* TemplateViewController.swift */; };
 		2E50DA942B8B98E2000DB071 /* ChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA932B8B98E2000DB071 /* ChatsViewController.swift */; };
-		2E50DA962B8BC07D000DB071 /* RaitingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA952B8BC07D000DB071 /* RaitingViewController.swift */; };
-		2E50DA982B8BC22A000DB071 /* RaitingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA972B8BC22A000DB071 /* RaitingCell.swift */; };
+		2E50DA962B8BC07D000DB071 /* RatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA952B8BC07D000DB071 /* RatingViewController.swift */; };
+		2E50DA982B8BC22A000DB071 /* RatingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DA972B8BC22A000DB071 /* RatingCell.swift */; };
 		2E50DB1F2B8CB21B000DB071 /* ChangeAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DB1E2B8CB21A000DB071 /* ChangeAvatarViewController.swift */; };
 		2E50DB222B8E62BF000DB071 /* ChangeNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DB212B8E62BF000DB071 /* ChangeNameViewController.swift */; };
 		2E50DB242B8E8812000DB071 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DB232B8E8812000DB071 /* ChangePasswordViewController.swift */; };
@@ -97,8 +97,8 @@
 		2E50DA8D2B8AB45A000DB071 /* UIView+Pin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Pin.swift"; sourceTree = "<group>"; };
 		2E50DA912B8AC55E000DB071 /* TemplateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateViewController.swift; sourceTree = "<group>"; };
 		2E50DA932B8B98E2000DB071 /* ChatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsViewController.swift; sourceTree = "<group>"; };
-		2E50DA952B8BC07D000DB071 /* RaitingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaitingViewController.swift; sourceTree = "<group>"; };
-		2E50DA972B8BC22A000DB071 /* RaitingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaitingCell.swift; sourceTree = "<group>"; };
+		2E50DA952B8BC07D000DB071 /* RatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingViewController.swift; sourceTree = "<group>"; };
+		2E50DA972B8BC22A000DB071 /* RatingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCell.swift; sourceTree = "<group>"; };
 		2E50DB1E2B8CB21A000DB071 /* ChangeAvatarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeAvatarViewController.swift; sourceTree = "<group>"; };
 		2E50DB212B8E62BF000DB071 /* ChangeNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNameViewController.swift; sourceTree = "<group>"; };
 		2E50DB232B8E8812000DB071 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
@@ -221,7 +221,7 @@
 				2E50DB282B8EC3B8000DB071 /* Start */,
 				2E50DB272B8EC3A5000DB071 /* Profile */,
 				2E50DB2A2B8EC3E7000DB071 /* Chat */,
-				2E50DB292B8EC3DE000DB071 /* Raiting */,
+				2E50DB292B8EC3DE000DB071 /* Rating */,
 			);
 			path = controllers;
 			sourceTree = "<group>";
@@ -277,12 +277,12 @@
 			path = Start;
 			sourceTree = "<group>";
 		};
-		2E50DB292B8EC3DE000DB071 /* Raiting */ = {
+		2E50DB292B8EC3DE000DB071 /* Rating */ = {
 			isa = PBXGroup;
 			children = (
-				2E50DA952B8BC07D000DB071 /* RaitingViewController.swift */,
+				2E50DA952B8BC07D000DB071 /* RatingViewController.swift */,
 			);
-			path = Raiting;
+			path = Rating;
 			sourceTree = "<group>";
 		};
 		2E50DB2A2B8EC3E7000DB071 /* Chat */ = {
@@ -316,7 +316,7 @@
 		2E50DB352B8F6A8E000DB071 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				2E50DA972B8BC22A000DB071 /* RaitingCell.swift */,
+				2E50DA972B8BC22A000DB071 /* RatingCell.swift */,
 				2E50DB312B8F5A60000DB071 /* RouteCell.swift */,
 				2E50DB3C2B90141A000DB071 /* PictureCell.swift */,
 				2E50DB612B971BCA000DB071 /* MessageCell.swift */,
@@ -602,9 +602,9 @@
 				2E50DA412B8AAEB5000DB071 /* SceneDelegate.swift in Sources */,
 				2E50DB382B8FC080000DB071 /* RouteViewController.swift in Sources */,
 				2E50DA7E2B8AB28F000DB071 /* ProfileViewController.swift in Sources */,
-				2E50DA962B8BC07D000DB071 /* RaitingViewController.swift in Sources */,
+				2E50DA962B8BC07D000DB071 /* RatingViewController.swift in Sources */,
 				2E50DB5C2B951D7C000DB071 /* ChatViewController.swift in Sources */,
-				2E50DA982B8BC22A000DB071 /* RaitingCell.swift in Sources */,
+				2E50DA982B8BC22A000DB071 /* RatingCell.swift in Sources */,
 				2E50DB4F2B933E95000DB071 /* Message.swift in Sources */,
 				2E50DB622B971BCA000DB071 /* MessageCell.swift in Sources */,
 				2E50DB572B933FF7000DB071 /* MessageFunctions.swift in Sources */,

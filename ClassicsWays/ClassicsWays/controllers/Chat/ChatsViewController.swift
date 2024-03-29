@@ -5,13 +5,6 @@
 //  Created by Михаил Прозорский on 25.02.2024.
 //
 
-//
-//  RaitingViewController.swift
-//  ClassicsWays
-//
-//  Created by Михаил Прозорский on 25.02.2024.
-//
-
 import UIKit
 
 class ChatsViewController: TemplateViewController {
@@ -29,8 +22,20 @@ class ChatsViewController: TemplateViewController {
                 chats = try await NetworkService.shared.getAllChats()
                 users = try await NetworkService.shared.getAllUsers()
                 DispatchQueue.main.async {
-                    self.chats.sort(by: {$0.last < $1.last})
-                    self.configureTable()
+                    for chat in self.chats {
+                        if chat.messages.isEmpty {
+                            Task {
+                                try await NetworkService.shared.deleteChat(id: chat.id)
+                                DispatchQueue.main.async {
+                                    self.chats.sort(by: {$0.last < $1.last})
+                                    self.configureTable()
+                                }
+                            }
+                        } else {
+                            self.chats.sort(by: {$0.last < $1.last})
+                            self.configureTable()
+                        }
+                    }
                 }
             } catch {
                 navigationController?.pushViewController(ServerErrorViewController(), animated: true)
@@ -73,7 +78,7 @@ class ChatsViewController: TemplateViewController {
     }
     
     private func configureTable() {
-        table.register(RaitingCell.self, forCellReuseIdentifier: RaitingCell.reuseId)
+        table.register(RatingCell.self, forCellReuseIdentifier: RatingCell.reuseId)
         
         view.addSubview(table)
         
@@ -100,8 +105,8 @@ extension ChatsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: RaitingCell.reuseId, for: indexPath)
-        guard let raitingCell = cell as? RaitingCell else { return cell }
+        let cell = tableView.dequeueReusableCell(withIdentifier: RatingCell.reuseId, for: indexPath)
+        guard let raitingCell = cell as? RatingCell else { return cell }
         var name = ""
         var avatar = ""
         for user in chats[indexPath.row].users {

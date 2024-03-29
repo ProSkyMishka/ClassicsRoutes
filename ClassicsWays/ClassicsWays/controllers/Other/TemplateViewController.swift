@@ -146,7 +146,7 @@ class TemplateViewController: UIViewController {
     
     @objc
     func buttonRaitingWasTapped() {
-        let vc = RaitingViewController()
+        let vc = RatingViewController()
         navigationController?.pushViewController(vc, animated: false)
     }
     

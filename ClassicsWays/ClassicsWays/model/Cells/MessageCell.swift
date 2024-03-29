@@ -10,10 +10,9 @@ import UIKit
 final class MessageCell: UICollectionViewCell {
     static let reuseId: String = "MessageCell"
     
-    private let name = UILabel()
-    private let message = UILabel()
-    private let messageView = UIView()
-    private let avatar = UIImageView()
+    private var name = UILabel()
+    private var message = UILabel()
+    private var avatar = UIImageView()
     private let wrap: UIView = UIView()
     
     // MARK: - Lifecycle
@@ -29,7 +28,12 @@ final class MessageCell: UICollectionViewCell {
     }
     
     func configure(with name: String, with message: String, with avatar: String) {
+        self.avatar.isHidden = true
+        self.name.isHidden = true
+        self.message.isHidden = true
+        configureUI()
         self.name.text = name
+        
         if name == Vars.user?.name {
             self.avatar.pinRight(to: self, 10)
             self.name.isHidden = true
@@ -37,6 +41,7 @@ final class MessageCell: UICollectionViewCell {
             self.avatar.pinBottom(to: self)
         } else {
             self.avatar.pinLeft(to: self, 10)
+            self.name.isHidden = false
             self.message.pinLeft(to: self.avatar.trailingAnchor, 10)
             self.avatar.pinBottom(to: self, 23)
         }
@@ -45,30 +50,39 @@ final class MessageCell: UICollectionViewCell {
     }
     
     private func configureUI() {
-        self.addSubview(avatar)
-        avatar.setHeight(40)
-        avatar.setWidth(50)
-        avatar.translatesAutoresizingMaskIntoConstraints = false
+        self.avatar = UIImageView()
+
+        self.avatar.setHeight(40)
+        self.avatar.setWidth(50)
+        self.avatar.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(self.avatar)
         
-        self.addSubview(name)
-        name.textColor = Constants.color
-        name.font = UIFont.boldSystemFont(ofSize: 18)
-        name.translatesAutoresizingMaskIntoConstraints = false
-        name.pinCenterX(to: avatar)
-        name.setWidth(50)
-        name.pinBottom(to: self)
+        self.name = UILabel()
         
-        self.addSubview(message)
-        message.textColor = .black
-        message.font = UIFont.boldSystemFont(ofSize: 18)
-        message.lineBreakMode = .byWordWrapping
-        message.numberOfLines = .zero
-        message.translatesAutoresizingMaskIntoConstraints = false
-        message.backgroundColor = Constants.color
-        message.layer.cornerCurve = CALayerCornerCurve.circular
+        self.addSubview(self.name)
+    
+        self.name.textColor = Constants.color
+        self.name.font = UIFont.boldSystemFont(ofSize: 18)
+        self.name.translatesAutoresizingMaskIntoConstraints = false
         
-        message.setWidth(190)
-        message.pinBottom(to: self, 5)
+        self.name.pinCenterX(to: self.avatar)
+        self.name.setWidth(50)
+        self.name.pinBottom(to: self)
+        
+        self.message = UILabel()
+        
+        self.addSubview(self.message)
+        
+        self.message.textColor = .black
+        self.message.font = UIFont.boldSystemFont(ofSize: 18)
+        self.message.lineBreakMode = .byWordWrapping
+        self.message.numberOfLines = .zero
+        self.message.translatesAutoresizingMaskIntoConstraints = false
+        self.message.backgroundColor = Constants.color
+        self.message.layer.cornerCurve = CALayerCornerCurve.circular
+
+        self.message.setWidth(190)
+        self.message.pinBottom(to: self, 5)
         
 //        wrap.addSubview(messageView)
 //        messageView.backgroundColor = Constants.color

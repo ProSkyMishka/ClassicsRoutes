@@ -8,6 +8,7 @@
 import UIKit
 
 class ChatViewController: UIViewController {
+    private var webSocketTask: URLSessionWebSocketTask?
     private var messagesCollection = UICollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
@@ -27,6 +28,10 @@ class ChatViewController: UIViewController {
     private func configureUI() {
         Task {
             do {
+                webSocketTask = try await NetworkService.shared.setUpWebSocket()
+                try await NetworkService.shared.sendMessages(webSocketTask: webSocketTask!, message: URLSessionWebSocketTask.Message.data(JSONEncoder().encode(MessageDate(id: "", user: "", route: "", routeSuggest: "", time: Constants.format.date(from: "01.01.0001")!, text: ""))
+                ))
+                try await receiveMessages()
                 users = try await NetworkService.shared.getAllUsers()
                 messages = try await NetworkService.shared.getAllMessages()
                 DispatchQueue.main.async { [self] in
@@ -44,6 +49,11 @@ class ChatViewController: UIViewController {
         configureUserView()
         configureBackButton()
         hideKeyboardOnTapAround()
+    }
+    
+    @objc
+    override func backButtonTapped() {
+        navigationController?.pushViewController(ChatsViewController(), animated: false)
     }
     
     private func configureUserView() {
@@ -165,7 +175,7 @@ class ChatViewController: UIViewController {
     
     private func configureNewMessageButton() {
         newMessageView.addSubview(newMessageButton)
-    
+        
         let largeFont = UIFont.systemFont(ofSize: view.bounds.height * 0.06, weight: .bold)
         let configuration = UIImage.SymbolConfiguration(font: largeFont)
         let image = UIImage(systemName: "arrow.up.circle.fill", withConfiguration: configuration)
@@ -182,19 +192,21 @@ class ChatViewController: UIViewController {
     @objc
     private func newMessageButtonWasPressed() {
         if (newMessage.text?.count != 0) {
-            let newMessageString = newMessage.text
-            newMessage.text = nil
+            let newMessageString = self.newMessage.text
+            self.newMessage.text = nil
             var newMessageDB: MessageDate?
             Task {
                 do {
                     newMessageDB = try await NetworkService.shared.createMessage(user: Vars.user!.id, route: "", routeSuggest: "", time: Constants.format.string(from: Date.now), text: newMessageString!)
                     Vars.chat = try await NetworkService.shared.getChat(id: Vars.chat!.id)
+                    let message = URLSessionWebSocketTask.Message.data(try JSONEncoder().encode(newMessageDB))
                     DispatchQueue.main.async { [self] in
                         messages.append(newMessageDB!)
                         messagesCollection.reloadData()
                         Vars.chat?.messages.append(newMessageDB!.id)
                         Task {
                             do {
+                                try await NetworkService.shared.sendMessages(webSocketTask: webSocketTask!, message: message)
                                 Vars.chat = try await NetworkService.shared.updateChat(id: Vars.chat!.id, users: Vars.chat!.users, messages: Vars.chat!.messages, last: Constants.format.string(from: newMessageDB!.time))
                             } catch {
                                 navigationController?.pushViewController(ServerErrorViewController(), animated: true)
@@ -203,34 +215,42 @@ class ChatViewController: UIViewController {
                         }
                     }
                 } catch {
-                    navigationController?.pushViewController(ServerErrorViewController(), animated: true)
+                    self.navigationController?.pushViewController(ServerErrorViewController(), animated: true)
                     print("Произошла ошибка: \(error)")
                 }
             }
         }
     }
     
-//    @objc
-//    override func dismissKeyboard() {
-//        view.endEditing(true)
-//        Task {
-//            do {
-//                users = try await NetworkService.shared.getAllUsers()
-//                Vars.chat = try await NetworkService.shared.getChat(id: Vars.chat!.id)
-//                messages = try await NetworkService.shared.getAllMessages()
-//                for i in messages {
-//                    print(i)
-//                }
-//                DispatchQueue.main.async { [self] in
-//                    messages.sort(by: {$0.time < $1.time})
-//                    messagesCollection.reloadData()
-//                }
-//            } catch {
-//                navigationController?.pushViewController(ServerErrorViewController(), animated: true)
-//                print("Произошла ошибка: \(error)")
-//            }
-//        }
-//    }
+    func receiveMessages() async throws {
+        webSocketTask!.receive { result in
+            switch result {
+            case .failure(let error):
+                print("Something went wrong: \(error.localizedDescription)")
+            case .success(let message):
+                switch message {
+                case .data(let data): 
+                    print ("Data: \(data)")
+                    guard let newMessageDB = try? JSONDecoder().decode(MessageDate.self, from: data)
+                    else {
+                        return
+                    }
+                    if newMessageDB.id != "" && !self.messages.contains(where: {$0.id == newMessageDB.id}) {
+                        self.messages.append(newMessageDB)
+                        DispatchQueue.main.async {
+                            self.messagesCollection.reloadData()
+                        }
+                    }
+                case .string(let message):
+                    print(message)
+                default: print("unknown case")
+                }
+                Task {
+                    try await self.receiveMessages()
+                }
+            }
+        }
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -274,5 +294,3 @@ extension ChatViewController: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets(top: view.bounds.height * 0.02, left: 0, bottom: view.bounds.height * 0.02, right: 0)
     }
 }
-
-

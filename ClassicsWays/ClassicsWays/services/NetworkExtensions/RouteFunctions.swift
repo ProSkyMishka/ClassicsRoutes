@@ -96,7 +96,7 @@ extension NetworkService {
         var request = URLRequest(url: url)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "DELETE"
-        let userResponce = try await URLSession.shared.data(for: request)
+        _ = try await URLSession.shared.data(for: request)
     }
 }
 

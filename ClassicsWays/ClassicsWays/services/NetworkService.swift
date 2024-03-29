@@ -12,6 +12,21 @@ class NetworkService {
     
     let localhost = "http://127.0.0.1:8080"
     
+    func setUpWebSocket() async throws -> URLSessionWebSocketTask {
+        let urlSession = URLSession(configuration: .default)
+        let webSocketTask = urlSession.webSocketTask(with: URL(string: "ws://127.0.0.1:8080/echo")!)
+        webSocketTask.resume()
+        return webSocketTask
+    }
+    
+    func sendMessages(webSocketTask: URLSessionWebSocketTask, message: URLSessionWebSocketTask.Message) async throws {
+        webSocketTask.send(message) { error in
+            if let error = error {
+                print("websocket couldn't send message: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     func auth(name: String, password: String) async throws -> User {
         let dto = UserDTO(name: name, password: password)
         guard let url = URL(string: "\(localhost)\(APIMethod.auth.rawValue)")

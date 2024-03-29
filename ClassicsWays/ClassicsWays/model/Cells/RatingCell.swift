@@ -1,5 +1,5 @@
 //
-//  RaitingCell.swift
+//  RatingCell.swift
 //  ClassicsWays
 //
 //  Created by Михаил Прозорский on 25.02.2024.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class RaitingCell: UITableViewCell {
+final class RatingCell: UITableViewCell {
     static let reuseId: String = "RaitingCellId"
     
     private let name = UILabel()

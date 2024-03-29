@@ -105,7 +105,7 @@ extension UIViewController {
     }
     
     @objc
-    private func backButtonTapped() {
+    func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
     
