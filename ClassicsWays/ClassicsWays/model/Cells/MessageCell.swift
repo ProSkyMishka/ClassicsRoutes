@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Foundation
 
 final class MessageCell: UICollectionViewCell {
     static let reuseId: String = "MessageCell"
@@ -13,7 +14,6 @@ final class MessageCell: UICollectionViewCell {
     private var name = UILabel()
     private var message = UILabel()
     private var avatar = UIImageView()
-    private let wrap: UIView = UIView()
     
     // MARK: - Lifecycle
     override init(frame: CGRect) {
@@ -27,13 +27,14 @@ final class MessageCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with name: String, with message: String, with avatar: String) {
+    func configure(with name: String, with message: String, with avatar: String, with height: Double) -> Double {
         self.avatar.isHidden = true
         self.name.isHidden = true
         self.message.isHidden = true
         configureUI()
+        self.message.font = UIFont.boldSystemFont(ofSize: height * 0.02)
         self.name.text = name
-        
+
         if name == Vars.user?.name {
             self.avatar.pinRight(to: self, 10)
             self.name.isHidden = true
@@ -46,43 +47,58 @@ final class MessageCell: UICollectionViewCell {
             self.avatar.pinBottom(to: self, 23)
         }
         self.message.text = message
+        let number = numberOfLines()
+        var coef = 1.0
+        if number > 3 {
+            coef = (Double(number) / 3.0)
+            self.message.numberOfLines = number
+        }
         UIViewController().returnImage(imageView: self.avatar, key: avatar)
+        return coef
     }
     
     private func configureUI() {
-        self.avatar = UIImageView()
-
-        self.avatar.setHeight(40)
-        self.avatar.setWidth(50)
-        self.avatar.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(self.avatar)
+        avatar = UIImageView()
         
-        self.name = UILabel()
+        avatar.translatesAutoresizingMaskIntoConstraints = false
+        avatar.setHeight(40)
+        avatar.setWidth(50)
         
-        self.addSubview(self.name)
+        addSubview(avatar)
+        
+        name = UILabel()
+        
+        addSubview(name)
+        
+        name.textColor = Constants.color
+        name.font = UIFont.boldSystemFont(ofSize: 18)
+        
+        name.translatesAutoresizingMaskIntoConstraints = false
+        name.pinCenterX(to: avatar)
+        name.setWidth(50)
+        name.pinBottom(to: self)
+        
+        message = UILabel()
+        
+        addSubview(message)
+        
+        message.textColor = .black
+        message.lineBreakMode = .byWordWrapping
+        message.numberOfLines = 3
+        message.translatesAutoresizingMaskIntoConstraints = false
+        message.backgroundColor = Constants.color
+        
+        message.setWidth(self.bounds.width * 0.6)
+        message.pinBottom(to: self, 5)
+    }
     
-        self.name.textColor = Constants.color
-        self.name.font = UIFont.boldSystemFont(ofSize: 18)
-        self.name.translatesAutoresizingMaskIntoConstraints = false
+    func numberOfLines() -> Int {
+        message.numberOfLines = 200000
+        let size = message.sizeThatFits(CGSize(width: self.bounds.width * 0.6, height: CGFloat.greatestFiniteMagnitude))
+        let numberOfLines = Int(size.height / message.font.lineHeight)
+        message.numberOfLines = 3
         
-        self.name.pinCenterX(to: self.avatar)
-        self.name.setWidth(50)
-        self.name.pinBottom(to: self)
-        
-        self.message = UILabel()
-        
-        self.addSubview(self.message)
-        
-        self.message.textColor = .black
-        self.message.font = UIFont.boldSystemFont(ofSize: 18)
-        self.message.lineBreakMode = .byWordWrapping
-        self.message.numberOfLines = 5
-        self.message.translatesAutoresizingMaskIntoConstraints = false
-        self.message.backgroundColor = Constants.color
-        self.message.layer.cornerCurve = CALayerCornerCurve.circular
-
-        self.message.setWidth(self.bounds.width * 0.6)
-        self.message.pinBottom(to: self, 5)
+        return numberOfLines
     }
 }
 

@@ -93,12 +93,12 @@ class TemplateViewController: UIViewController {
     func configureBarStack() {
         bar.addSubview(barStack)
         barStack.axis = .horizontal
-        barStack.spacing = view.bounds.width * 0.15
+        barStack.spacing = view.bounds.width * 0.16
         
         for button in [buttonRoutes, buttonRaiting, buttonChat, buttonProfile] {
             button.translatesAutoresizingMaskIntoConstraints = false
-            button.setWidth(view.bounds.height * 0.05)
-            button.setHeight(view.bounds.height * 0.05)
+            button.setWidth(view.bounds.height * 0.04)
+            button.setHeight(view.bounds.height * 0.04)
             
             barStack.addArrangedSubview(button)
         }
@@ -116,7 +116,7 @@ class TemplateViewController: UIViewController {
     func configureStickStack() {
         bar.addSubview(stickStack)
         stickStack.axis = .horizontal
-        stickStack.spacing = view.bounds.width * 0.15 + view.bounds.height * 0.05
+        stickStack.spacing = view.bounds.width * 0.25
         
         for stick in [stick1, stick2, stick3] {
             stick.translatesAutoresizingMaskIntoConstraints = false

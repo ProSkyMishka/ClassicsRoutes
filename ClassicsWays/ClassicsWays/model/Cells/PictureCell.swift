@@ -37,6 +37,8 @@ class PictureCell: UICollectionViewCell {
     private func configurePicture() {
         addSubview(picture)
         
+        picture.layer.cornerRadius = Constants.radius
+        picture.layer.masksToBounds = true
         picture.pinHeight(to: heightAnchor)
         picture.pinWidth(to: widthAnchor)
     }

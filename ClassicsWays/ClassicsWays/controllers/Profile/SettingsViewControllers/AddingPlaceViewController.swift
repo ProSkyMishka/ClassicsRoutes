@@ -96,7 +96,7 @@ class AddingPlaceViewController: UIViewController {
         view.addSubview(addButton)
         
         addButton.setTitle("ДОБАВИТЬ", for: .normal)
-        addButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.05)
+        addButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.04)
         addButton.setTitleColor(.black, for: .normal)
         addButton.setTitleColor(.lightGray, for: .disabled)
         addButton.layer.borderColor = UIColor.black.cgColor

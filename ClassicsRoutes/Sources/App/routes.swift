@@ -12,7 +12,6 @@ func routes(_ app: Application) throws {
     
     app.webSocket("echo") { req, ws in
         ws.onBinary { ws, text in
-            print("")
             guard
                 let message = try? JSONDecoder().decode(ChatMessage.self, from: text)
             else {
@@ -20,7 +19,7 @@ func routes(_ app: Application) throws {
                 return
             }
             room.connections["\(message.chatId) \(message.user)"] = ws
-            room.send(info: message, message: text)
+            room.send(chatId: message.chatId, message: text)
         }
     }
 }
@@ -38,11 +37,10 @@ struct ChatMessage: Codable {
 class Room {
     var connections = [String: WebSocket]()
     
-    func send(info: ChatMessage, message: ByteBuffer) {
-        print("second")
+    func send(chatId: String, message: ByteBuffer) {
         for (str, websocket) in connections {
             let compon = str.components(separatedBy: " ")
-            if (info.chatId != String(compon[0]) || info.user == String(compon[1])) {
+            if (chatId != String(compon[0])) {
                 continue
             }
             websocket.send(message)

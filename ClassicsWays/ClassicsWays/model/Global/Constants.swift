@@ -39,5 +39,7 @@ class Constants {
     static let digits = "1234567890"
     
     static let format = DateFormatter()
-    static let dateFormat = "dd.MM.yyyy hh:mm:ss"
+    static let dateFormat = "dd.MM.yyyy HH:mm:ss"
+    
+    static let routeMessage = "Пройдем?"
 }

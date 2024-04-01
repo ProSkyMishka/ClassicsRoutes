@@ -225,6 +225,7 @@ class ProfileViewController: TemplateViewController {
             Task {
                 do {
                     let users = try await NetworkService.shared.getAllUsers()
+                    let chats = try await NetworkService.shared.getAllChats()
                     DispatchQueue.main.async {
                         var usersId: [String] = []
                         for user in users {
@@ -233,11 +234,32 @@ class ProfileViewController: TemplateViewController {
                             }
                         }
                         usersId.append(Vars.user!.id)
-                        Task {
-                            var chat = try await NetworkService.shared.createChat(users: usersId, messages: [], last: "01.01.0001 01:00:00")
-                            DispatchQueue.main.async {
-                                Vars.chat = ChatDate(id: chat.id, users: chat.users, messages: [], last: Constants.format.date(from: chat.last)!)
-                                self.navigationController?.pushViewController(ChatViewController(), animated: true)
+                        if chats.contains(where: {
+                            var flag = true
+                            for user in usersId {
+                                if !$0.users.contains(user) {
+                                    flag = false
+                                }
+                            }
+                            return flag
+                        }) {
+                            Vars.chat = chats[chats.firstIndex(where: {
+                                var flag = true
+                                for user in usersId {
+                                    if !$0.users.contains(user) {
+                                        flag = false
+                                    }
+                                }
+                                return flag
+                            })!]
+                            self.navigationController?.pushViewController(ChatViewController(), animated: true)
+                        } else {
+                            Task {
+                                let chat = try await NetworkService.shared.createChat(users: usersId, messages: [], last: "01.01.0001 01:00:00")
+                                DispatchQueue.main.async {
+                                    Vars.chat = ChatDate(id: chat.id, users: chat.users, messages: [], last: Constants.format.date(from: chat.last)!)
+                                    self.navigationController?.pushViewController(ChatViewController(), animated: true)
+                                }
                             }
                         }
                     }

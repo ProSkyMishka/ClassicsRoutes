@@ -14,7 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        Constants.format.locale = Locale(identifier: "ru_RU")
         Constants.format.dateFormat = Constants.dateFormat
+        Constants.format.timeZone = TimeZone(identifier: "Europe/Moscow")
         sleep(1)
         return true
     }

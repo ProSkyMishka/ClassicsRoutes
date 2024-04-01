@@ -95,13 +95,13 @@ extension UIViewController {
         view.endEditing(true)
     }
     
-    func configureBackButton() {
+    func configureBackButton(_ color: UIColor = Constants.color) {
         navigationItem.hidesBackButton = true
         let largeFont = UIFont.systemFont(ofSize: view.bounds.height * 0.025, weight: .bold)
         let configuration = UIImage.SymbolConfiguration(font: largeFont)
         let image = UIImage(systemName: "chevron.left", withConfiguration: configuration)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(backButtonTapped))
-        navigationItem.leftBarButtonItem?.tintColor = Constants.color
+        navigationItem.leftBarButtonItem?.tintColor = color
     }
     
     @objc

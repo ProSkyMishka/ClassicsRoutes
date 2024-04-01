@@ -6,26 +6,14 @@
 //
 
 import Foundation
+import UIKit
 
 class NetworkService {
     static let shared = NetworkService(); private init() { }
     
     let localhost = "http://127.0.0.1:8080"
-    
-    func setUpWebSocket() async throws -> URLSessionWebSocketTask {
-        let urlSession = URLSession(configuration: .default)
-        let webSocketTask = urlSession.webSocketTask(with: URL(string: "ws://127.0.0.1:8080/echo")!)
-        webSocketTask.resume()
-        return webSocketTask
-    }
-    
-    func sendMessages(webSocketTask: URLSessionWebSocketTask, message: URLSessionWebSocketTask.Message) async throws {
-        webSocketTask.send(message) { error in
-            if let error = error {
-                print("websocket couldn't send message: \(error.localizedDescription)")
-            }
-        }
-    }
+    let localSocketHost = "ws://127.0.0.1:8080/echo"
+    var webSocketTask: URLSessionWebSocketTask?
     
     func auth(name: String, password: String) async throws -> User {
         let dto = UserDTO(name: name, password: password)

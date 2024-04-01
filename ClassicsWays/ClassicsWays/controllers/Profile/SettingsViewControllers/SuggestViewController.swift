@@ -513,7 +513,7 @@ class SuggestViewController: UIViewController {
         } else {
             makeButton.setTitle("ИЗМЕНИТЬ", for: .normal)
         }
-        makeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.05)
+        makeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.04)
         makeButton.setTitleColor(.black, for: .normal)
         makeButton.setTitleColor(.lightGray, for: .disabled)
         makeButton.layer.borderColor = UIColor.black.cgColor
@@ -575,14 +575,18 @@ class SuggestViewController: UIViewController {
                         }
                     } else {
                         self.avatarResource = "\(self.name.text!)\(self.avatarResource)"
-                        for index in 0...self.picturesResource.count - 1 {
-                            self.picturesResource[index] = "\(self.name.text!)\(self.picturesResource[index])"
+                        if !picturesResource.isEmpty {
+                            for index in 0...self.picturesResource.count - 1 {
+                                self.picturesResource[index] = "\(self.name.text!)\(self.picturesResource[index])"
+                            }
                         }
                         _ = try await NetworkService.shared.updateRoute(id: id, avatar: self.avatarResource, person: self.person.text!, name: self.name.text!, description: self.desc.text!, theme: self.theme, time: timeInt, start: self.place.text!, pictures: self.picturesResource, raiting: self.raiting, locations: self.locations)
                         DispatchQueue.main.async {
                             self.uploadFile(with: self.avatarResource, path: self.avatarPath)
-                            for index in 0...self.picturesPath.count - 1 {
-                                self.uploadFile(with: self.picturesResource[index], path: self.picturesPath[index])
+                            if !self.picturesPath.isEmpty {
+                                for index in 0...self.picturesPath.count - 1 {
+                                    self.uploadFile(with: self.picturesResource[index], path: self.picturesPath[index])
+                                }
                             }
                             self.navigationController?.pushViewController(RoutesViewController(), animated: true)
                         }

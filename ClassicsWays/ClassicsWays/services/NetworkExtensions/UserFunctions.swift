@@ -58,7 +58,7 @@ extension NetworkService {
     func createUser(name: String,
                      themes: [Int],
                      password: String) async throws -> User {
-        let dto = UserDTOAll(name: name, email: "", date: Constants.format.string(from: Date.now), avatar: "withOutAvatar.png", routes: [], role: "user", likes: [], themes: themes, chats: [], password: password)
+        let dto = UserDTOAll(name: name, email: "", date: String(Constants.format.string(from: Date.now).split(separator: " ")[0]), avatar: "withOutAvatar.png", routes: [], role: "user", likes: [], themes: themes, chats: [], password: password)
         guard let url = URL(string: "\(localhost)\(APIMethod.getAllUsers.rawValue)")
         else {
             throw NetworkError.badURL

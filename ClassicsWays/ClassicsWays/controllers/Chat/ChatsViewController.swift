@@ -8,15 +8,18 @@
 import UIKit
 
 class ChatsViewController: TemplateViewController {
-    var txtLabel = UILabel()
-    var stick = UIView()
+    private var txtLabel = UILabel()
+    private var stick = UIView()
     private var table: UITableView = UITableView(frame: .zero)
-    var chats: [ChatDate] = []
-    var users: [User] = []
+    private var users: [User] = []
+    private var chats: [ChatDate] = []
+    private var textLabel = "Чаты"
+    private var routeId = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         status = 1
+        configureUI()
         Task {
             do {
                 chats = try await NetworkService.shared.getAllChats()
@@ -24,7 +27,7 @@ class ChatsViewController: TemplateViewController {
                 DispatchQueue.main.async { [self] in
                     chats.removeAll(where: {$0.messages.isEmpty})
                     chats.sort(by: {$0.last > $1.last})
-                    configureUI()
+                    configureTable()
                 }
             } catch {
                 navigationController?.pushViewController(ServerErrorViewController(), animated: false)
@@ -38,13 +41,19 @@ class ChatsViewController: TemplateViewController {
         configureBar()
         configureLabel()
         configureStick()
-        configureTable()
+    }
+    
+    func configure(with routeId: String) {
+        bar.isHidden = true
+        textLabel = "Выберите"
+        self.routeId = routeId
+        configureBackButton(.black)
     }
     
     private func configureLabel() {
         view.addSubview(txtLabel)
         
-        txtLabel.text = "Чаты"
+        txtLabel.text = textLabel
         txtLabel.font = UIFont.boldSystemFont(ofSize: view.bounds.height / Constants.coef)
         txtLabel.textColor = .black
         
@@ -66,7 +75,7 @@ class ChatsViewController: TemplateViewController {
     }
     
     private func configureTable() {
-        table.register(RatingCell.self, forCellReuseIdentifier: RatingCell.reuseId)
+        table.register(ChatCell.self, forCellReuseIdentifier: ChatCell.reuseId)
         
         view.addSubview(table)
         
@@ -93,8 +102,8 @@ extension ChatsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: RatingCell.reuseId, for: indexPath)
-        guard let raitingCell = cell as? RatingCell else { return cell }
+        let cell = tableView.dequeueReusableCell(withIdentifier: ChatCell.reuseId, for: indexPath)
+        guard let chatCell = cell as? ChatCell else { return cell }
         var name = ""
         var avatar = ""
         for user in chats[indexPath.row].users {
@@ -104,30 +113,8 @@ extension ChatsViewController: UITableViewDataSource {
             name += "\(users[(users.firstIndex(where: {$0.id == user}))!].name) "
             avatar = users[users.firstIndex(where: {$0.id == user})!].avatar
         }
-        var messages: [MessageDate] = []
-        let chat = chats[indexPath.row]
-        Task {
-            do {
-                messages = try await NetworkService.shared.getAllMessages(chat: chat)
-                DispatchQueue.main.async {
-                    messages.sort(by: {$0.time < $1.time})
-                    var messageText = ""
-                    if messages.count > 0 {
-                        let message = messages[messages.count - 1]
-                        if message.user == Vars.user!.id {
-                            messageText = "Вы: \(message.text)"
-                        } else {
-                            messageText = message.text
-                        }
-                    }
-                    raitingCell.configure(with: name, with: messageText, with: avatar)
-                }
-            } catch {
-                navigationController?.pushViewController(ServerErrorViewController(), animated: false)
-                print("Произошла ошибка: \(error)")
-            }
-        }
-        return raitingCell
+        chatCell.configure(with: name, with: avatar)
+        return chatCell
     }
 }
 
@@ -136,8 +123,29 @@ extension ChatsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         Vars.chat = chats[indexPath.row]
         if (Vars.chat != nil) {
-            let vc = ChatViewController()
-            navigationController?.pushViewController(vc, animated: true)
+            if !routeId.isEmpty {
+                Task {
+                    do {
+                        let message = try await NetworkService.shared.createMessage(user: Vars.user!.id, route: routeId, routeSuggest: "false", time: Constants.format.string(from: Date.now), text: Constants.routeMessage)
+                        Vars.chat = try await NetworkService.shared.getChat(id: Vars.chat!.id)
+                        try await NetworkService.shared.setUpWebSocket()
+                        let messageSocket = MessageSocket(chatId: Vars.chat!.id, id: message.id, user: Vars.user!.id, route: message.route, routeSuggest: message.routeSuggest, time: message.time, text: message.text)
+                        try await NetworkService.shared.sendMessages(message: URLSessionWebSocketTask.Message.data(JSONEncoder().encode(messageSocket))
+                        )
+                        var messages = Vars.chat?.messages
+                        messages?.append(message.id)
+                        Vars.chat = try await NetworkService.shared.updateChat(id: Vars.chat!.id, users: Vars.chat!.users, messages: messages!, last: Constants.format.string(from: message.time))
+                        let vc = ChatViewController()
+                        navigationController?.pushViewController(vc, animated: true)
+                    } catch {
+                        navigationController?.pushViewController(ServerErrorViewController(), animated: false)
+                        print("Произошла ошибка: \(error)")
+                    }
+                }
+            } else {
+                let vc = ChatViewController()
+                navigationController?.pushViewController(vc, animated: true)
+            }
         }
     }
 }

@@ -54,6 +54,8 @@ final class RouteCell: UITableViewCell {
         wrap.pinCenter(to: self)
         
         wrap.addSubview(avatar)
+        avatar.layer.cornerRadius = Constants.radius
+        avatar.layer.masksToBounds = true
         avatar.pinHeight(to: heightAnchor, 0.52)
         avatar.pinWidth(to: widthAnchor, 0.37)
         avatar.translatesAutoresizingMaskIntoConstraints = false

@@ -136,7 +136,7 @@ class RoutesViewController: TemplateViewController {
             default:
                 array = third
             }
-            var route = array[indexPath[1]]
+            let route = array[indexPath[1]]
             let id = route.route?.id
             Task {
                 do {
@@ -162,7 +162,7 @@ class RoutesViewController: TemplateViewController {
             default:
                 array = third
             }
-            var route = array[indexPath[1]].route
+            let route = array[indexPath[1]].route
             let vc = SuggestViewController()
             vc.configure(id: route!.id, name: route!.name, person: route!.person, desc: route!.description, time: String(route!.time), place: route!.start, locations: route!.locations, avatar: route!.avatar, pictures: route!.pictures, theme: route!.theme, raiting: route!.raiting)
             navigationController?.pushViewController(vc, animated: true)

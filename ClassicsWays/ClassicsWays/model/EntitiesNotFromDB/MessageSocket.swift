@@ -8,9 +8,9 @@
 import Foundation
 
 struct MessageSocket: Identifiable, Codable {
-    let chatId: String
+    var chatId: String
     let id: String
-    let user: String
+    var user: String
     let route: String
     let routeSuggest: String
     let time: Date

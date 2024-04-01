@@ -51,7 +51,9 @@ class RouteViewController: UIViewController {
     
     @objc
     private func sharedButtonTapped() {
-        navigationController?.popViewController(animated: true)
+        let vc = ChatsViewController()
+        vc.configure(with: Vars.route!.route!.id)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func configureInfoView() {
@@ -199,7 +201,7 @@ class RouteViewController: UIViewController {
         view.addSubview(startButton)
         
         startButton.setTitle("НАЧАТЬ", for: .normal)
-        startButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.05)
+        startButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.04)
         startButton.setTitleColor(.black, for: .normal)
         startButton.setTitleColor(.lightGray, for: .disabled)
         startButton.layer.borderColor = UIColor.black.cgColor

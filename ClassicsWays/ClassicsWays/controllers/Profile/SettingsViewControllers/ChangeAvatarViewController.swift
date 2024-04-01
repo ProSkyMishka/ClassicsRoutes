@@ -78,7 +78,7 @@ final class ChangeAvatarViewController: UIViewController {
         
         readyButton.isEnabled = false
         readyButton.setTitle("ГОТОВО", for: .normal)
-        readyButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.05)
+        readyButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.04)
         readyButton.setTitleColor(.black, for: .normal)
         readyButton.setTitleColor(.lightGray, for: .disabled)
         readyButton.layer.borderColor = UIColor.black.cgColor

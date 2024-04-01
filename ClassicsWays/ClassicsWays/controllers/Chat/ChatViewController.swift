@@ -8,38 +8,54 @@
 import UIKit
 
 class ChatViewController: UIViewController {
-    private var webSocketTask: URLSessionWebSocketTask?
     private var messagesCollection = UICollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
     )
     private var users: [User] = []
-    private var messages: [MessageDate] = []
     private var newMessage = UITextField()
     private var newMessageView = UIView()
     private var newMessageButton = UIButton()
     private var userView = UIView()
+    private var indexes: [IndexPath: CGFloat] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        Vars.messages = []
+        Vars.nilMessage.user = Vars.user!.id
+        Vars.nilMessage.chatId = Vars.chat!.id
         configureUI()
     }
     
     private func configureUI() {
         Task {
             do {
-                webSocketTask = try await NetworkService.shared.setUpWebSocket()
-                try await NetworkService.shared.sendMessages(webSocketTask: webSocketTask!, message: URLSessionWebSocketTask.Message.data(JSONEncoder().encode(MessageSocket(chatId: Vars.chat!.id, id: "", user: "", route: "", routeSuggest: "", time: Constants.format.date(from: "01.01.0001 01:00:00")!, text: ""))
-                ))
-                try await receiveMessages()
+                try await NetworkService.shared.setUpWebSocket()
+                try await NetworkService.shared.sendMessages(message: URLSessionWebSocketTask.Message.data(JSONEncoder().encode(Vars.nilMessage))
+                )
                 users = try await NetworkService.shared.getAllUsers()
-                messages = try await NetworkService.shared.getAllMessages(chat: Vars.chat!)
+                Vars.messages = try await NetworkService.shared.getAllMessages(chat: Vars.chat!)
                 DispatchQueue.main.async { [self] in
-                    messages.sort(by: {$0.time < $1.time})
+                    Vars.messages.sort(by: {$0.time < $1.time})
                     configureUserView()
                     configureNewMessageView()
                     configureMessagesCollection()
+                    messagesCollection.isHidden = true
                     configureGrayView()
+                    DispatchQueue.main.async {
+                        Task {
+                            var index = 0
+                            while (index < Vars.messages.count) {
+                                self.messagesCollection.scrollToItem(at: IndexPath(row: index - 1, section: 0), at: .bottom, animated: true)
+                                try await Task.sleep(nanoseconds:  250_000_000)
+                                index += 25
+                            }
+                            self.messagesCollection.scrollToItem(at: IndexPath(row: Vars.messages.count - 1, section: 0), at: .bottom, animated: true)
+                            try await Task.sleep(nanoseconds:  250_000_000)
+                            self.messagesCollection.isHidden = false
+                            try await NetworkService.shared.receiveMessagesChat(collection: self.messagesCollection)
+                        }
+                    }
                 }
             } catch {
                 navigationController?.pushViewController(ServerErrorViewController(), animated: false)
@@ -53,16 +69,12 @@ class ChatViewController: UIViewController {
     
     @objc
     override func backButtonTapped() {
-        if messages.isEmpty {
-            Task {
-                try await NetworkService.shared.deleteChat(id: Vars.chat!.id)
-                DispatchQueue.main.async {
-                    self.navigationController?.pushViewController(ChatsViewController(), animated: false)
-                }
-            }
-        } else {
+        if !messagesCollection.isHidden {
+            Vars.messages = []
+            Vars.chat = nil
             navigationController?.pushViewController(ChatsViewController(), animated: false)
         }
+        
     }
     
     private func configureUserView() {
@@ -98,7 +110,6 @@ class ChatViewController: UIViewController {
         }
         let avatar = UIImageView()
         circle.addSubview(avatar)
-        let chatAvatar = ""
         
         returnImage(imageView: avatar, key: avatarChat)
         avatar.setHeight(view.bounds.height * 0.04)
@@ -137,10 +148,8 @@ class ChatViewController: UIViewController {
         messagesCollection.dataSource = self
         messagesCollection.delegate = self
         messagesCollection.alwaysBounceVertical = true
-        messagesCollection.isScrollEnabled = true
         messagesCollection.backgroundColor = .clear
         messagesCollection.layer.cornerRadius = Constants.radius
-        
         if let layout = messagesCollection.collectionViewLayout as?
             UICollectionViewFlowLayout {
             layout.minimumInteritemSpacing = .zero
@@ -211,7 +220,7 @@ class ChatViewController: UIViewController {
     
     @objc
     private func newMessageButtonWasPressed() {
-        if (newMessage.text?.count != 0) {
+        if (newMessage.text?.count != 0 && !messagesCollection.isHidden) {
             let newMessageString = self.newMessage.text
             self.newMessage.text = nil
             var newMessageDB: MessageDate?
@@ -221,56 +230,12 @@ class ChatViewController: UIViewController {
                     Vars.chat = try await NetworkService.shared.getChat(id: Vars.chat!.id)
                     let messageSocket = MessageSocket(chatId: Vars.chat!.id, id: newMessageDB!.id, user: newMessageDB!.user, route: newMessageDB!.route, routeSuggest: newMessageDB!.routeSuggest, time: newMessageDB!.time, text: newMessageDB!.text)
                     let message = URLSessionWebSocketTask.Message.data(try JSONEncoder().encode(messageSocket))
-                    DispatchQueue.main.async { [self] in
-                        messages.append(newMessageDB!)
-                        messagesCollection.reloadData()
-                        messagesCollection.scrollToItem(at: IndexPath(row: messages.count - 1, section: 0), at: .top, animated: true)
-                        Vars.chat?.messages.append(newMessageDB!.id)
-                        Task {
-                            do {
-                                try await NetworkService.shared.sendMessages(webSocketTask: webSocketTask!, message: message)
-                                Vars.chat = try await NetworkService.shared.updateChat(id: Vars.chat!.id, users: Vars.chat!.users, messages: Vars.chat!.messages, last: Constants.format.string(from: newMessageDB!.time))
-                            } catch {
-                                navigationController?.pushViewController(ServerErrorViewController(), animated: false)
-                                print("Произошла ошибка: \(error)")
-                            }
-                        }
-                    }
+                    Vars.chat?.messages.append(newMessageDB!.id)
+                    try await NetworkService.shared.sendMessages(message: message)
+                    Vars.chat = try await NetworkService.shared.updateChat(id: Vars.chat!.id, users: Vars.chat!.users, messages: Vars.chat!.messages, last: Constants.format.string(from: newMessageDB!.time))
                 } catch {
                     self.navigationController?.pushViewController(ServerErrorViewController(), animated: false)
                     print("Произошла ошибка: \(error)")
-                }
-            }
-        }
-    }
-    
-    func receiveMessages() async throws {
-        webSocketTask!.receive { result in
-            switch result {
-            case .failure(let error):
-                print("Something went wrong: \(error.localizedDescription)")
-            case .success(let message):
-                switch message {
-                case .data(let data): 
-                    print ("Data: \(data)")
-                    guard let newMessageSocket = try? JSONDecoder().decode(MessageDate.self, from: data)
-                    else {
-                        return
-                    }
-                    let newMessageDB = MessageDate(id: newMessageSocket.id, user: newMessageSocket.user, route: newMessageSocket.route, routeSuggest: newMessageSocket.routeSuggest, time: newMessageSocket.time, text: newMessageSocket.text)
-                    if newMessageDB.id != "" && !self.messages.contains(where: {$0.id == newMessageDB.id}) {
-                        self.messages.append(newMessageDB)
-                        DispatchQueue.main.async {
-                            self.messagesCollection.reloadData()
-                            self.messagesCollection.scrollToItem(at: IndexPath(row: self.messages.count - 1, section: 0), at: .bottom, animated: true)
-                        }
-                    }
-                case .string(let message):
-                    print(message)
-                default: print("unknown case")
-                }
-                Task {
-                    try await self.receiveMessages()
                 }
             }
         }
@@ -284,7 +249,7 @@ extension ChatViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return messages.count
+        return Vars.messages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -292,9 +257,14 @@ extension ChatViewController: UICollectionViewDataSource {
         guard let messageCell = cell as? MessageCell else {
             return cell
         }
+        
         var user: User?
-        user = users[users.firstIndex(where: {$0.id == messages[indexPath.row].user})!]
-        messageCell.configure(with: user!.name, with: messages[indexPath.row].text, with: user!.avatar)
+        user = users[users.firstIndex(where: {$0.id == Vars.messages[indexPath.row].user})!]
+        let coef = messageCell.configure(with: user!.name, with: Vars.messages[indexPath.row].text, with: user!.avatar, with: view.bounds.height)
+        guard self.indexes[indexPath] != nil else {
+            self.indexes[indexPath] = coef
+            return cell
+        }
         return cell
     }
 }
@@ -302,8 +272,10 @@ extension ChatViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegateFlowLayout
 extension ChatViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = view.bounds.width
-        return CGSize(width: width, height: width * 0.2)
+        guard let coef = indexes[indexPath] else {
+            return CGSize(width: view.bounds.width, height: view.bounds.height * 0.072)
+        }
+        return CGSize(width: view.bounds.width, height: view.bounds.height * 0.072 * coef)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

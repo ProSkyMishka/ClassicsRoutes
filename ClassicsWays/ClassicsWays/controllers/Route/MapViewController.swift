@@ -20,9 +20,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     private var startLocation = ""
     private var finishLocation = ""
     private var continueButton = UIButton()
+    private var backButton = UIButton()
     private var endButton = UIButton()
     private var stackButton = UIStackView()
-    private var currentIndex = 0
+    private var currentIndex: Int = .zero
     private var locations = Vars.route!.route!.locations
     private lazy var error = UILabel()
     private lazy var errorView = UIView()
@@ -33,6 +34,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     private var routes = Vars.user!.routes
     private let tick = UIButton()
     private let cross = UIButton()
+    private let like = UIButton()
+    private let dislike = UIButton()
+    private var largeFont: UIFont?
+    private var configuration: UIImage.SymbolConfiguration?
     
     private func configureInfoView() {
         view.addSubview(infoView)
@@ -119,8 +124,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     }
     
     private func showCurrent(coordinates: CLLocationCoordinate2D, showRegion: Bool = false, completion: @escaping () -> Void ) {
-        
-        //        self.coordinatesArray.append(coordinates)
         let point = MKPointAnnotation()
         point.coordinate = coordinates
         point.title = ""
@@ -138,14 +141,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         completion()
     }
     
-    
     private func doAfterOne() {
         let completion2 = findLocations
         DispatchQueue.global(qos: .utility).async {
             self.findLocation(location: self.finishLocation, showRegion: true, completion: completion2)
         }
     }
-    
     
     private func findLocations() {
         if self.coordinatesArray.count < 2 {
@@ -166,14 +167,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
             } else {
                 let myRoute: MKRoute? = response?.routes.first
                 if let a = myRoute?.polyline {
-                    if self.overlaysArray.count > 0 {
+                    if self.overlaysArray.count > .zero {
                         self.mapView.removeOverlays(self.overlaysArray)
                         self.overlaysArray = []
                     }
                     self.overlaysArray.append(a)
                     self.mapView.addOverlay(a)
                     
-                    // Настройка отображения маршрута на карте
                     let rect = a.boundingMapRect
                     self.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
                     
@@ -183,17 +183,16 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         }
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        largeFont = UIFont.systemFont(ofSize: view.bounds.height * 0.06, weight: .bold)
+        configuration = UIImage.SymbolConfiguration(font: largeFont!)
         setupUI()
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         startMap()
     }
-    
     
     private func startMap() {
         locationManager.requestWhenInUseAuthorization()
@@ -204,10 +203,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         }
     }
     
-    
-    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let userLocation = locations[0] as CLLocation
+        let userLocation = locations[.zero] as CLLocation
         manager.stopUpdatingLocation()
         
         let location = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
@@ -223,6 +220,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         hideKeyboardOnTapAround()
         configureBackButton()
         configureBackGroundImage()
+        configureEndButton()
         configureStackButton()
         
         self.view.addSubview(mapView)
@@ -239,6 +237,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         getYourRoute()
     }
     
+    @objc
+    override func dismissKeyboard() {
+        crossWaspressed()
+    }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
@@ -249,57 +251,89 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         return polylineRenderer
     }
     
+    private func configureEndButton() {
+        view.addSubview(endButton)
+        
+        endButton.setTitle("ЗАВЕРШИТЬ", for: .normal)
+        endButton.backgroundColor = Constants.red
+        endButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.03)
+        endButton.setTitleColor(.black, for: .normal)
+        endButton.setTitleColor(.darkGray, for: .disabled)
+        
+        endButton.layer.borderWidth = CGFloat(Constants.one)
+        endButton.layer.borderColor = UIColor.black.cgColor
+        
+        endButton.translatesAutoresizingMaskIntoConstraints = false
+        endButton.setHeight(view.bounds.height * 0.05)
+        endButton.setWidth(view.bounds.width)
+        endButton.pinBottom(to: view)
+        
+        endButton.addTarget(self, action: #selector(endButtonWasPressed), for: .touchUpInside)
+    }
+    
+    
     private func configureContinueButton() {
-        continueButton.setTitle("ДАЛЬШЕ", for: .normal)
-        continueButton.backgroundColor = Constants.green
+        let imageTick = UIImage(systemName: "arrowshape.right.fill", withConfiguration: configuration)
+        continueButton.setBackgroundImage(imageTick, for: .normal)
         
         continueButton.addTarget(self, action: #selector(getYourRoute), for: .touchUpInside)
     }
     
-    private func configureEndButton() {
-        endButton.setTitle("ЗАВЕРШИТЬ", for: .normal)
-        endButton.backgroundColor = Constants.red
+    private func configureThisBackButton() {
+        let imageTick = UIImage(systemName: "arrowshape.left.fill", withConfiguration: configuration)
+        backButton.setBackgroundImage(imageTick, for: .normal)
         
-        endButton.addTarget(self, action: #selector(endButtonWasPressed), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(thisBackButtonWasTapped), for: .touchUpInside)
     }
     
     private func configureStackButton() {
         view.addSubview(stackButton)
         
-        stackButton.axis = .vertical
-        stackButton.spacing = 0
+        stackButton.axis = .horizontal
+        stackButton.spacing = view.bounds.width * 0.6
         
-        for button in [continueButton, endButton] {
-            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.03)
-            button.setTitleColor(.black, for: .normal)
-            button.setTitleColor(.darkGray, for: .disabled)
+        for button in [backButton, continueButton] {
+            button.tintColor = .black
+            button.backgroundColor = Constants.color
             
             button.layer.borderWidth = CGFloat(Constants.one)
             button.layer.borderColor = UIColor.black.cgColor
             
             button.translatesAutoresizingMaskIntoConstraints = false
-            button.setHeight(view.bounds.height * 0.05)
-            button.setWidth(view.bounds.width)
+            button.setHeight(view.bounds.height * 0.07)
+            button.setWidth(view.bounds.height * 0.07)
+            button.layer.cornerRadius = view.bounds.height * 0.035
             stackButton.addArrangedSubview(button)
         }
         
         configureContinueButton()
-        configureEndButton()
+        configureThisBackButton()
         
         stackButton.translatesAutoresizingMaskIntoConstraints = false
-        stackButton.pinBottom(to: view)
+        stackButton.pinBottom(to: endButton.topAnchor)
         stackButton.pinCenterX(to: view)
+    }
+    
+    @objc
+    private func thisBackButtonWasTapped() {
+        if currentIndex == 3 {
+            currentIndex = 0
+            startLocation = ""
+        } else {
+            currentIndex -= 4
+        }
+        getYourRoute()
     }
     
     @objc
     func getYourRoute() {
         let completion1 = doAfterOne
-        if locations.count == 0 {
+        if locations.count == .zero {
             endButtonWasPressed()
             return
         }
         
-        if self.mapView.annotations.count > 0 {
+        if self.mapView.annotations.count > .zero {
             self.mapView.removeAnnotations(self.annotationsArray)
             self.annotationsArray = []
         }
@@ -311,7 +345,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         
         self.coordinatesArray = []
         
-        if startLocation.count == 0 {
+        if startLocation.count == .zero {
             desc.text = locations[currentIndex]
             currentIndex += 1
             finishLocation = locations[currentIndex]
@@ -322,12 +356,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
             currentIndex += 1
             finishLocation = locations[currentIndex]
         }
+        setSize()
         
-        if currentIndex + 1 == locations.count {
-            continueButton.isHidden = true
-        }
+        blockButtons()
 
-        if startLocation.count == 0 {
+        if startLocation.count == .zero {
             startLocation = finishLocation
             guard let sourceCoordinate = locationManager.location?.coordinate else { return }
             self.coordinatesArray.append(sourceCoordinate)
@@ -339,43 +372,63 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         }
     }
     
+    private func blockButtons() {
+        if locations.count <= 2 {
+            backButton.isEnabled = false
+            continueButton.isEnabled = false
+        } else if currentIndex + 1 == locations.count {
+            backButton.isEnabled = true
+            continueButton.isEnabled = false
+        } else if currentIndex == Constants.one {
+            backButton.isEnabled = false
+            continueButton.isEnabled = true
+        } else {
+            backButton.isEnabled = true
+            continueButton.isEnabled = true
+        }
+    }
+    
     @objc
     private func endButtonWasPressed() {
         continueButton.isEnabled = false
+        backButton.isEnabled = false
         endButton.isEnabled = false
         errorView.isHidden = false
         configureErrorView(errorView: errorView, error: error)
-
-        let largeFont = UIFont.systemFont(ofSize: view.bounds.height * 0.06, weight: .bold)
-        let configuration = UIImage.SymbolConfiguration(font: largeFont)
-        
-        let like = UIButton()
-        let dislike = UIButton()
         
         if currentIndex + 1 < locations.count {
             tick.isHidden = false
             cross.isHidden = false
+            like.isHidden = true
+            dislike.isHidden = true
             
+            error.pinTop(to: errorView)
             error.text = "Вы уверены, что хотите завершить маршрут преждевременно?"
+            error.textAlignment = .center
             
             errorView.backgroundColor = Constants.red
             
             let imageTick = UIImage(systemName: "checkmark", withConfiguration: configuration)
             tick.setBackgroundImage(imageTick, for: .normal)
             tick.addTarget(self, action: #selector(tickWaspressed), for: .touchUpInside)
-            view.addSubview(tick)
-            tick.tintColor = .red
-            tick.pinLeft(to: errorView, view.bounds.width * 0.95 * 0.2)
+            errorView.addSubview(tick)
+            tick.tintColor = .black
+            tick.pinRight(to: errorView, view.bounds.width * 0.19)
             tick.pinBottom(to: errorView, 5)
             
             let imageCross = UIImage(systemName: "xmark", withConfiguration: configuration)
             cross.setBackgroundImage(imageCross, for: .normal)
             cross.addTarget(self, action: #selector(crossWaspressed), for: .touchUpInside)
-            view.addSubview(cross)
-            cross.tintColor = .green
-            cross.pinRight(to: errorView, view.bounds.width * 0.95 * 0.2)
+            errorView.addSubview(cross)
+            cross.tintColor = .black
+            cross.pinLeft(to: errorView, view.bounds.width * 0.95 * 0.2)
             cross.pinBottom(to: errorView, 5)
         } else {
+            tick.isHidden = true
+            cross.isHidden = true
+            like.isHidden = false
+            dislike.isHidden = false
+            
             error.text = "Вам понравился маршрут?"
             
             errorView.backgroundColor = Constants.color
@@ -409,7 +462,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         cross.isHidden = true
         errorView.isHidden = true
         endButton.isEnabled = true
-        continueButton.isEnabled = true
+        blockButtons()
     }
     
     @objc
@@ -456,5 +509,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
                 navigationController?.pushViewController(RoutesViewController(), animated: true)
             }
         }
+    }
+    
+    private func setSize() {
+        desc.numberOfLines = 200000
+        let sizeDesc = desc.sizeThatFits(CGSize(width: view.bounds.width * 0.9, height: CGFloat.greatestFiniteMagnitude))
+        desc.numberOfLines = .zero
+        let size = CGSize(width: view.bounds.width, height: sizeDesc.height * 1.1)
+        infoView.contentSize = size
+        contentView.frame.size = size
     }
 }
