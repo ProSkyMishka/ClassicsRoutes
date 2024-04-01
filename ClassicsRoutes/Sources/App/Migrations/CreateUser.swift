@@ -13,7 +13,6 @@ struct CreateUser: AsyncMigration {
         let schema = database.schema("users")
             .id()
             .field("name", .string, .required)
-            .field("email", .string, .required)
             .field("password", .string, .required)
             .field("date", .string, .required)
             .field("avatar", .string)
@@ -21,7 +20,6 @@ struct CreateUser: AsyncMigration {
             .field("role", .string, .required)
             .field("likes", .array(of: .string))
             .field("themes", .array(of: .int), .required)
-            .field("chats", .array(of: .string))
             .unique(on: "name")
         
         try await schema.create()

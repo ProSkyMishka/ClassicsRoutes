@@ -32,7 +32,7 @@ class MakePictureCell: UICollectionViewCell {
     // MARK: - Cell Configuration
     func configure(with picture: UIImageView) {
         self.picture = picture
-        
+ 
         configurePicture()
     }
     
@@ -40,6 +40,8 @@ class MakePictureCell: UICollectionViewCell {
     private func configurePicture() {
         addSubview(picture)
         
+        picture.layer.cornerRadius = Constants.value
+        picture.layer.masksToBounds = true
         picture.pinHeight(to: heightAnchor)
         picture.pinWidth(to: widthAnchor)
     }

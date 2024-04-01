@@ -13,12 +13,8 @@ class MainRegistrationViewController: UIViewController {
     var stackField = UIStackView()
     var stackButton = UIStackView()
     var name = UITextField()
-    var email = UITextField()
     var password = UITextField()
     var passwordCopy = UITextField()
-    var code = UITextField()
-    var problemButton = UIButton()
-    var sendButton = UIButton()
     var continueButton = UIButton()
     var autoButton = UIButton()
     var themeView = UIView()
@@ -40,7 +36,7 @@ class MainRegistrationViewController: UIViewController {
     
     private func configureUI() {
         configureBackGroundImage()
-        hideKeyboardOnTapAround()
+        hideKeyboardOnTapAround(view)
         navigationItem.hidesBackButton = true
         configureStackButton()
         configureStackField()
@@ -50,7 +46,7 @@ class MainRegistrationViewController: UIViewController {
     private func configureTxtLabel() {
         view.addSubview(txtLabel)
         
-        txtLabel.text = "Регистрация"
+        txtLabel.text = Constants.regString
         txtLabel.font = UIFont.boldSystemFont(ofSize: view.bounds.height / Constants.coef)
         txtLabel.textColor = .white
         txtLabel.shadowColor = .black
@@ -62,43 +58,33 @@ class MainRegistrationViewController: UIViewController {
     }
     
     private func configureName() {
-        name.attributedPlaceholder = NSAttributedString(string: "Имя пользователя", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
-    }
-    
-    private func configureEmail() {
-        email.isHidden = true
-        email.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+        name.attributedPlaceholder = NSAttributedString(string: Constants.userNameString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     }
     
     private func configurePassword() {
-        password.attributedPlaceholder = NSAttributedString(string: "Пароль", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+        password.attributedPlaceholder = NSAttributedString(string: Constants.passwordString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     }
     
     private func configurePasswordCopy() {
-        passwordCopy.attributedPlaceholder = NSAttributedString(string: "Повторите пароль", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
-    }
-    
-    private func configureCode() {
-        code.isHidden = true
-        code.attributedPlaceholder = NSAttributedString(string: "код с email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+        passwordCopy.attributedPlaceholder = NSAttributedString(string: Constants.repeatPasswordString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     }
     
     private func configureContinueButton() {
         continueButton.isEnabled = false
-        continueButton.setTitle("Дальше", for: .normal)
+        continueButton.setTitle(Constants.continueString, for: .normal)
         
         continueButton.addTarget(self, action: #selector(continueButtonWasPressed), for: .touchUpInside)
     }
     
     private func configureAuthButton() {
-        autoButton.setTitle("Есть аккаунт", for: .normal)
+        autoButton.setTitle(Constants.withAccount, for: .normal)
         
         autoButton.addTarget(self, action: #selector(autoButtonWasPressed), for: .touchUpInside)
     }
     
     private func configureBackThemeButton() {
         backButton.isHidden = true
-        backButton.setTitle("Назад", for: .normal)
+        backButton.setTitle(Constants.backString, for: .normal)
         
         backButton.addTarget(self, action: #selector(backThemeButtonWasPressed), for: .touchUpInside)
     }
@@ -106,7 +92,7 @@ class MainRegistrationViewController: UIViewController {
     private func configureReadyButton() {
         readyButton.isEnabled = false
         readyButton.isHidden = true
-        readyButton.setTitle("Готово", for: .normal)
+        readyButton.setTitle(Constants.ready, for: .normal)
         
         readyButton.addTarget(self, action: #selector(readyButtonWasPressed), for: .touchUpInside)
     }
@@ -123,7 +109,7 @@ class MainRegistrationViewController: UIViewController {
             field.font = UIFont.boldSystemFont(ofSize: view.bounds.height / Constants.coef2)
             field.textColor = .black
             field.backgroundColor = Constants.color
-            field.layer.cornerRadius = Constants.radius
+            field.layer.cornerRadius = Constants.value
             
             field.leftView = UIView(frame: CGRect(x: .zero, y: .zero, width: Constants.offset, height: Constants.offset))
             field.rightView = UIView(frame: CGRect(x: .zero, y: .zero, width: Constants.offset, height: Constants.offset))
@@ -158,7 +144,7 @@ class MainRegistrationViewController: UIViewController {
             button.setTitleColor(.black, for: .normal)
             button.setTitleColor(.lightGray, for: .disabled)
             button.backgroundColor = Constants.color
-            button.layer.cornerRadius = Constants.radius
+            button.layer.cornerRadius = Constants.value
             
             button.layer.borderWidth = CGFloat(Constants.one)
             button.layer.borderColor = UIColor.black.cgColor
@@ -175,50 +161,50 @@ class MainRegistrationViewController: UIViewController {
         configureReadyButton()
         
         stackButton.translatesAutoresizingMaskIntoConstraints = false
-        stackButton.pinBottom(to: view, view.bounds.height / Constants.coef1)
+        stackButton.pinBottom(to: view, view.bounds.height / Constants.coef7)
         stackButton.pinCenterX(to: view)
     }
     
     @objc
     private func continueButtonWasPressed() {
-        var countDigits = 0
+        var countDigits: Int = .zero
         var flag = true
         for i in password.text! {
             if Constants.digits.contains(i) {
-                countDigits += 1
+                countDigits += Constants.one
             }
             if !Constants.letters.contains(i) && !Constants.digits.contains(i) {
                 flag = false
             }
         }
-        var countLetters = 0
+        var countLetters: Int = .zero
         var flagN = true
         for i in name.text! {
             if Constants.letters.contains(i) {
-                countLetters += 1
+                countLetters += Constants.one
             }
             if !Constants.letters.contains(i) && !Constants.digits.contains(i) {
                 flagN = false
             }
         }
-        if countLetters == 0 || !flagN {
-            let text = "error - Имя пользователя должно содержать хотя бы одну латинскую букву, специальные символы не допускаются"
+        if countLetters == .zero || !flagN {
+            let text = Constants.nameFormatError
             name.backgroundColor = Constants.red
             name.text = nil
-            name.attributedPlaceholder = NSAttributedString(string: "неверный формат", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+            name.attributedPlaceholder = NSAttributedString(string: Constants.formatError, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
             continueButton.isEnabled = false
             error.text = text
             configureErrorView(errorView: errorView, error: error)
             errorView.isHidden = false
-        } else if countDigits == 0 || !flag || password.text!.count < 8 {
+        } else if countDigits == .zero || !flag || password.text!.count < Int(Constants.coef3) {
             password.backgroundColor = Constants.red
             password.text = nil
-            password.attributedPlaceholder = NSAttributedString(string: "неверный формат", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+            password.attributedPlaceholder = NSAttributedString(string: Constants.formatError, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
             continueButton.isEnabled = false
-            error.text = "error - Пароль должен иметь длину не менее 8 символов, быть написанным на латинице и содержать как минимум одну цифру, специальные символы не допускаются"
+            error.text = Constants.passwordFormatError
             configureErrorView(errorView: errorView, error: error)
             errorView.isHidden = false
-        } else if password.text != "" && passwordCopy.text != "" && name.text != "" {
+        } else if password.text != Constants.nilString && passwordCopy.text != Constants.nilString && name.text != Constants.nilString {
             if password.text == passwordCopy.text {
                 continueButton.isEnabled = false
                 Task {
@@ -227,11 +213,11 @@ class MainRegistrationViewController: UIViewController {
                         DispatchQueue.main.async { [self] in
                             for user in users {
                                 if name.text == user.name {
-                                    name.attributedPlaceholder = NSAttributedString(string: "имя занято", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+                                    name.attributedPlaceholder = NSAttributedString(string: Constants.nameTaken, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
                                     name.backgroundColor = Constants.red
                                     name.text = nil
                                     continueButton.isEnabled = false
-                                    error.text = "error - Пользователь с таким именем уже существует"
+                                    error.text = Constants.nameError
                                     configureErrorView(errorView: errorView, error: error)
                                     errorView.isHidden = false
                                     return
@@ -249,8 +235,8 @@ class MainRegistrationViewController: UIViewController {
                 }
             } else {
                 passwordCopy.backgroundColor = Constants.red
-                passwordCopy.text = ""
-                passwordCopy.attributedPlaceholder = NSAttributedString(string: "не совпадает", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+                passwordCopy.text = Constants.nilString
+                passwordCopy.attributedPlaceholder = NSAttributedString(string: Constants.differentPasswords, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
             }
         }
     }
@@ -265,7 +251,7 @@ class MainRegistrationViewController: UIViewController {
         readyButton.isEnabled = true
         errorView.isHidden = true
         view.endEditing(true)
-        if name.text != "" && password.text != "" && passwordCopy.text != "" {
+        if name.text != Constants.nilString && password.text != Constants.nilString && passwordCopy.text != Constants.nilString {
             continueButton.isEnabled = true
         } else {
             continueButton.isEnabled = false
@@ -285,7 +271,7 @@ class MainRegistrationViewController: UIViewController {
     @objc
     private func readyButtonWasPressed() {
         readyButton.isEnabled = false
-        if themes.count != 0 {
+        if themes.count != .zero {
             Task {
                 do {
                     Vars.user = try await NetworkService.shared.createUser(name: name.text!, themes: themes, password: passwordCopy.text!)
@@ -299,7 +285,7 @@ class MainRegistrationViewController: UIViewController {
                 }
             }
         } else {
-            error.text = "error - Нужно выбрать хоть одну тему"
+            error.text = Constants.themeError
             configureErrorView(errorView: errorView, error: error)
             errorView.isHidden = false
         }
@@ -320,89 +306,33 @@ class MainRegistrationViewController: UIViewController {
         view.addSubview(themeView)
         
         themeView.backgroundColor = Constants.color
-        themeView.layer.borderWidth = 2
+        themeView.layer.borderWidth = Constants.coef5
         themeView.layer.borderColor = UIColor.black.cgColor
-        themeView.layer.cornerRadius = Constants.radius
+        themeView.layer.cornerRadius = Constants.value
         
-        themeView.pinHorizontal(to: view, 10)
-        themeView.pinTop(to: txtLabel.bottomAnchor, 10)
-        themeView.pinBottom(to: stackButton.topAnchor, 10)
+        themeView.pinHorizontal(to: view, Constants.coef14)
+        themeView.pinTop(to: txtLabel.bottomAnchor, Constants.coef14)
+        themeView.pinBottom(to: stackButton.topAnchor, Constants.coef14)
         
-        configureThemeLabel()
-        configureThemeStack()
-    }
-    
-    private func configureThemeLabel() {
-        themeView.addSubview(themeLabel)
-        
-        themeLabel.text = "Что Вам ближе?"
-        themeLabel.font = UIFont.boldSystemFont(ofSize: view.bounds.height / Constants.coef2)
-        themeLabel.textColor = .black
-        
-        themeLabel.translatesAutoresizingMaskIntoConstraints = false
-        themeLabel.pinCenterX(to: themeView)
-        themeLabel.pinTop(to: themeView, 10)
-    }
-    
-    private func configureThemeOne() {
-        themeOne.setTitle("Писатели", for: .normal)
-    }
-    
-    private func configureThemeTwo() {
-        themeTwo.setTitle("Художники", for: .normal)
-    }
-    
-    private func configureThemeThree() {
-        themeThree.setTitle("Исторические лица", for: .normal)
-    }
-    
-    private func configureThemeStack() {
-        themeView.addSubview(themeStack)
-        
-        themeStack.axis = .vertical
-        themeStack.spacing = view.bounds.height / Constants.coef2
-        
-        for button in [themeOne, themeTwo, themeThree] {
-            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height / Constants.coef2)
-            button.setTitleColor(.black, for: .normal)
-            button.backgroundColor = Constants.color
-            button.layer.cornerRadius = Constants.radius
-            
-            button.layer.borderWidth = CGFloat(Constants.one)
-            button.layer.borderColor = UIColor.black.cgColor
-            
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.setWidth(view.bounds.width * 0.7)
-            
-            button.addTarget(self, action: #selector(themeButtonWasPressed), for: .touchUpInside)
-            themeStack.addArrangedSubview(button)
-        }
-        
-        configureThemeOne()
-        configureThemeTwo()
-        configureThemeThree()
-        
-        themeStack.translatesAutoresizingMaskIntoConstraints = false
-        themeStack.pinTop(to: themeLabel.bottomAnchor, 10)
-        themeStack.pinBottom(to: themeView, 10)
-        themeStack.pinCenterX(to: themeView)
+        configureThemeLabel(themeView: themeView, themeLabel: themeLabel)
+        configureThemeStack(themeView: themeView, themeLabel: themeLabel, themeStack: themeStack, themeOne: themeOne, themeTwo: themeTwo, themeThree: themeThree)
     }
     
     @objc
-    private func themeButtonWasPressed(_ sender: UIButton) {
-        var theme = 0
+    override func themeButtonWasPressed(_ sender: UIButton) {
+        var theme: Int = .zero
         switch sender {
         case themeOne:
-            theme = 1
+            theme = Constants.one
         case themeTwo:
-            theme = 2
+            theme = Int(Constants.coef5)
         default:
-            theme = 3
+            theme = Int(Constants.coef18)
         }
         if themes.contains(theme) {
             sender.layer.borderColor = UIColor.black.cgColor
             themes.remove(at: themes.firstIndex(of: theme)!)
-            if themes.count == 0 {
+            if themes.count == .zero {
                 readyButton.isEnabled = false
             }
         } else {

@@ -35,7 +35,6 @@
 		2E50DB322B8F5A60000DB071 /* RouteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DB312B8F5A60000DB071 /* RouteCell.swift */; };
 		2E50DB382B8FC080000DB071 /* RouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DB372B8FC080000DB071 /* RouteViewController.swift */; };
 		2E50DB3B2B900EB2000DB071 /* RouteWithGrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DB3A2B900EB2000DB071 /* RouteWithGrade.swift */; };
-		2E50DB3D2B90141A000DB071 /* PictureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DB3C2B90141A000DB071 /* PictureCell.swift */; };
 		2E50DB452B91FE40000DB071 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DB442B91FE40000DB071 /* MapViewController.swift */; };
 		2E50DB4A2B924F2C000DB071 /* ViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DB492B924F2C000DB071 /* ViewControllerTest.swift */; };
 		2E50DB4D2B933E8D000DB071 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DB4C2B933E8D000DB071 /* Chat.swift */; };
@@ -56,6 +55,8 @@
 		2EA941282BB3279D004E103F /* MakePictureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA941272BB3279D004E103F /* MakePictureCell.swift */; };
 		2EA9412B2BB332ED004E103F /* SuggestViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA9412A2BB332EC004E103F /* SuggestViewControllerExtension.swift */; };
 		2EB58ABD2BB922EC008D6A24 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB58ABC2BB922EC008D6A24 /* ChatCell.swift */; };
+		2EB58ABF2BBA8813008D6A24 /* RouteSuggestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB58ABE2BBA8813008D6A24 /* RouteSuggestCell.swift */; };
+		2EB58AC12BBAF6F5008D6A24 /* ChatViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB58AC02BBAF6F5008D6A24 /* ChatViewControllerExtension.swift */; };
 		2EEFB0F82BA1B76C00D370BA /* SuggestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEFB0F72BA1B76C00D370BA /* SuggestViewController.swift */; };
 		2EEFB0FA2BA1CA7400D370BA /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEFB0F92BA1CA7400D370BA /* ImagePicker.swift */; };
 		760AAC6228AFC992D5028927 /* Pods_ClassicsWays.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAF1A4D267529043336C5CAE /* Pods_ClassicsWays.framework */; };
@@ -111,7 +112,6 @@
 		2E50DB312B8F5A60000DB071 /* RouteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCell.swift; sourceTree = "<group>"; };
 		2E50DB372B8FC080000DB071 /* RouteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteViewController.swift; sourceTree = "<group>"; };
 		2E50DB3A2B900EB2000DB071 /* RouteWithGrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteWithGrade.swift; sourceTree = "<group>"; };
-		2E50DB3C2B90141A000DB071 /* PictureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureCell.swift; sourceTree = "<group>"; };
 		2E50DB442B91FE40000DB071 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		2E50DB492B924F2C000DB071 /* ViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerTest.swift; sourceTree = "<group>"; };
 		2E50DB4C2B933E8D000DB071 /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
@@ -132,6 +132,8 @@
 		2EA941272BB3279D004E103F /* MakePictureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakePictureCell.swift; sourceTree = "<group>"; };
 		2EA9412A2BB332EC004E103F /* SuggestViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestViewControllerExtension.swift; sourceTree = "<group>"; };
 		2EB58ABC2BB922EC008D6A24 /* ChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
+		2EB58ABE2BBA8813008D6A24 /* RouteSuggestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSuggestCell.swift; sourceTree = "<group>"; };
+		2EB58AC02BBAF6F5008D6A24 /* ChatViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewControllerExtension.swift; sourceTree = "<group>"; };
 		2EEFB0F72BA1B76C00D370BA /* SuggestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestViewController.swift; sourceTree = "<group>"; };
 		2EEFB0F92BA1CA7400D370BA /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		8B3F084EA94B7E5EA9E2E87E /* Pods-ClassicsWays.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClassicsWays.release.xcconfig"; path = "Target Support Files/Pods-ClassicsWays/Pods-ClassicsWays.release.xcconfig"; sourceTree = "<group>"; };
@@ -324,7 +326,7 @@
 			children = (
 				2E50DA972B8BC22A000DB071 /* RatingCell.swift */,
 				2E50DB312B8F5A60000DB071 /* RouteCell.swift */,
-				2E50DB3C2B90141A000DB071 /* PictureCell.swift */,
+				2EB58ABE2BBA8813008D6A24 /* RouteSuggestCell.swift */,
 				2E50DB612B971BCA000DB071 /* MessageCell.swift */,
 				2EB58ABC2BB922EC008D6A24 /* ChatCell.swift */,
 				2EA940FD2BAD8421004E103F /* LocationCell.swift */,
@@ -380,6 +382,7 @@
 			isa = PBXGroup;
 			children = (
 				2E50DA8B2B8AB431000DB071 /* UIViewControllerExtension.swift */,
+				2EB58AC02BBAF6F5008D6A24 /* ChatViewControllerExtension.swift */,
 				2EA9412A2BB332EC004E103F /* SuggestViewControllerExtension.swift */,
 			);
 			path = extensions;
@@ -598,7 +601,6 @@
 				2EA941002BAD9C44004E103F /* EditingCellViewController.swift in Sources */,
 				2E50DB262B8EB345000DB071 /* ServerErrorViewController.swift in Sources */,
 				2E50DA8A2B8AB3EA000DB071 /* NetworkService.swift in Sources */,
-				2E50DB3D2B90141A000DB071 /* PictureCell.swift in Sources */,
 				2E50DB532B933F35000DB071 /* RouteFunctions.swift in Sources */,
 				2E50DA3F2B8AAEB5000DB071 /* AppDelegate.swift in Sources */,
 				2E50DA922B8AC55E000DB071 /* TemplateViewController.swift in Sources */,
@@ -614,6 +616,7 @@
 				2E50DA412B8AAEB5000DB071 /* SceneDelegate.swift in Sources */,
 				2E50DB382B8FC080000DB071 /* RouteViewController.swift in Sources */,
 				2E50DA7E2B8AB28F000DB071 /* ProfileViewController.swift in Sources */,
+				2EB58AC12BBAF6F5008D6A24 /* ChatViewControllerExtension.swift in Sources */,
 				2E50DA962B8BC07D000DB071 /* RatingViewController.swift in Sources */,
 				2E50DB5C2B951D7C000DB071 /* ChatViewController.swift in Sources */,
 				2E50DA982B8BC22A000DB071 /* RatingCell.swift in Sources */,
@@ -634,6 +637,7 @@
 				2E50DA7C2B8AB275000DB071 /* MainRegistrationViewController.swift in Sources */,
 				2E50DA8C2B8AB431000DB071 /* UIViewControllerExtension.swift in Sources */,
 				2E50DB4D2B933E8D000DB071 /* Chat.swift in Sources */,
+				2EB58ABF2BBA8813008D6A24 /* RouteSuggestCell.swift in Sources */,
 				2EA9412B2BB332ED004E103F /* SuggestViewControllerExtension.swift in Sources */,
 				2E50DB1F2B8CB21B000DB071 /* ChangeAvatarViewController.swift in Sources */,
 				2E50DB222B8E62BF000DB071 /* ChangeNameViewController.swift in Sources */,
@@ -831,9 +835,11 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = s.ClassicsWays;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -861,9 +867,11 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = s.ClassicsWays;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

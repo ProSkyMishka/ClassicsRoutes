@@ -11,7 +11,6 @@ struct Message: Identifiable, Codable {
     let id: String
     let user: String
     let route: String
-    let routeSuggest: String
     let time: String
     let text: String
 }

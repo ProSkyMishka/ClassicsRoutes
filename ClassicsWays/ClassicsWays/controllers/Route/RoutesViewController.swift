@@ -13,71 +13,71 @@ class RoutesViewController: TemplateViewController {
     private var table: UITableView = UITableView(frame: .zero)
     private var routes: [Route] = []
     private var first: [RouteWithGrade] = []
-    private var firstTheme = 0
-    private var secondTheme = 0
-    private var thirdTheme = 0
+    private var firstTheme: Int = .zero
+    private var secondTheme: Int = .zero
+    private var thirdTheme: Int = .zero
     private var second: [RouteWithGrade] = []
     private var third: [RouteWithGrade] = []
     private var themes = Vars.user!.themes
-    private var firstHeader = ""
-    private var secondHeader = ""
-    private var thirdHeader = ""
-    private var themesArray = ["Писатели", "Художники", "Исторические лица"]
-    private var themesArrayInt = [1, 2, 3]
+    private var firstHeader = Constants.nilString
+    private var secondHeader = Constants.nilString
+    private var thirdHeader = Constants.nilString
+    private var themesArray = [Constants.themeWriter, Constants.themeArtist, Constants.themeHistorical]
+    private var themesArrayInt = [Constants.one, Int(Constants.coef5), Int(Constants.coef18)]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        switch themes[0] {
-        case themesArrayInt[0]:
-            firstTheme = themesArrayInt[0]
-            firstHeader = themesArray[0]
-            themesArray.remove(at: 0)
-            themesArrayInt.remove(at: 0)
-        case themesArrayInt[1]:
-            firstTheme = themesArrayInt[1]
-            firstHeader = themesArray[1]
-            themesArray.remove(at: 1)
-            themesArrayInt.remove(at: 1)
+        switch themes[.zero] {
+        case themesArrayInt[.zero]:
+            firstTheme = themesArrayInt[.zero]
+            firstHeader = themesArray[.zero]
+            themesArray.remove(at: .zero)
+            themesArrayInt.remove(at: .zero)
+        case themesArrayInt[Constants.one]:
+            firstTheme = themesArrayInt[Constants.one]
+            firstHeader = themesArray[Constants.one]
+            themesArray.remove(at: Constants.one)
+            themesArrayInt.remove(at: Constants.one)
         default:
-            firstTheme = themesArrayInt[2]
-            firstHeader = themesArray[2]
-            themesArray.remove(at: 2)
-            themesArrayInt.remove(at: 2)
+            firstTheme = themesArrayInt[Int(Constants.coef5)]
+            firstHeader = themesArray[Int(Constants.coef5)]
+            themesArray.remove(at: Int(Constants.coef5))
+            themesArrayInt.remove(at: Int(Constants.coef5))
         }
         
-        if themes.count > 1 {
-            switch themes[1] {
-            case themesArrayInt[0]:
-                secondTheme = themesArrayInt[0]
-                secondHeader = themesArray[0]
-                themesArray.remove(at: 0)
-                themesArrayInt.remove(at: 0)
+        if themes.count > Constants.one {
+            switch themes[Constants.one] {
+            case themesArrayInt[.zero]:
+                secondTheme = themesArrayInt[.zero]
+                secondHeader = themesArray[.zero]
+                themesArray.remove(at: .zero)
+                themesArrayInt.remove(at: .zero)
             default:
-                secondTheme = themesArrayInt[1]
-                secondHeader = themesArray[1]
-                themesArray.remove(at: 1)
-                themesArrayInt.remove(at: 1)
+                secondTheme = themesArrayInt[Constants.one]
+                secondHeader = themesArray[Constants.one]
+                themesArray.remove(at: Constants.one)
+                themesArrayInt.remove(at: Constants.one)
             }
         } else {
-            secondTheme = themesArrayInt[0]
-            secondHeader = themesArray[0]
-            themesArray.remove(at: 0)
-            themesArrayInt.remove(at: 0)
+            secondTheme = themesArrayInt[.zero]
+            secondHeader = themesArray[.zero]
+            themesArray.remove(at: .zero)
+            themesArrayInt.remove(at: .zero)
         }
         
-        thirdTheme = themesArrayInt[0]
-        thirdHeader = themesArray[0]
+        thirdTheme = themesArrayInt[.zero]
+        thirdHeader = themesArray[.zero]
         
         Task {
             do {
                 routes = try await NetworkService.shared.getAllRoutes()
                 DispatchQueue.main.async {
                     for route in self.routes {
-                        var sum = 0.0
+                        var sum: Double = .zero
                         for i in route.raiting {
-                            if i == "+" {
-                                sum += 5.0
+                            if i == Constants.plus {
+                                sum += Constants.coef7
                             }
                         }
                         if route.theme == self.firstTheme {
@@ -98,7 +98,7 @@ class RoutesViewController: TemplateViewController {
                 print("Произошла ошибка: \(error)")
             }
         }
-        status = 3
+        status = Int(Constants.coef18)
         configureUI()
     }
     
@@ -116,8 +116,8 @@ class RoutesViewController: TemplateViewController {
         table.delegate = self
         table.dataSource = self
         table.separatorStyle = .none
-        table.rowHeight = view.bounds.height * 0.3
-        table.sectionHeaderHeight = view.bounds.height * 0.05
+        table.rowHeight = view.bounds.height * Constants.coef10
+        table.sectionHeaderHeight = view.bounds.height * Constants.coef16
         
         
         table.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
@@ -128,15 +128,15 @@ class RoutesViewController: TemplateViewController {
     func handleDelete(indexPath: IndexPath) {
         if !routes.isEmpty {
             var array: [RouteWithGrade] = []
-            switch indexPath[0] {
-            case 0:
+            switch indexPath[.zero] {
+            case .zero:
                 array = first
-            case 1:
+            case Constants.one:
                 array = second
             default:
                 array = third
             }
-            let route = array[indexPath[1]]
+            let route = array[indexPath[Constants.one]]
             let id = route.route?.id
             Task {
                 do {
@@ -154,15 +154,15 @@ class RoutesViewController: TemplateViewController {
     func handleEdit(indexPath: IndexPath) {
         if !routes.isEmpty {
             var array: [RouteWithGrade] = []
-            switch indexPath[0] {
-            case 0:
+            switch indexPath[.zero] {
+            case .zero:
                 array = first
-            case 1:
+            case Constants.one:
                 array = second
             default:
                 array = third
             }
-            let route = array[indexPath[1]].route
+            let route = array[indexPath[Constants.one]].route
             let vc = SuggestViewController()
             vc.configure(id: route!.id, name: route!.name, person: route!.person, desc: route!.description, time: String(route!.time), place: route!.start, locations: route!.locations, avatar: route!.avatar, pictures: route!.pictures, theme: route!.theme, raiting: route!.raiting)
             navigationController?.pushViewController(vc, animated: true)
@@ -174,33 +174,33 @@ class RoutesViewController: TemplateViewController {
 extension RoutesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection
                    section: Int) -> String? {
-        if (section == 0) {
+        if (section == .zero) {
             return firstHeader
-        } else if (section == 1) {
+        } else if (section == Constants.one) {
             return secondHeader
         }
         return thirdHeader
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
+        if section == .zero {
             return first.count
-        } else if section == 1 {
+        } else if section == Constants.one {
             return second.count
         }
         return third.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return Int(Constants.coef18)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: RouteCell.reuseId, for: indexPath)
         guard let routeCell = cell as? RouteCell else { return cell }
-        if indexPath.section == 0 {
+        if indexPath.section == .zero {
             configureCell(arrayWithGrade: first, indexPath: indexPath, routeCell: routeCell)
-        } else if indexPath.section == 1 {
+        } else if indexPath.section == Constants.one {
             configureCell(arrayWithGrade: second, indexPath: indexPath, routeCell: routeCell)
         } else {
             configureCell(arrayWithGrade: third, indexPath: indexPath, routeCell: routeCell)
@@ -220,29 +220,29 @@ extension RoutesViewController: UITableViewDelegate {
         view.tintColor = Constants.color
         let header = view as! UITableViewHeaderFooterView
         header.textLabel?.textColor = UIColor.black
-        header.textLabel?.font = UIFont.boldSystemFont(ofSize: self.view.bounds.height * 0.04)
-        header.layer.borderWidth = 2
+        header.textLabel?.font = UIFont.boldSystemFont(ofSize: self.view.bounds.height * Constants.coef29)
+        header.layer.borderWidth = Constants.coef5
         header.layer.borderColor = UIColor.black.cgColor
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var array: [RouteWithGrade] = []
-        switch indexPath[0] {
-        case 0:
+        switch indexPath[.zero] {
+        case .zero:
             array = first
-        case 1:
+        case Constants.one:
             array = second
         default:
             array = third
         }
-        Vars.route = array[indexPath[1]]
+        Vars.route = array[indexPath[Constants.one]]
         let vc = RouteViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt
                    indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        if (Vars.user?.role == "admin") {
+        if (Vars.user?.role == Constants.adminRole) {
             let deleteAction = UIContextualAction(
                 style: .destructive,
                 title: .none
@@ -252,7 +252,7 @@ extension RoutesViewController: UITableViewDelegate {
             }
             
             deleteAction.image = UIImage(
-                systemName: "trash.fill",
+                systemName: Constants.trashFillSymbol,
                 withConfiguration: UIImage.SymbolConfiguration(weight: .bold)
             )?.withTintColor(.white)
             deleteAction.backgroundColor = Constants.red
@@ -263,7 +263,7 @@ extension RoutesViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt
                    indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        if (Vars.user?.role == "admin") {
+        if (Vars.user?.role == Constants.adminRole) {
             let editAction = UIContextualAction(
                 style: .destructive,
                 title: .none
@@ -272,7 +272,7 @@ extension RoutesViewController: UITableViewDelegate {
                 completion(true)
             }
             editAction.image = UIImage(
-                systemName: "square.and.pencil",
+                systemName: Constants.editSymbol,
                 withConfiguration: UIImage.SymbolConfiguration(weight: .bold)
             )?.withTintColor(.white)
             editAction.backgroundColor = Constants.green

@@ -13,12 +13,12 @@ class ChatsViewController: TemplateViewController {
     private var table: UITableView = UITableView(frame: .zero)
     private var users: [User] = []
     private var chats: [ChatDate] = []
-    private var textLabel = "Чаты"
-    private var routeId = ""
+    private var textLabel = Constants.chatsString
+    private var routeId = Constants.nilString
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        status = 1
+        status = Constants.one
         configureUI()
         Task {
             do {
@@ -45,7 +45,7 @@ class ChatsViewController: TemplateViewController {
     
     func configure(with routeId: String) {
         bar.isHidden = true
-        textLabel = "Выберите"
+        textLabel = Constants.choose
         self.routeId = routeId
         configureBackButton(.black)
     }
@@ -69,9 +69,9 @@ class ChatsViewController: TemplateViewController {
         
         stick.translatesAutoresizingMaskIntoConstraints = false
         stick.pinWidth(to: view)
-        stick.setHeight(2)
+        stick.setHeight(Constants.coef5)
         stick.pinCenterX(to: view)
-        stick.pinTop(to: txtLabel.bottomAnchor, 5)
+        stick.pinTop(to: txtLabel.bottomAnchor, Constants.coef7)
     }
     
     private func configureTable() {
@@ -83,9 +83,9 @@ class ChatsViewController: TemplateViewController {
         table.delegate = self
         table.backgroundColor = Constants.color
         table.separatorStyle = .none
-        table.rowHeight = 100
+        table.rowHeight = Constants.rowHeight
         
-        table.pinTop(to: stick.bottomAnchor, view.bounds.height * 0.05)
+        table.pinTop(to: stick.bottomAnchor, view.bounds.height * Constants.coef16)
         table.pinWidth(to: view)
         table.pinBottom(to: bar.topAnchor)
     }
@@ -104,13 +104,13 @@ extension ChatsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ChatCell.reuseId, for: indexPath)
         guard let chatCell = cell as? ChatCell else { return cell }
-        var name = ""
-        var avatar = ""
+        var name = Constants.nilString
+        var avatar = Constants.nilString
         for user in chats[indexPath.row].users {
             if user == Vars.user!.id {
                 continue
             }
-            name += "\(users[(users.firstIndex(where: {$0.id == user}))!].name) "
+            name += (users[(users.firstIndex(where: {$0.id == user}))!].name) + Constants.space
             avatar = users[users.firstIndex(where: {$0.id == user})!].avatar
         }
         chatCell.configure(with: name, with: avatar)
@@ -126,15 +126,15 @@ extension ChatsViewController: UITableViewDelegate {
             if !routeId.isEmpty {
                 Task {
                     do {
-                        let message = try await NetworkService.shared.createMessage(user: Vars.user!.id, route: routeId, routeSuggest: "false", time: Constants.format.string(from: Date.now), text: Constants.routeMessage)
+                        let message = try await NetworkService.shared.createMessage(user: Vars.user!.id, route: routeId, time: Constants.format.string(from: Date.now), text: Constants.routeMessage)
                         Vars.chat = try await NetworkService.shared.getChat(id: Vars.chat!.id)
                         try await NetworkService.shared.setUpWebSocket()
-                        let messageSocket = MessageSocket(chatId: Vars.chat!.id, id: message.id, user: Vars.user!.id, route: message.route, routeSuggest: message.routeSuggest, time: message.time, text: message.text)
+                        let messageSocket = MessageSocket(chatId: Vars.chat!.id, id: message.id, user: Vars.user!.id, route: message.route, time: message.time, text: message.text)
                         try await NetworkService.shared.sendMessages(message: URLSessionWebSocketTask.Message.data(JSONEncoder().encode(messageSocket))
                         )
                         var messages = Vars.chat?.messages
                         messages?.append(message.id)
-                        Vars.chat = try await NetworkService.shared.updateChat(id: Vars.chat!.id, users: Vars.chat!.users, messages: messages!, last: Constants.format.string(from: message.time))
+                        Vars.chat = try await NetworkService.shared.updateChat(id: Vars.chat!.id, users: Vars.chat!.users, messages: messages!, last: Constants.format.string(from: message.time), routeSuggest: Vars.chat!.routeSuggest)
                         let vc = ChatViewController()
                         navigationController?.pushViewController(vc, animated: true)
                     } catch {

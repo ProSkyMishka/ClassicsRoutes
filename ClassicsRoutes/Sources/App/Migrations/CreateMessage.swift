@@ -16,7 +16,6 @@ struct CreateMessage: AsyncMigration {
             .field("text", .string, .required)
             .field("time", .string, .required)
             .field("route", .string, .required)
-            .field("routeSuggest", .string, .required)
         
         try await schema.create()
     }

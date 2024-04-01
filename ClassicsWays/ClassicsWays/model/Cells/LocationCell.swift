@@ -10,7 +10,7 @@ import UIKit
 final class LocationCell: UITableViewCell {
     static let reuseId: String = "LocationCell"
     
-    private enum Constants {
+    private enum ThisConstants {
         static let wrapColor: UIColor = .white
         static let wrapRadius: CGFloat = 16
         static let wrapOffsetV: CGFloat = 5
@@ -43,13 +43,13 @@ final class LocationCell: UITableViewCell {
         let wrap: UIView = UIView()
         addSubview(wrap)
         
-        wrap.backgroundColor = Constants.wrapColor
-        wrap.layer.cornerRadius = Constants.wrapRadius
-        wrap.pinVertical(to: self, Constants.wrapOffsetV)
-        wrap.pinHorizontal(to: self, Constants.wrapOffsetH)
+        wrap.backgroundColor = ThisConstants.wrapColor
+        wrap.layer.cornerRadius = ThisConstants.wrapRadius
+        wrap.pinVertical(to: self, ThisConstants.wrapOffsetV)
+        wrap.pinHorizontal(to: self, ThisConstants.wrapOffsetH)
         
         wrap.addSubview(wishLabel)
         wishLabel.textColor = .black
-        wishLabel.pin(to: wrap, Constants.wishLabelOffset)
+        wishLabel.pin(to: wrap, ThisConstants.wishLabelOffset)
     }
 }

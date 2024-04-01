@@ -67,6 +67,7 @@ struct ChatsController: RouteCollection {
         chat.messages = chatUpdate.messages
         chat.users = chatUpdate.users
         chat.last = chatUpdate.last
+        chat.routeSuggest = chatUpdate.routeSuggest
         
         try await chat.save(on: req.db)
         

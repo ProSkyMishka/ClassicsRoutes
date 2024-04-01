@@ -21,12 +21,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         var navC = UINavigationController(rootViewController: RootViewController())
         let users = (UserDefaults.standard.array(forKey: Constants.usersKey) as? [String] ?? [])
-        if users.count != 0 {
+        if users.count != .zero {
             Task {
                 do {
-                    Vars.user = try await NetworkService.shared.auth(name: users[0], password: users[1])
+                    Vars.user = try await NetworkService.shared.auth(name: users[.zero], password: users[Constants.one])
                     DispatchQueue.main.async {
-                        Vars.password = users[1]
+                        Vars.password = users[Constants.one]
                         navC = UINavigationController(rootViewController: ProfileViewController())
                         window.rootViewController = navC
                         self.window = window

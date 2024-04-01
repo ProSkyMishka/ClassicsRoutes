@@ -15,6 +15,7 @@ struct CreateChat: AsyncMigration {
             .field("users", .array(of: .string), .required)
             .field("messages", .array(of: .string), .required)
             .field("last", .string, .required)
+            .field("routeSuggest", .string, .required)
         
         try await schema.create()
     }

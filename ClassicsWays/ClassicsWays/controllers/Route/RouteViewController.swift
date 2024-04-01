@@ -22,13 +22,10 @@ class RouteViewController: UIViewController {
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
     )
-    private var contentSize: CGSize?
-    private var rest: Int = (Vars.route!.route!.pictures.count - 4) / 2 + (Vars.route!.route!.pictures.count - 4) % 2
-    private var coef = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        coef = 1.0 + Double(rest) * 0.3
+
         configureUI()
     }
     
@@ -42,7 +39,7 @@ class RouteViewController: UIViewController {
     
     private func configureSharedButton() {
         navigationItem.hidesBackButton = true
-        let largeFont = UIFont.systemFont(ofSize: view.bounds.height * 0.025, weight: .bold)
+        let largeFont = UIFont.systemFont(ofSize: view.bounds.height * Constants.coef8, weight: .bold)
         let configuration = UIImage.SymbolConfiguration(font: largeFont)
         let image = UIImage(systemName: "square.and.arrow.up", withConfiguration: configuration)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(sharedButtonTapped))
@@ -61,20 +58,16 @@ class RouteViewController: UIViewController {
         
         infoView.isScrollEnabled = true
         infoView.backgroundColor = Constants.color
-        infoView.layer.cornerRadius = Constants.radius
-        infoView.layer.borderWidth = 2
+        infoView.layer.cornerRadius = Constants.value
+        infoView.layer.borderWidth = Constants.coef5
         infoView.layer.borderColor = UIColor.black.cgColor
         
-        contentSize = CGSize(width: view.bounds.width * 0.95, height: view.bounds.height * 0.85)
-        if Vars.route!.route!.pictures.count > 4 {
-            contentSize = CGSize(width: view.bounds.width * 0.95, height: view.bounds.height * 0.85 * coef)
-        }
-        infoView.contentSize = contentSize!
+        infoView.contentSize = CGSize(width: view.bounds.width * Constants.coef9, height: view.bounds.height * Constants.coef12)
         
         infoView.translatesAutoresizingMaskIntoConstraints = false
         infoView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
-        infoView.pinWidth(to: view, 0.95)
-        infoView.pinBottom(to: startButton.topAnchor, view.bounds.height * 0.01)
+        infoView.pinWidth(to: view, Constants.coef9)
+        infoView.pinBottom(to: startButton.topAnchor, view.bounds.height * Constants.coef34)
         infoView.pinCenterX(to: view)
         
         configureContentView()
@@ -82,7 +75,7 @@ class RouteViewController: UIViewController {
     
     private func configureContentView() {
         infoView.addSubview(contentView)
-        contentView.frame.size = CGSize(width: view.bounds.width * 0.95, height: view.bounds.height * 2)
+        contentView.frame.size = CGSize(width: view.bounds.width * Constants.coef9, height: view.bounds.height * Constants.coef5)
         contentView.backgroundColor = Constants.color
         
         configureStackLabel()
@@ -91,67 +84,67 @@ class RouteViewController: UIViewController {
     
     private func configureName() {
         name.text = Vars.route!.route!.name
-        name.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.042)
+        name.font = UIFont.boldSystemFont(ofSize: view.bounds.height * Constants.coef29)
     }
     
     private func configureDescription() {
         desc.text = Vars.route!.route!.description
-        desc.font = UIFont.systemFont(ofSize: view.bounds.height * 0.032)
+        desc.font = UIFont.systemFont(ofSize: view.bounds.height * Constants.coef11)
     }
     
     private func configureTime() {
         let minutes = Vars.route!.route!.time
-        let rest = minutes % 60
-        let hours: Int = minutes / 60
-        var hoursStr = ""
-        var minStr = ""
-        if hours != 0 {
-            hoursStr = " \(hours) ч."
+        let rest = minutes % Constants.minutes
+        let hours: Int = minutes / Constants.minutes
+        var hoursStr = Constants.nilString
+        var minStr = Constants.nilString
+        if hours != .zero {
+            hoursStr = Constants.space + String(hours) + Constants.hour
         }
-        if rest != 0 {
-            minStr = " \(rest) мин."
+        if rest != .zero {
+            minStr = Constants.space + String(rest) + Constants.min
         }
-        time.text = "Время прохождения:\(hoursStr)\(minStr)"
+        time.text = Constants.time + hoursStr + minStr
     }
     
     private func configurePlace() {
-        place.text = "Точка старта:\n\(Vars.route!.route!.start)"
+        place.text = Constants.startPlace + (Vars.route!.route!.start)
     }
     
     private func configureRaiting() {
         raiting.textColor = .green
-        if Vars.route!.route!.raiting.count == 0 {
-            raiting.text = "Нет оценок"
+        if Vars.route!.route!.raiting.count == .zero {
+            raiting.text = Constants.withOutGrades
             raiting.textColor = Constants.gold
             return
         }
         let result = Vars.route!.grade!
-        if result < 4 {
+        if result < Constants.coef1 {
             raiting.textColor = .red
         }
-        raiting.text = "Оценка:  \(NSString(format: "%.2f", result))/5"
+        raiting.text = Constants.grade + String(NSString(format: Constants.stringFormat, result)) + Constants.fromFive
     }
     
     private func configurePhoto() {
-        if Vars.route!.route!.pictures.count == 0 {
+        if Vars.route!.route!.pictures.count == .zero {
             photo.isHidden = true
         }
-        photo.text = "Места из маршрута:"
-        photo.font = UIFont.systemFont(ofSize: view.bounds.height * 0.032)
+        photo.text = Constants.places
+        photo.font = UIFont.systemFont(ofSize: view.bounds.height * Constants.coef11)
     }
     
     private func configureStackLabel() {
         contentView.addSubview(stackLabel)
         
         stackLabel.axis = .vertical
-        stackLabel.spacing = view.bounds.height * 0.02
+        stackLabel.spacing = view.bounds.height * Constants.coef20
         
         for label in [name, desc, time, place, raiting, photo] {
             label.textAlignment = .center
             label.textColor = .black
             label.lineBreakMode = .byWordWrapping
             label.numberOfLines = .zero
-            label.font = UIFont.systemFont(ofSize: view.bounds.height * 0.021)
+            label.font = UIFont.systemFont(ofSize: view.bounds.height * Constants.coef20)
             
             stackLabel.addArrangedSubview(label)
         }
@@ -164,23 +157,23 @@ class RouteViewController: UIViewController {
         configurePhoto()
         
         stackLabel.translatesAutoresizingMaskIntoConstraints = false
-        stackLabel.pinLeft(to: contentView, view.bounds.width * 0.05)
-        stackLabel.pinRight(to: contentView, view.bounds.width * 0.05)
-        stackLabel.pinTop(to: contentView, view.bounds.height * 0.03)
+        stackLabel.pinLeft(to: contentView, view.bounds.width * Constants.coef16)
+        stackLabel.pinRight(to: contentView, view.bounds.width * Constants.coef16)
+        stackLabel.pinTop(to: contentView, view.bounds.height * Constants.coef11)
         stackLabel.pinCenterX(to: contentView)
     }
     
     private func configurePicturesCollection() {
         contentView.addSubview(picturesCollection)
         
-        picturesCollection.register(PictureCell.self, forCellWithReuseIdentifier: PictureCell.reuseIdentifier)
+        picturesCollection.register(MakePictureCell.self, forCellWithReuseIdentifier: MakePictureCell.reuseIdentifier)
         
         picturesCollection.dataSource = self
         picturesCollection.delegate = self
         picturesCollection.alwaysBounceVertical = true
         picturesCollection.isScrollEnabled = false
         picturesCollection.backgroundColor = Constants.color
-        picturesCollection.layer.cornerRadius = Constants.radius
+        picturesCollection.layer.cornerRadius = Constants.value
         
         if let layout = picturesCollection.collectionViewLayout as?
             UICollectionViewFlowLayout {
@@ -190,27 +183,27 @@ class RouteViewController: UIViewController {
         }
         
         picturesCollection.translatesAutoresizingMaskIntoConstraints = false
-        let heightRest = Vars.route!.route!.pictures.count / 2 + Vars.route!.route!.pictures.count % 2
-        let heightCoef = Double(heightRest) * 0.3
-        picturesCollection.pinHeight(to: view, 0.85 * heightCoef)
-        picturesCollection.pinHorizontal(to: contentView, view.bounds.width * 0.05)
-        picturesCollection.pinTop(to: stackLabel.bottomAnchor, view.bounds.height * 0.02)
+        let heightRest = Vars.route!.route!.pictures.count / Int(Constants.coef5) + Vars.route!.route!.pictures.count % Int(Constants.coef5)
+        let heightCoef = Double(heightRest) * Constants.coef35
+        picturesCollection.setHeight(view.bounds.width * heightCoef)
+        picturesCollection.pinHorizontal(to: contentView, view.bounds.width * Constants.coef16)
+        picturesCollection.pinTop(to: stackLabel.bottomAnchor, view.bounds.height * Constants.coef20)
     }
     
     private func configureStartButton() {
         view.addSubview(startButton)
         
-        startButton.setTitle("НАЧАТЬ", for: .normal)
-        startButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.04)
+        startButton.setTitle(Constants.start.uppercased(), for: .normal)
+        startButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * Constants.coef29)
         startButton.setTitleColor(.black, for: .normal)
         startButton.setTitleColor(.lightGray, for: .disabled)
         startButton.layer.borderColor = UIColor.black.cgColor
-        startButton.layer.borderWidth = 2
+        startButton.layer.borderWidth = Constants.coef5
         startButton.backgroundColor = Constants.color
         
         startButton.translatesAutoresizingMaskIntoConstraints = false
         startButton.pinWidth(to: view)
-        startButton.pinHeight(to: view, 0.07)
+        startButton.pinHeight(to: view, Constants.avatarCoef3)
         startButton.pinBottom(to: view)
         
         startButton.addTarget(self, action: #selector(startButtonWasPressed), for: .touchUpInside)
@@ -226,7 +219,11 @@ class RouteViewController: UIViewController {
 // MARK: - UICollectionViewDataSource
 extension RouteViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        let newHeight = returnHeight(thisView: stackLabel) + returnHeight(thisView: picturesCollection) + view.bounds.height * Constants.coef16
+        let newSize = CGSize(width: view.bounds.width * Constants.coef9, height: newHeight)
+        contentView.frame.size = newSize
+        infoView.contentSize = newSize
+        return Constants.one
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -234,11 +231,13 @@ extension RouteViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PictureCell.reuseIdentifier, for: indexPath)
-        guard let pictureCell = cell as? PictureCell else {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MakePictureCell.reuseIdentifier, for: indexPath)
+        guard let pictureCell = cell as? MakePictureCell else {
             return cell
         }
-        pictureCell.configure(with: Vars.route!.route!.pictures[indexPath.row])
+        let image = UIImageView()
+        UIViewController().returnImage(imageView: image, key: Vars.route!.route!.pictures[indexPath.row])
+        pictureCell.configure(with: image)
         return cell
     }
 }
@@ -246,19 +245,19 @@ extension RouteViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegateFlowLayout
 extension RouteViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = view.bounds.width * 0.35
-        return CGSize(width: width, height: width * 0.89)
+        let width = view.bounds.width * Constants.coef22
+        return CGSize(width: width, height: width * Constants.coef23)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return view.bounds.width * 0.1
+        return view.bounds.width / Constants.coef14
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return view.bounds.width * 0.1
+        return view.bounds.width / Constants.coef14
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: view.bounds.height * 0.02, left: 0, bottom: view.bounds.height * 0.02, right: 0)
+        return UIEdgeInsets(top: view.bounds.height * Constants.coef20, left: .zero, bottom: view.bounds.height * Constants.coef20, right: .zero)
     }
 }

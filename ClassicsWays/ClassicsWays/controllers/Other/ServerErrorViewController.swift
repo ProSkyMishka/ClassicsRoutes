@@ -27,25 +27,25 @@ class ServerErrorViewController: TemplateViewController {
         
         error.translatesAutoresizingMaskIntoConstraints = false
         error.textColor = .black
-        error.font = UIFont.systemFont(ofSize: view.bounds.height * 0.03)
+        error.font = UIFont.systemFont(ofSize: view.bounds.height * Constants.coef11)
         error.lineBreakMode = .byWordWrapping
         error.numberOfLines = .zero
-        error.text = "Возникла проблема соединения, проверьте подключение к сети и перезапустите приложение. Если не помогло, то значит проблемы со стороны сервера и мы их уже решаем, немного подождите и перезапустите приложение. Приносим свои извинения"
+        error.text = Constants.serverError
         
         error.pinCenter(to: errorView)
-        error.setWidth(view.bounds.width * 0.85)
+        error.setWidth(view.bounds.width * Constants.coef12)
     }
     
     private func configureErrorView() {
         view.addSubview(errorView)
         
         errorView.backgroundColor = Constants.red
-        errorView.layer.borderWidth = 2
+        errorView.layer.borderWidth = Constants.coef5
         errorView.layer.borderColor = UIColor.black.cgColor
-        errorView.layer.cornerRadius = Constants.radius
+        errorView.layer.cornerRadius = Constants.value
         
-        errorView.pinWidth(to: view, 0.95)
-        errorView.pinHeight(to: view, 0.5)
+        errorView.pinWidth(to: view, Constants.coef9)
+        errorView.pinHeight(to: view, Constants.coef38)
         errorView.pinCenter(to: view)
         
         configureError()

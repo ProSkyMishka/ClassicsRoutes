@@ -10,12 +10,10 @@ import Foundation
 struct User: Identifiable, Codable {
     let id: String
     let name: String
-    let email: String
     let date: String
     let avatar: String
     let routes: [String]
     let role: String
     let likes: [String]
     let themes: [Int]
-    let chats: [String]
 }

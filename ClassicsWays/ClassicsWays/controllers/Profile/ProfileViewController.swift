@@ -24,7 +24,7 @@ class ProfileViewController: TemplateViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        status = 0
+        status = .zero
         configureUI()
     }
     
@@ -52,28 +52,28 @@ class ProfileViewController: TemplateViewController {
     private func configureName() {
         name.textColor = .black
         name.text = Vars.user!.name
-        name.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.03)
+        name.font = UIFont.boldSystemFont(ofSize: view.bounds.height * Constants.coef11)
         
         name.translatesAutoresizingMaskIntoConstraints = false
-        name.pinTop(to: infoView, view.bounds.height * 0.02)
+        name.pinTop(to: infoView, view.bounds.height * Constants.coef20)
         name.pinHorizontal(to: infoView, Constants.coef4)
     }
     
     private func configureDate() {
-        date.text = "Регистрация: \(Vars.user!.date)"
+        date.text = Constants.regedString + (Vars.user!.date)
     }
     
     private func configureCount() {
-        count.text = "Пройдено маршрутов: \(Vars.user!.routes.count)"
+        count.text = Constants.gone + String((Vars.user!.routes.count))
     }
     
     private func configureStackLabel() {
         stackLabel.axis = .vertical
-        stackLabel.spacing = view.bounds.height * 0.01
+        stackLabel.spacing = view.bounds.height * Constants.coef34
         
         for label in [date, count] {
             label.textColor = .black
-            label.font = UIFont.systemFont(ofSize: view.bounds.height * 0.02)
+            label.font = UIFont.systemFont(ofSize: view.bounds.height * Constants.coef20)
             
             label.translatesAutoresizingMaskIntoConstraints = false
             
@@ -84,7 +84,7 @@ class ProfileViewController: TemplateViewController {
         configureCount()
         
         stackLabel.translatesAutoresizingMaskIntoConstraints = false
-        stackLabel.pinTop(to: name.bottomAnchor, view.bounds.height * 0.02)
+        stackLabel.pinTop(to: name.bottomAnchor, view.bounds.height * Constants.coef20)
         stackLabel.pinHorizontal(to: infoView, Constants.coef4)
     }
     
@@ -94,21 +94,21 @@ class ProfileViewController: TemplateViewController {
         infoView.addSubview(stackLabel)
         
         infoView.backgroundColor = Constants.color
-        infoView.layer.cornerRadius = Constants.radius
-        infoView.layer.borderWidth = 2
+        infoView.layer.cornerRadius = Constants.value
+        infoView.layer.borderWidth = Constants.coef5
         infoView.layer.borderColor = UIColor.black.cgColor
         
         infoView.translatesAutoresizingMaskIntoConstraints = false
         infoView.pinTop(to: avatar.bottomAnchor)
         infoView.pinWidth(to: view)
-        infoView.pinHeight(to: view, 0.15)
+        infoView.pinHeight(to: view, Constants.coef40)
         
         configureName()
         configureStackLabel()
     }
     
     private func configureSignOutButton() {
-        let title = "Выйти"
+        let title = Constants.signOut
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(signOutButtonTapped))
         navigationItem.rightBarButtonItem?.tintColor = .red
     }
@@ -120,37 +120,37 @@ class ProfileViewController: TemplateViewController {
     }
     
     private func configureSettingsLabel() {
-        settingsLabel.text = "Настройки"
+        settingsLabel.text = Constants.settings
         settingsLabel.font = UIFont.boldSystemFont(ofSize: view.bounds.height / Constants.coef)
         settingsLabel.textColor = .black
         
         settingsLabel.translatesAutoresizingMaskIntoConstraints = false
         settingsLabel.pinCenterX(to: settings)
-        settingsLabel.pinTop(to: settings, view.bounds.height * 0.02)
+        settingsLabel.pinTop(to: settings, view.bounds.height * Constants.coef20)
     }
     
     private func configureChangeAvatar() {
-        changeAvatar.setTitle("аватар", for: .normal)
+        changeAvatar.setTitle(Constants.avatarString, for: .normal)
         
         changeAvatar.addTarget(self, action: #selector(changeAvatarWasPressed), for: .touchUpInside)
     }
     
     private func configureChangeName() {
-        changeName.setTitle("имя пользователя", for: .normal)
+        changeName.setTitle(Constants.userNameString.lowercased(), for: .normal)
         
         changeName.addTarget(self, action: #selector(changeNameWasPressed), for: .touchUpInside)
     }
     
     private func configureChangePassword() {
-        changePassword.setTitle("пароль", for: .normal)
+        changePassword.setTitle(Constants.passwordString.lowercased(), for: .normal)
         
         changePassword.addTarget(self, action: #selector(changePasswordWasPressed), for: .touchUpInside)
     }
     
     private func configureSuggest() {
-        suggest.setTitle("предложить маршрут", for: .normal)
-        if Vars.user?.role == "admin" {
-            suggest.setTitle("добавить маршрут", for: .normal)
+        suggest.setTitle(Constants.suggestString, for: .normal)
+        if Vars.user?.role == Constants.adminRole {
+            suggest.setTitle(Constants.addRouteString, for: .normal)
         }
         
         suggest.addTarget(self, action: #selector(suggestWasPressed), for: .touchUpInside)
@@ -158,17 +158,17 @@ class ProfileViewController: TemplateViewController {
     
     private func configureSettingsStack() {
         settingsStack.axis = .vertical
-        settingsStack.spacing = view.bounds.height * 0.005
+        settingsStack.spacing = view.bounds.height * Constants.coef41
         
         for button in [changeAvatar, changeName, changePassword, suggest] {
             button.setTitleColor(Constants.color, for: .normal)
-            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.03)
+            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * Constants.coef11)
             button.backgroundColor = .gray
-            button.layer.borderWidth = 2
+            button.layer.borderWidth = Constants.coef5
             button.layer.borderColor = UIColor.black.cgColor
             
             button.translatesAutoresizingMaskIntoConstraints = false
-            button.setHeight(view.bounds.height * 0.07)
+            button.setHeight(view.bounds.height * Constants.avatarCoef3)
             settingsStack.addArrangedSubview(button)
         }
         
@@ -178,7 +178,7 @@ class ProfileViewController: TemplateViewController {
         configureSuggest()
         
         settingsStack.translatesAutoresizingMaskIntoConstraints = false
-        settingsStack.pinTop(to: settingsLabel.bottomAnchor, view.bounds.height * 0.02)
+        settingsStack.pinTop(to: settingsLabel.bottomAnchor, view.bounds.height * Constants.coef20)
         settingsStack.pinHorizontal(to: settings)
     }
     
@@ -188,14 +188,14 @@ class ProfileViewController: TemplateViewController {
         settings.addSubview(settingsStack)
         
         settings.backgroundColor = Constants.color
-        settings.layer.cornerRadius = Constants.radius
-        settings.layer.borderWidth = 2
+        settings.layer.cornerRadius = Constants.value
+        settings.layer.borderWidth = Constants.coef5
         settings.layer.borderColor = UIColor.black.cgColor
-        settings.layer.cornerRadius = Constants.radius
+        settings.layer.cornerRadius = Constants.value
         
         settings.translatesAutoresizingMaskIntoConstraints = false
-        settings.pinTop(to: infoView.bottomAnchor, view.bounds.height * 0.03)
-        settings.pinBottom(to: bar.topAnchor, view.bounds.height * 0.01)
+        settings.pinTop(to: infoView.bottomAnchor, view.bounds.height * Constants.coef11)
+        settings.pinBottom(to: bar.topAnchor, view.bounds.height * Constants.coef34)
         settings.pinWidth(to: view)
         
         configureSettingsLabel()
@@ -219,7 +219,7 @@ class ProfileViewController: TemplateViewController {
     
     @objc
     private func suggestWasPressed() {
-        if Vars.user?.role == "admin" {
+        if Vars.user?.role == Constants.adminRole {
             navigationController?.pushViewController(SuggestViewController(), animated: true)
         } else {
             Task {
@@ -229,7 +229,7 @@ class ProfileViewController: TemplateViewController {
                     DispatchQueue.main.async {
                         var usersId: [String] = []
                         for user in users {
-                            if user.role == "admin" {
+                            if user.role == Constants.adminRole {
                                 usersId.append(user.id)
                             }
                         }
@@ -255,9 +255,9 @@ class ProfileViewController: TemplateViewController {
                             self.navigationController?.pushViewController(ChatViewController(), animated: true)
                         } else {
                             Task {
-                                let chat = try await NetworkService.shared.createChat(users: usersId, messages: [], last: "01.01.0001 01:00:00")
+                                let chat = try await NetworkService.shared.createChat(users: usersId, messages: [], last: Constants.nilDate)
                                 DispatchQueue.main.async {
-                                    Vars.chat = ChatDate(id: chat.id, users: chat.users, messages: [], last: Constants.format.date(from: chat.last)!)
+                                    Vars.chat = ChatDate(id: chat.id, users: chat.users, messages: [], last: Constants.format.date(from: chat.last)!, routeSuggest: chat.routeSuggest)
                                     self.navigationController?.pushViewController(ChatViewController(), animated: true)
                                 }
                             }

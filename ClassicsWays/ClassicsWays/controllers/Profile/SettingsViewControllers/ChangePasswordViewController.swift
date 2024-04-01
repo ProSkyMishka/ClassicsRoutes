@@ -40,51 +40,51 @@ final class ChangePasswordViewController: UIViewController {
         var passwordView = UIView()
         
         switch type {
-        case 0:
+        case .zero:
             passwordLabel = passwordLabelOld
             passwordView = passwordViewOld
-            passwordLabel.text = "Старый пароль:"
-        case 1:
+            passwordLabel.text = Constants.oldPasswordString
+        case Constants.one:
             passwordLabel = passwordLabelNew
             passwordView = passwordViewNew
-            passwordLabel.text = "Новый пароль:"
+            passwordLabel.text = Constants.newPasswordString
         default:
             passwordLabel = passwordLabelNewCopy
             passwordView = passwordViewNewCopy
-            passwordLabel.text = "Повторите:"
+            passwordLabel.text = Constants.repeatString
         }
         
         passwordView.addSubview(passwordLabel)
         
-        passwordLabel.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.04)
+        passwordLabel.font = UIFont.boldSystemFont(ofSize: view.bounds.height * Constants.coef29)
         passwordLabel.textColor = .black
         
         passwordLabel.translatesAutoresizingMaskIntoConstraints = false
         passwordLabel.pinCenterX(to: passwordView)
-        passwordLabel.pinTop(to: passwordView, view.bounds.height * 0.02)
+        passwordLabel.pinTop(to: passwordView, view.bounds.height * Constants.coef20)
     }
     
     private func configurePasswordField(type: Int) {
         var passwordField = UITextField()
         var passwordView = UIView()
         var passwordLabel = UILabel()
-        var text: String = ""
+        var text: String = Constants.nilString
         switch type {
-        case 0:
+        case .zero:
             passwordLabel = passwordLabelOld
             passwordField = passwordFieldOld
             passwordView = passwordViewOld
-            text = "введите старый пароль"
-        case 1:
+            text = Constants.inputOldPassword
+        case Constants.one:
             passwordLabel = passwordLabelNew
             passwordField = passwordFieldNew
             passwordView = passwordViewNew
-            text = "введите новый пароль"
+            text = Constants.inputNewPassword
         default:
             passwordLabel = passwordLabelNewCopy
             passwordField = passwordFieldNewCopy
             passwordView = passwordViewNewCopy
-            text = "повторите новый пароль"
+            text = Constants.repeatNewPassword
         }
         
         passwordView.addSubview(passwordField)
@@ -95,7 +95,7 @@ final class ChangePasswordViewController: UIViewController {
         passwordField.font = UIFont.boldSystemFont(ofSize: view.bounds.height / Constants.coef2)
         passwordField.textColor = .black
         passwordField.backgroundColor = .white
-        passwordField.layer.cornerRadius = view.bounds.height * 0.02
+        passwordField.layer.cornerRadius = view.bounds.height * Constants.coef20
         
         passwordField.leftView = UIView(frame: CGRect(x: .zero, y: .zero, width: Constants.offset, height: Constants.offset))
         passwordField.rightView = UIView(frame: CGRect(x: .zero, y: .zero, width: Constants.offset, height: Constants.offset))
@@ -106,55 +106,55 @@ final class ChangePasswordViewController: UIViewController {
         
         passwordField.translatesAutoresizingMaskIntoConstraints = false
         passwordField.pinCenterX(to: passwordView)
-        passwordField.pinTop(to: passwordLabel.bottomAnchor, view.bounds.height * 0.02)
-        passwordField.setHeight(view.bounds.height * 0.04)
-        passwordField.setWidth(view.bounds.width * 0.8)
+        passwordField.pinTop(to: passwordLabel.bottomAnchor, view.bounds.height * Constants.coef20)
+        passwordField.setHeight(view.bounds.height * Constants.coef29)
+        passwordField.setWidth(view.bounds.width * Constants.avatarCoef1)
     }
     
     private func configurePasswordStack() {
         view.addSubview(passwordStack)
         
         passwordStack.axis = .vertical
-        passwordStack.spacing = view.bounds.height * 0.02
+        passwordStack.spacing = view.bounds.height * Constants.coef20
         
-        var i = 0
+        var i: Int = .zero
         for password in [passwordViewOld, passwordViewNew, passwordViewNewCopy] {
             password.backgroundColor = Constants.color
-            password.layer.borderWidth = 2
+            password.layer.borderWidth = Constants.coef5
             password.layer.borderColor = UIColor.black.cgColor
-            password.layer.cornerRadius = Constants.radius
+            password.layer.cornerRadius = Constants.value
             
             password.translatesAutoresizingMaskIntoConstraints = false
-            password.setWidth(view.bounds.width * 0.9)
-            password.setHeight(view.bounds.height * 0.15)
+            password.setWidth(view.bounds.width * Constants.coef17)
+            password.setHeight(view.bounds.height * Constants.coef40)
             
             configurePasswordLabel(type: i)
             configurePasswordField(type: i)
-            i += 1
+            i += Constants.one
             
             passwordStack.addArrangedSubview(password)
         }
         
         passwordStack.translatesAutoresizingMaskIntoConstraints = false
         passwordStack.pinCenterX(to: view)
-        passwordStack.pinBottom(to: view.keyboardLayoutGuide.topAnchor, 0.065 * view.bounds.height)
+        passwordStack.pinBottom(to: view.keyboardLayoutGuide.topAnchor, Constants.avatarCoef3 * view.bounds.height)
     }
     
     private func configureReadyButton() {
         view.addSubview(readyButton)
         
         readyButton.isEnabled = false
-        readyButton.setTitle("ГОТОВО", for: .normal)
-        readyButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.04)
+        readyButton.setTitle(Constants.ready.uppercased(), for: .normal)
+        readyButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * Constants.coef29)
         readyButton.setTitleColor(.black, for: .normal)
         readyButton.setTitleColor(.lightGray, for: .disabled)
         readyButton.layer.borderColor = UIColor.black.cgColor
-        readyButton.layer.borderWidth = 2
+        readyButton.layer.borderWidth = Constants.coef5
         readyButton.backgroundColor = Constants.color
         
         readyButton.translatesAutoresizingMaskIntoConstraints = false
         readyButton.pinWidth(to: view)
-        readyButton.pinHeight(to: view, 0.06)
+        readyButton.pinHeight(to: view, Constants.coef44)
         readyButton.pinBottom(to: view)
         
         readyButton.addTarget(self, action: #selector(readyButtonWasPressed), for: .touchUpInside)
@@ -162,25 +162,25 @@ final class ChangePasswordViewController: UIViewController {
     
     @objc
     private func readyButtonWasPressed() {
-        var countDigits = 0
+        var countDigits: Int = .zero
         var flag = true
         for i in passwordFieldNew.text! {
             if Constants.digits.contains(i) {
-                countDigits += 1
+                countDigits += Constants.one
             }
             if !Constants.letters.contains(i) && !Constants.digits.contains(i) {
                 flag = false
             }
         }
-        if countDigits == 0 || !flag || passwordFieldNew.text!.count < 8 {
+        if countDigits == .zero || !flag || passwordFieldNew.text!.count < Int(Constants.coef3) {
             passwordViewNew.backgroundColor = Constants.red
             passwordFieldNew.text = nil
-            passwordFieldNew.attributedPlaceholder = NSAttributedString(string: "неверный формат", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+            passwordFieldNew.attributedPlaceholder = NSAttributedString(string: Constants.formatError, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
             readyButton.isEnabled = false
-            error.text = "error - Пароль должен иметь длину не менее 8 символов, быть написанным на латинице и содержать как минимум одну цифру, специальные символы не допускаются"
+            error.text = Constants.passwordFormatError
             configureErrorView(errorView: errorView, error: error)
             errorView.isHidden = false
-        } else if passwordFieldNewCopy.text != "" && passwordFieldNew.text != "" && passwordFieldOld.text != "" {
+        } else if passwordFieldNewCopy.text != Constants.nilString && passwordFieldNew.text != Constants.nilString && passwordFieldOld.text != Constants.nilString {
             if passwordFieldOld.text == Vars.password {
                 if passwordFieldNew.text == passwordFieldNewCopy.text {
                     readyButton.isEnabled = false
@@ -189,7 +189,7 @@ final class ChangePasswordViewController: UIViewController {
                     passwordViewOld.backgroundColor = Constants.green
                     Task {
                         do {
-                            Vars.user = try await NetworkService.shared.updateUser(id: Vars.user!.id, name: Vars.user!.name, email: Vars.user!.email, date: Vars.user!.date, avatar: Vars.user!.avatar, routes: Vars.user!.routes, role: Vars.user!.role, likes: Vars.user!.likes, themes: Vars.user!.themes, chats: Vars.user!.chats, password: passwordFieldNewCopy.text!)
+                            Vars.user = try await NetworkService.shared.updateUser(id: Vars.user!.id, name: Vars.user!.name, date: Vars.user!.date, avatar: Vars.user!.avatar, routes: Vars.user!.routes, role: Vars.user!.role, likes: Vars.user!.likes, themes: Vars.user!.themes, password: passwordFieldNewCopy.text!)
                             DispatchQueue.main.async {
                                 UserDefaults.standard.set([], forKey: Constants.usersKey)
                                 self.navigationController?.pushViewController(RootViewController(), animated: true)
@@ -201,13 +201,13 @@ final class ChangePasswordViewController: UIViewController {
                     }
                 } else {
                     passwordViewNewCopy.backgroundColor = Constants.red
-                    passwordFieldNewCopy.text = ""
-                    passwordFieldNewCopy.attributedPlaceholder = NSAttributedString(string: "не совпадает", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+                    passwordFieldNewCopy.text = Constants.nilString
+                    passwordFieldNewCopy.attributedPlaceholder = NSAttributedString(string: Constants.differentPasswords, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
                 }
             } else {
                 passwordViewOld.backgroundColor = Constants.red
-                passwordFieldOld.text = ""
-                passwordFieldOld.attributedPlaceholder = NSAttributedString(string: "не подходит", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+                passwordFieldOld.text = Constants.nilString
+                passwordFieldOld.attributedPlaceholder = NSAttributedString(string: Constants.notCome, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
             }
         }
     }
@@ -221,7 +221,7 @@ final class ChangePasswordViewController: UIViewController {
     @objc func dismissKeyboardAndEnabledButton() {
         errorView.isHidden = true
         view.endEditing(true)
-        if passwordFieldNewCopy.text != "" && passwordFieldNew.text != "" && passwordFieldOld.text != "" {
+        if passwordFieldNewCopy.text != Constants.nilString && passwordFieldNew.text != Constants.nilString && passwordFieldOld.text != Constants.nilString {
             readyButton.isEnabled = true
         } else {
             readyButton.isEnabled = false

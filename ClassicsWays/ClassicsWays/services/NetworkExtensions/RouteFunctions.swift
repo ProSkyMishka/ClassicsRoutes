@@ -15,13 +15,37 @@ extension NetworkService {
         }
         
         var request = URLRequest(url: url)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "GET"
+        request.addValue(Constants.applicationJSON, forHTTPHeaderField: Constants.contentType)
+        request.httpMethod = HTTPMethod.get.rawValue
         let userResponce = try await URLSession.shared.data(for: request)
         let userData = userResponce.0
         let decoder = JSONDecoder()
         let routes = try decoder.decode([Route].self, from: userData)
         return routes
+    }
+    
+    func getRoute(id: String) async throws -> RouteWithGrade {
+        let idUrl = "/\(id)"
+        guard let url = URL(string: "\(localhost)\(APIMethod.getAllRoutes.rawValue)\(idUrl)")
+        else {
+            throw NetworkError.badURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.addValue(Constants.applicationJSON, forHTTPHeaderField: Constants.contentType)
+        request.httpMethod = "GET"
+        let routeResponce = try await URLSession.shared.data(for: request)
+        let routeData = routeResponce.0
+        let decoder = JSONDecoder()
+        let route = try decoder.decode(Route.self, from: routeData)
+        var sum: Double = .zero
+        for i in route.raiting {
+            if i == Constants.plus {
+                sum += Constants.coef7
+            }
+        }
+        let routeWithGrade = RouteWithGrade(route: route, grade: sum / Double(route.raiting.count))
+        return routeWithGrade
     }
     
     func updateRoute(id: String,
@@ -43,8 +67,8 @@ extension NetworkService {
         }
         
         var request = URLRequest(url: url)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "PUT"
+        request.addValue(Constants.applicationJSON, forHTTPHeaderField: Constants.contentType)
+        request.httpMethod = HTTPMethod.put.rawValue
         let encoder = JSONEncoder()
         let data = try encoder.encode(dto)
         request.httpBody = data
@@ -66,15 +90,15 @@ extension NetworkService {
                      pictures: [String],
                      raiting: [String],
                      locations: [String]) async throws -> Route {
-        let dto = RouteDTOAll(avatar: avatar, person: person, name: name, description: description, theme: theme, time: time, start: start, pictures: pictures, raiting: raiting, locations: locations/*, Username: Vars.user!.email, Password: Vars.password*/)
+        let dto = RouteDTOAll(avatar: avatar, person: person, name: name, description: description, theme: theme, time: time, start: start, pictures: pictures, raiting: raiting, locations: locations)
         guard let url = URL(string: "\(localhost)\(APIMethod.getAllRoutes.rawValue)")
         else {
             throw NetworkError.badURL
         }
         
         var request = URLRequest(url: url)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "POST"
+        request.addValue(Constants.applicationJSON, forHTTPHeaderField: Constants.contentType)
+        request.httpMethod = HTTPMethod.post.rawValue
         let encoder = JSONEncoder()
         let data = try encoder.encode(dto)
         request.httpBody = data
@@ -94,8 +118,8 @@ extension NetworkService {
         }
         
         var request = URLRequest(url: url)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "DELETE"
+        request.addValue(Constants.applicationJSON, forHTTPHeaderField: Constants.contentType)
+        request.httpMethod = HTTPMethod.delete.rawValue
         _ = try await URLSession.shared.data(for: request)
     }
 }

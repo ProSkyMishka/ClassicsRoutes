@@ -12,4 +12,5 @@ struct ChatDate: Identifiable, Codable {
     var users: [String]
     var messages: [String]
     let last: Date
+    let routeSuggest: String
 }

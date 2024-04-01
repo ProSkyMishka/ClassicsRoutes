@@ -10,7 +10,7 @@ import UIKit
 // MARK: - UICollectionViewDataSource
 extension SuggestViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return Constants.one
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -36,36 +36,36 @@ extension SuggestViewController: UICollectionViewDelegateFlowLayout {
         cell.addSubview(trash)
         
         trash.tag = index
-        let largeFont = UIFont.systemFont(ofSize: 30, weight: .bold)
+        let largeFont = UIFont.systemFont(ofSize: Constants.coef, weight: .bold)
         let configuration = UIImage.SymbolConfiguration(font: largeFont)
-        let imageTrash = UIImage(systemName: "trash.circle", withConfiguration: configuration)
+        let imageTrash = UIImage(systemName: Constants.trashSymbol, withConfiguration: configuration)
         
         trash.setBackgroundImage(imageTrash, for: .normal)
         
-        trash.tintColor = .red
+        trash.tintColor = .white
         trash.backgroundColor = .black
-        trash.layer.cornerRadius = 15
-        trash.pinTop(to: cell, 5)
-        trash.pinRight(to: cell, 5)
+        trash.layer.cornerRadius = Constants.coef21
+        trash.pinTop(to: cell, Constants.coef7)
+        trash.pinRight(to: cell, Constants.coef7)
         
         trash.addTarget(self, action: #selector(trashPressed), for: .touchUpInside)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = view.bounds.width * 0.35
-        return CGSize(width: width, height: width * 0.89)
+        let width = view.bounds.width * Constants.coef22
+        return CGSize(width: width, height: width * Constants.coef23)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return view.bounds.width * 0.1
+        return view.bounds.width / Constants.coef14
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return view.bounds.width * 0.1
+        return view.bounds.width / Constants.coef14
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: view.bounds.height * 0.02, left: 0, bottom: view.bounds.height * 0.02, right: 0)
+        return UIEdgeInsets(top: view.bounds.height * Constants.coef20, left: .zero, bottom: view.bounds.height * Constants.coef20, right: .zero)
     }
 }
 
@@ -83,7 +83,7 @@ extension SuggestViewController: UITableViewDelegate {
         }
         
         deleteAction.image = UIImage(
-            systemName: "trash.fill",
+            systemName: Constants.trashFillSymbol,
             withConfiguration: UIImage.SymbolConfiguration(weight: .bold)
         )?.withTintColor(.white)
         deleteAction.backgroundColor = Constants.red
@@ -101,7 +101,7 @@ extension SuggestViewController: UITableViewDelegate {
             completion(true)
         }
         editAction.image = UIImage(
-            systemName: "square.and.pencil",
+            systemName: Constants.editSymbol,
             withConfiguration: UIImage.SymbolConfiguration(weight: .bold)
         )?.withTintColor(.white)
         editAction.backgroundColor = Constants.green
@@ -116,14 +116,14 @@ extension SuggestViewController: UITableViewDataSource {
         let header = view as! UITableViewHeaderFooterView
         header.textLabel?.textColor = UIColor.black
         header.textLabel?.textAlignment = .center
-        header.textLabel?.font = UIFont.boldSystemFont(ofSize: self.view.bounds.height * 0.02)
-        header.layer.borderWidth = 2
+        header.textLabel?.font = UIFont.boldSystemFont(ofSize: self.view.bounds.height * Constants.coef20)
+        header.layer.borderWidth = Constants.coef5
         header.layer.borderColor = UIColor.black.cgColor
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection
                    section: Int) -> String? {
-        return "Here is a list of the locations"
+        return Constants.headerLocations
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

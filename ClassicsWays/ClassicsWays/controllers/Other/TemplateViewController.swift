@@ -10,7 +10,7 @@ import UIKit
 class TemplateViewController: UIViewController {
     var buttonProfile = UIButton()
     var buttonChat = UIButton()
-    var buttonRaiting = UIButton()
+    var buttonRating = UIButton()
     var buttonRoutes = UIButton()
     var barStack = UIStackView()
     var stick1 = UIView()
@@ -18,7 +18,7 @@ class TemplateViewController: UIViewController {
     var stick3 = UIView()
     var stickStack = UIStackView()
     var bar = UIView()
-    var status = -1
+    var status = Int(Constants.coef24)
     
     func configureBar() {
         view.addSubview(bar)
@@ -26,12 +26,12 @@ class TemplateViewController: UIViewController {
         navigationItem.hidesBackButton = true
         
         bar.backgroundColor = Constants.color
-        bar.layer.borderWidth = 2
+        bar.layer.borderWidth = Constants.coef5
         bar.layer.borderColor = UIColor.black.cgColor
         
         bar.translatesAutoresizingMaskIntoConstraints = false
         bar.pinBottom(to: view)
-        bar.pinHeight(to: view, 0.07)
+        bar.pinHeight(to: view, Constants.avatarCoef3)
         bar.pinWidth(to: view)
         
         configureStickStack()
@@ -39,53 +39,53 @@ class TemplateViewController: UIViewController {
     }
     
     func configureButtonProfile() {
-        if (status == 0) {
+        if (status == .zero) {
             buttonProfile.isEnabled = false
         } else {
             buttonProfile.isEnabled = true
         }
         
-        buttonProfile.setBackgroundImage(UIImage(named: "profile.png"), for: .disabled)
-        buttonProfile.setBackgroundImage(UIImage(named: "profileGray.png"), for: .normal)
+        buttonProfile.setBackgroundImage(UIImage(named: Constants.profilePng), for: .disabled)
+        buttonProfile.setBackgroundImage(UIImage(named: Constants.profileGrayPng), for: .normal)
         
         buttonProfile.addTarget(self, action: #selector(buttonProfileWasTapped), for: .touchUpInside)
     }
     
     func configureButtonChat() {
-        if (status == 1) {
+        if (status == Constants.one) {
             buttonChat.isEnabled = false
         } else {
             buttonChat.isEnabled = true
         }
         
-        buttonChat.setBackgroundImage(UIImage(named: "chat.png"), for: .disabled)
-        buttonChat.setBackgroundImage(UIImage(named: "chatGray.png"), for: .normal)
+        buttonChat.setBackgroundImage(UIImage(named: Constants.chatPng), for: .disabled)
+        buttonChat.setBackgroundImage(UIImage(named: Constants.chatGrayPng), for: .normal)
         
         buttonChat.addTarget(self, action: #selector(buttonChatWasTapped), for: .touchUpInside)
     }
     
-    func configureButtonRaiting() {
-        if (status == 2) {
-            buttonRaiting.isEnabled = false
+    func configureButtonRating() {
+        if (status == Int(Constants.coef5)) {
+            buttonRating.isEnabled = false
         } else {
-            buttonRaiting.isEnabled = true
+            buttonRating.isEnabled = true
         }
         
-        buttonRaiting.setBackgroundImage(UIImage(named: "raiting.png"), for: .disabled)
-        buttonRaiting.setBackgroundImage(UIImage(named: "raitingGray.png"), for: .normal)
+        buttonRating.setBackgroundImage(UIImage(named: Constants.ratingPng), for: .disabled)
+        buttonRating.setBackgroundImage(UIImage(named: Constants.ratingGrayPng), for: .normal)
         
-        buttonRaiting.addTarget(self, action: #selector(buttonRaitingWasTapped), for: .touchUpInside)
+        buttonRating.addTarget(self, action: #selector(buttonRatingWasTapped), for: .touchUpInside)
     }
     
     func configureButtonRoutes() {
-        if (status == 3) {
+        if (status == Int(Constants.coef18)) {
             buttonRoutes.isEnabled = false
         } else {
             buttonRoutes.isEnabled = true
         }
         
-        buttonRoutes.setBackgroundImage(UIImage(named: "routes.png"), for: .disabled)
-        buttonRoutes.setBackgroundImage(UIImage(named: "routesGray.png"), for: .normal)
+        buttonRoutes.setBackgroundImage(UIImage(named: Constants.routesPng), for: .disabled)
+        buttonRoutes.setBackgroundImage(UIImage(named: Constants.routesGrayPng), for: .normal)
         
         buttonRoutes.addTarget(self, action: #selector(buttonRoutesWasTapped), for: .touchUpInside)
     }
@@ -93,35 +93,34 @@ class TemplateViewController: UIViewController {
     func configureBarStack() {
         bar.addSubview(barStack)
         barStack.axis = .horizontal
-        barStack.spacing = view.bounds.width * 0.16
+        barStack.spacing = view.bounds.width * Constants.coef36
         
-        for button in [buttonRoutes, buttonRaiting, buttonChat, buttonProfile] {
+        for button in [buttonRoutes, buttonRating, buttonChat, buttonProfile] {
             button.translatesAutoresizingMaskIntoConstraints = false
-            button.setWidth(view.bounds.height * 0.04)
-            button.setHeight(view.bounds.height * 0.04)
+            button.setWidth(view.bounds.width * Constants.coef16)
+            button.setHeight(view.bounds.width * Constants.coef16)
             
             barStack.addArrangedSubview(button)
         }
         
         configureButtonRoutes()
-        configureButtonRaiting()
+        configureButtonRating()
         configureButtonChat()
         configureButtonProfile()
         
         barStack.translatesAutoresizingMaskIntoConstraints = false
-        barStack.pinBottom(to: bar.bottomAnchor, view.bounds.height * 0.01)
-        barStack.pinCenterX(to: view)
+        barStack.pinCenter(to: bar)
     }
     
     func configureStickStack() {
         bar.addSubview(stickStack)
         stickStack.axis = .horizontal
-        stickStack.spacing = view.bounds.width * 0.25
+        stickStack.spacing = view.bounds.width * Constants.avatarCoef2
         
         for stick in [stick1, stick2, stick3] {
             stick.translatesAutoresizingMaskIntoConstraints = false
-            stick.setWidth(2)
-            stick.setHeight(view.bounds.height * 0.07)
+            stick.setWidth(Constants.coef5)
+            stick.setHeight(view.bounds.height * Constants.avatarCoef3)
             stick.backgroundColor = .black
             
             stickStack.addArrangedSubview(stick)
@@ -145,7 +144,7 @@ class TemplateViewController: UIViewController {
     }
     
     @objc
-    func buttonRaitingWasTapped() {
+    func buttonRatingWasTapped() {
         let vc = RatingViewController()
         navigationController?.pushViewController(vc, animated: false)
     }

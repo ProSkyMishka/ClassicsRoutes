@@ -11,5 +11,6 @@ struct Chat: Identifiable, Codable {
     let id: String
     var users: [String]
     let messages: [String]
+    let routeSuggest: String
     let last: String
 }

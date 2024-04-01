@@ -1519,7 +1519,7 @@
 		F8968807F4C5DD218EB7EE22BCCAB3F0 /* AWSLambdaResources.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AWSLambdaResources.m; path = AWSLambda/AWSLambdaResources.m; sourceTree = "<group>"; };
 		F920B2E04D13BF1D226BAD090BFB6030 /* AWSElasticLoadBalancingModel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AWSElasticLoadBalancingModel.m; path = AWSElasticLoadBalancing/AWSElasticLoadBalancingModel.m; sourceTree = "<group>"; };
 		F9B514A03CFEDF59C3C4E75E94061927 /* AWSMobileAnalyticsEncryptedBufferedReader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AWSMobileAnalyticsEncryptedBufferedReader.h; path = AWSMobileAnalytics/Internal/AWSMobileAnalyticsEncryptedBufferedReader.h; sourceTree = "<group>"; };
-		F9D2071E688B4108BF982883BAC9EDC0 /* AWSSQS */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = AWSSQS; path = AWSSQS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F9D2071E688B4108BF982883BAC9EDC0 /* AWSSQS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AWSSQS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA51682736EC01A93BFB3B5C6596EFB2 /* AWSURLRequestRetryHandler.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AWSURLRequestRetryHandler.m; path = AWSCore/Serialization/AWSURLRequestRetryHandler.m; sourceTree = "<group>"; };
 		FA678FEA3BF8C6640086049BE93DAA2A /* Pods-ClassicsWays.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ClassicsWays.release.xcconfig"; sourceTree = "<group>"; };
 		FA70CFEC1F093BFD7E2FB1EC371BC80B /* AWSMQTTSession.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AWSMQTTSession.h; path = AWSIoT/Internal/MQTTSDK/AWSMQTTSession.h; sourceTree = "<group>"; };
@@ -2048,7 +2048,7 @@
 				25AF49F4A8AC20B368AD455A87E20AAD /* AWSSES */,
 				D78EA46DC425CA54AC914AA35DB7AC9E /* AWSSimpleDB */,
 				EB6E22C624F945F298D65AD851FB405E /* AWSSNS */,
-				F9D2071E688B4108BF982883BAC9EDC0 /* AWSSQS */,
+				F9D2071E688B4108BF982883BAC9EDC0 /* AWSSQS.framework */,
 				E89F4AD00AADBF6A599A4121FCB63B08 /* Pods-ClassicsWays */,
 			);
 			name = Products;
@@ -3604,7 +3604,7 @@
 			);
 			name = AWSSQS;
 			productName = AWSSQS;
-			productReference = F9D2071E688B4108BF982883BAC9EDC0 /* AWSSQS */;
+			productReference = F9D2071E688B4108BF982883BAC9EDC0 /* AWSSQS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		BBF90BA4F6EC5653945C7B0FFD9128D2 /* AWSCognitoIdentityProviderASF */ = {
@@ -4475,7 +4475,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/AWSSQS/AWSSQS-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/AWSSQS/AWSSQS-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4927,7 +4927,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/AWSSQS/AWSSQS-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/AWSSQS/AWSSQS-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

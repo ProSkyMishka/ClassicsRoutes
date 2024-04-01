@@ -23,7 +23,7 @@ extension UIView {
     /// Creates and activates a constraint from views leadingAnchor to otherView's leadingAnchor.
     func pinLeft(
         to otherView: UIView,
-        _ const: Double = 0,
+        _ const: Double = .zero,
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
         pinConstraint(mode: mode, leadingAnchor, otherView.leadingAnchor, const)
@@ -33,7 +33,7 @@ extension UIView {
     /// Creates and activates a constraint from views leadingAnchor to an inputed xAxisAnchor.
     func pinLeft(
         to anchor: NSLayoutXAxisAnchor,
-        _ const: Double = 0,
+        _ const: Double = .zero,
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
         return pinConstraint(mode: mode, leadingAnchor, anchor, const)
@@ -44,20 +44,20 @@ extension UIView {
     /// Creates and activates a constraint from views trailingAnchor to otherView's trailingAnchor.
     func pinRight(
         to otherView: UIView,
-        _ const: Double = 0,
+        _ const: Double = .zero,
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
-        pinConstraint(mode: mode, trailingAnchor, otherView.trailingAnchor, -1 * const)
+        pinConstraint(mode: mode, trailingAnchor, otherView.trailingAnchor, Constants.coef24 * const)
     }
 
     @discardableResult
     /// Creates and activates a constraint from views trailingAnchor to an inputed xAxisAnchor.
     func pinRight(
         to anchor: NSLayoutXAxisAnchor,
-        _ const: Double = 0,
+        _ const: Double = .zero,
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
-        return pinConstraint(mode: mode, trailingAnchor, anchor, -1 * const)
+        return pinConstraint(mode: mode, trailingAnchor, anchor, Constants.coef24 * const)
     }
 
     // MARK: - Pin top
@@ -65,7 +65,7 @@ extension UIView {
     /// Creates and activates a constraint from views topAnchor to otherView's topAnchor.
     func pinTop(
         to otherView: UIView,
-        _ const: Double = 0,
+        _ const: Double = .zero,
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
         pinConstraint(mode: mode, topAnchor, otherView.topAnchor, const)
@@ -75,7 +75,7 @@ extension UIView {
     /// Creates and activates a constraint from views topAnchor to an inputed xAxisAnchor.
     func pinTop(
         to anchor: NSLayoutYAxisAnchor,
-        _ const: Double = 0,
+        _ const: Double = .zero,
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
         return pinConstraint(mode: mode, topAnchor, anchor, const)
@@ -86,20 +86,20 @@ extension UIView {
     /// Creates and activates a constraint from views bottomAnchor to otherView's bottomAnchor.
     func pinBottom(
         to otherView: UIView,
-        _ const: Double = 0,
+        _ const: Double = .zero,
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
-        pinConstraint(mode: mode, bottomAnchor, otherView.bottomAnchor, -1 * const)
+        pinConstraint(mode: mode, bottomAnchor, otherView.bottomAnchor, Constants.coef24 * const)
     }
 
     @discardableResult
     /// Creates and activates a constraint from views bottomAnchor to an inputed xAxisAnchor.
     func pinBottom(
         to anchor: NSLayoutYAxisAnchor,
-        _ const: Double = 0,
+        _ const: Double = .zero,
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
-        return pinConstraint(mode: mode, bottomAnchor, anchor, -1 * const)
+        return pinConstraint(mode: mode, bottomAnchor, anchor, Constants.coef24 * const)
     }
 
     // MARK: - Pin center
@@ -114,7 +114,7 @@ extension UIView {
     /// Creates and activates a constraint from views centerXAnchor to otherView's centerXAnchor.
     func pinCenterX(
         to otherView: UIView,
-        _ const: Double = 0,
+        _ const: Double = .zero,
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
         pinConstraint(mode: mode, centerXAnchor, otherView.centerXAnchor, const)
@@ -124,7 +124,7 @@ extension UIView {
     /// Creates and activates a constraint from views centerXAnchor to an inputed xAxisAnchor.
     func pinCenterX(
         to anchor: NSLayoutXAxisAnchor,
-        _ const: Double = 0,
+        _ const: Double = .zero,
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
         return pinConstraint(mode: mode, centerXAnchor, anchor, const)
@@ -134,7 +134,7 @@ extension UIView {
     /// Creates and activates a constraint from views centerYAnchor to otherView's centerYAnchor.
     func pinCenterY(
         to otherView: UIView,
-        _ const: Double = 0,
+        _ const: Double = .zero,
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
         pinConstraint(mode: mode, centerYAnchor, otherView.centerYAnchor, const)
@@ -144,7 +144,7 @@ extension UIView {
     /// Creates and activates a constraint from views centerYAnchor to an inputed yAxisAnchor.
     func pinCenterY(
         to anchor: NSLayoutYAxisAnchor,
-        _ const: Double = 0,
+        _ const: Double = .zero,
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
         return pinConstraint(mode: mode, centerYAnchor, anchor, const)
@@ -155,7 +155,7 @@ extension UIView {
     /// Creates and activates a constraint from views widthAnchor to otherView's widthAnchor.
     func pinWidth(
         to otherView: UIView,
-        _ mult: Double = 1,
+        _ mult: Double = Double(Constants.one),
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
         pinConstraint(mode: mode, widthAnchor, otherView.widthAnchor, mult)
@@ -165,7 +165,7 @@ extension UIView {
     /// Creates and activates a constraint from views widthAnchor to an inputed NSLayoutDimension.
     func pinWidth(
         to anchor: NSLayoutDimension,
-        _ mult: Double = 1,
+        _ mult: Double = Double(Constants.one),
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
         pinConstraint(mode: mode, widthAnchor, anchor, mult)
@@ -181,7 +181,7 @@ extension UIView {
     /// Creates and activates a constraint from views heightAnchor to otherView's heightAnchor.
     func pinHeight(
         to otherView: UIView,
-        _ mult: Double = 1,
+        _ mult: Double = Double(Constants.one),
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
         return pinConstraint(mode: mode, heightAnchor, otherView.heightAnchor, mult)
@@ -191,7 +191,7 @@ extension UIView {
     /// Creates and activates a constraint from views heightAnchor to an inputed NSLayoutDimension.
     func pinHeight(
         to anchor: NSLayoutDimension,
-        _ mult: Double = 1,
+        _ mult: Double = Double(Constants.one),
         _ mode: ConstraintMode = .equal
     ) -> NSLayoutConstraint {
         return pinConstraint(mode: mode, heightAnchor, anchor, mult)
@@ -205,7 +205,7 @@ extension UIView {
     // MARK: - Pin utilities
     func pinHorizontal(
         to otherView: UIView,
-        _ const: Double = 0,
+        _ const: Double = .zero,
         mode: ConstraintMode = .equal
     ) {
         pinLeft(to: otherView, const, mode)
@@ -214,14 +214,14 @@ extension UIView {
 
     func pinVertical(
         to otherView: UIView,
-        _ const: Double = 0,
+        _ const: Double = .zero,
         mode: ConstraintMode = .equal
     ) {
         pinTop(to: otherView, const, mode)
         pinBottom(to: otherView, const, mode)
     }
 
-    func pin(to otherView: UIView, _ const: Double = 0) {
+    func pin(to otherView: UIView, _ const: Double = .zero) {
         pinVertical(to: otherView, const)
         pinHorizontal(to: otherView, const)
     }
@@ -232,7 +232,7 @@ extension UIView {
         mode: ConstraintMode,
         _ firstAnchor: AnyAnchor,
         _ secondAnchor: AnyAnchor,
-        _ constant: Double = 0
+        _ constant: Double = .zero
     ) -> NSLayoutConstraint {
         let const = CGFloat(constant)
         let result: NSLayoutConstraint
@@ -255,7 +255,7 @@ extension UIView {
         mode: ConstraintMode,
         _ firstAnchor: NSLayoutDimension,
         _ secondAnchor: NSLayoutDimension,
-        _ multiplier: Double = 1
+        _ multiplier: Double = Double(Constants.one)
     ) -> NSLayoutConstraint {
         let mult = CGFloat(multiplier)
         let result: NSLayoutConstraint

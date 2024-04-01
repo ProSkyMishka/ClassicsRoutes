@@ -12,7 +12,7 @@ class RootViewController: UIViewController {
     var txtLabel = UILabel()
     var stackField = UIStackView()
     var stackButton = UIStackView()
-    var email = UITextField()
+    var name = UITextField()
     var password = UITextField()
     var comeButton = UIButton()
     var regButton = UIButton()
@@ -26,16 +26,23 @@ class RootViewController: UIViewController {
     
     private func configureUI() {
         configureBackGroundImage()
-        hideKeyboardOnTapAround()
+        hideKeyboardOnTapAround(view)
         configureTxtLabel()
         configureStackField()
         configureStackButton()
     }
     
+    override func dismissKeyboard() {
+        super.dismissKeyboard()
+        
+        name.backgroundColor = Constants.color
+        password.backgroundColor = Constants.color
+    }
+    
     private func configureTxtLabel() {
         view.addSubview(txtLabel)
         
-        txtLabel.text = "Авторизация"
+        txtLabel.text = Constants.authString
         txtLabel.font = UIFont.boldSystemFont(ofSize: view.bounds.height / Constants.coef)
         txtLabel.textColor = .white
         txtLabel.shadowColor = .black
@@ -46,22 +53,22 @@ class RootViewController: UIViewController {
         txtLabel.pinTop(to: view, Double(view.bounds.height / Constants.coef1))
     }
     
-    private func configureEmail() {
-        email.attributedPlaceholder = NSAttributedString(string: "Имя", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+    private func configureName() {
+        name.attributedPlaceholder = NSAttributedString(string: Constants.nameString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     }
     
     private func configurePassword() {
-        password.attributedPlaceholder = NSAttributedString(string: "Пароль", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+        password.attributedPlaceholder = NSAttributedString(string: Constants.passwordString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     }
     
     private func configureComeButton() {
-        comeButton.setTitle("Войти", for: .normal)
+        comeButton.setTitle(Constants.come, for: .normal)
         
         comeButton.addTarget(self, action: #selector(comeButtonWasPressed), for: .touchUpInside)
     }
     
     private func configureRegButton() {
-        regButton.setTitle("Нет аккаунта", for: .normal)
+        regButton.setTitle(Constants.withOutAccount, for: .normal)
         
         regButton.addTarget(self, action: #selector(regButtonWasPressed), for: .touchUpInside)
     }
@@ -72,13 +79,13 @@ class RootViewController: UIViewController {
         stackField.axis = .vertical
         stackField.spacing = Double(view.bounds.height / Constants.coef)
         
-        for field in [email, password] {
+        for field in [name, password] {
             field.returnKeyType = UIReturnKeyType.done
             
             field.font = UIFont.boldSystemFont(ofSize: view.bounds.height / Constants.coef2)
             field.textColor = .black
             field.backgroundColor = Constants.color
-            field.layer.cornerRadius = Constants.radius
+            field.layer.cornerRadius = view.bounds.height / Constants.coef48
             
             field.leftView = UIView(frame: CGRect(x: .zero, y: .zero, width: Constants.offset, height: Constants.offset))
             field.rightView = UIView(frame: CGRect(x: .zero, y: .zero, width: Constants.offset, height: Constants.offset))
@@ -93,7 +100,7 @@ class RootViewController: UIViewController {
             stackField.addArrangedSubview(field)
         }
         
-        configureEmail()
+        configureName()
         configurePassword()
         
         stackField.translatesAutoresizingMaskIntoConstraints = false
@@ -112,7 +119,7 @@ class RootViewController: UIViewController {
             button.setTitleColor(.black, for: .normal)
             button.setTitleColor(.darkGray, for: .disabled)
             button.backgroundColor = Constants.color
-            button.layer.cornerRadius = Constants.radius
+            button.layer.cornerRadius = Constants.value
             
             button.layer.borderWidth = CGFloat(Constants.one)
             button.layer.borderColor = UIColor.black.cgColor
@@ -133,26 +140,26 @@ class RootViewController: UIViewController {
     
     @objc
     private func comeButtonWasPressed() {
-        auth(email: email.text!, password: password.text!)
+        auth(name: name.text!, password: password.text!)
     }
     
     @objc
     private func regButtonWasPressed() {
-        email.text = nil
+        name.text = nil
         password.text = nil
         let vc = MainRegistrationViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func auth(email: String, password: String) {
+    private func auth(name: String, password: String) {
         comeButton.isEnabled = false
         regButton.isEnabled = false
         Task {
             do {
-                Vars.user = try await NetworkService.shared.auth(name: email, password: password)
+                Vars.user = try await NetworkService.shared.auth(name: name, password: password)
                 DispatchQueue.main.async {
                     Vars.password = password
-                    self.users.append(email)
+                    self.users.append(name)
                     self.users.append(password)
                     self.defaults.set(self.users, forKey: Constants.usersKey)
                     let vc = ProfileViewController()
@@ -161,6 +168,8 @@ class RootViewController: UIViewController {
             } catch {
                 comeButton.isEnabled = true
                 regButton.isEnabled = true
+                self.name.backgroundColor = Constants.red
+                self.password.backgroundColor = Constants.red
                 print("Произошла ошибка: \(error)")
             }
         }

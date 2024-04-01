@@ -67,7 +67,6 @@ struct MessagesController: RouteCollection {
         message.user = messageUpdate.user
         message.text = messageUpdate.text
         message.time = messageUpdate.time
-        message.routeSuggest = messageUpdate.routeSuggest
         message.route = messageUpdate.route
         
         try await message.save(on: req.db)

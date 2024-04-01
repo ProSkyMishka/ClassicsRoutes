@@ -12,7 +12,7 @@ final class ChangeAvatarViewController: UIViewController {
     private var girlAvatar = UIButton()
     private var readyButton = UIButton()
     private var stackAvavtar = UIStackView()
-    private var choise = ""
+    private var choise = Constants.nilString
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,22 +28,22 @@ final class ChangeAvatarViewController: UIViewController {
     
     private func configureBoyAvatar() {
         let image = UIImageView()
-        returnImage(imageView: image, key: "boyAvatar.png")
+        returnImage(imageView: image, key: Constants.boyAvatar)
         boyAvatar.addSubview(image)
         image.pinCenter(to: boyAvatar)
-        image.setWidth(view.bounds.width * 0.72)
-        image.setHeight(view.bounds.height * 0.27)
+        image.setWidth(view.bounds.width * Constants.coef42)
+        image.setHeight(view.bounds.height * Constants.coef43)
         
         boyAvatar.addTarget(self, action: #selector(imageBoyWasTapped), for: .touchUpInside)
     }
     
     private func configureGirlAvatar() {
         let image = UIImageView()
-        returnImage(imageView: image, key: "girlAvatar.png")
+        returnImage(imageView: image, key: Constants.girlAvatar)
         girlAvatar.addSubview(image)
         image.pinCenter(to: girlAvatar)
-        image.setWidth(view.bounds.width * 0.72)
-        image.setHeight(view.bounds.height * 0.27)
+        image.setWidth(view.bounds.width * Constants.coef42)
+        image.setHeight(view.bounds.height * Constants.coef43)
         
         girlAvatar.addTarget(self, action: #selector(imageGirlWasTapped), for: .touchUpInside)
     }
@@ -52,17 +52,17 @@ final class ChangeAvatarViewController: UIViewController {
         view.addSubview(stackAvavtar)
         
         stackAvavtar.axis = .vertical
-        stackAvavtar.spacing = view.bounds.height * 0.1
+        stackAvavtar.spacing = view.bounds.height / Constants.coef14
         
         for button in [boyAvatar, girlAvatar] {
             button.backgroundColor = .lightGray
-            button.layer.borderWidth = 2
+            button.layer.borderWidth = Constants.coef5
             button.layer.borderColor = UIColor.black.cgColor
             button.layer.cornerRadius = CGFloat(Constants.one)
             
             button.translatesAutoresizingMaskIntoConstraints = false
-            button.setHeight(view.bounds.height * 0.3)
-            button.setWidth(view.bounds.width * 0.8)
+            button.setHeight(view.bounds.height * Constants.coef10)
+            button.setWidth(view.bounds.width * Constants.avatarCoef1)
             stackAvavtar.addArrangedSubview(button)
         }
         
@@ -77,17 +77,17 @@ final class ChangeAvatarViewController: UIViewController {
         view.addSubview(readyButton)
         
         readyButton.isEnabled = false
-        readyButton.setTitle("ГОТОВО", for: .normal)
-        readyButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.04)
+        readyButton.setTitle(Constants.ready.uppercased(), for: .normal)
+        readyButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * Constants.coef29)
         readyButton.setTitleColor(.black, for: .normal)
         readyButton.setTitleColor(.lightGray, for: .disabled)
         readyButton.layer.borderColor = UIColor.black.cgColor
-        readyButton.layer.borderWidth = 2
+        readyButton.layer.borderWidth = Constants.coef5
         readyButton.backgroundColor = Constants.color
         
         readyButton.translatesAutoresizingMaskIntoConstraints = false
         readyButton.pinWidth(to: view)
-        readyButton.pinHeight(to: view, 0.07)
+        readyButton.pinHeight(to: view, Constants.avatarCoef3)
         readyButton.pinBottom(to: view)
         
         readyButton.addTarget(self, action: #selector(readyButtonWasPressed), for: .touchUpInside)
@@ -95,11 +95,11 @@ final class ChangeAvatarViewController: UIViewController {
     
     @objc
     private func readyButtonWasPressed() {
-        if choise != "" {
+        if choise != Constants.nilString {
             readyButton.isEnabled = false
             Task {
                 do {
-                    Vars.user = try await NetworkService.shared.updateUser(id: Vars.user!.id, name: Vars.user!.name, email: Vars.user!.email, date: Vars.user!.date, avatar: choise, routes: Vars.user!.routes, role: Vars.user!.role, likes: Vars.user!.likes, themes: Vars.user!.themes, chats: Vars.user!.chats, password: Vars.password)
+                    Vars.user = try await NetworkService.shared.updateUser(id: Vars.user!.id, name: Vars.user!.name, date: Vars.user!.date, avatar: choise, routes: Vars.user!.routes, role: Vars.user!.role, likes: Vars.user!.likes, themes: Vars.user!.themes, password: Vars.password)
                     DispatchQueue.main.async {
                         self.navigationController?.pushViewController(ProfileViewController(), animated: true)
                     }
@@ -116,7 +116,7 @@ final class ChangeAvatarViewController: UIViewController {
         readyButton.isEnabled = true
         boyAvatar.backgroundColor = Constants.green
         girlAvatar.backgroundColor = Constants.red
-        choise = "boyAvatar.png"
+        choise = Constants.boyAvatar
     }
     
     @objc
@@ -124,6 +124,6 @@ final class ChangeAvatarViewController: UIViewController {
         readyButton.isEnabled = true
         boyAvatar.backgroundColor = Constants.red
         girlAvatar.backgroundColor = Constants.green
-        choise = "girlAvatar.png"
+        choise = Constants.girlAvatar
     }
 }

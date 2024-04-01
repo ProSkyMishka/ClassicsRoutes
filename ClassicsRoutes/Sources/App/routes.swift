@@ -29,7 +29,6 @@ struct ChatMessage: Codable {
     let id: String
     let user: String
     let route: String
-    let routeSuggest: String
     let time: Date
     let text: String
 }

@@ -23,6 +23,7 @@ struct UsersController: RouteCollection {
         guard let user = try? req.content.decode(User.self) else {
             throw Abort(.custom(code: 499, reasonPhrase: "Не получилось декодировать контент в модель продукта"))
         }
+        
         user.password = try Bcrypt.hash(user.password)
         try await user.save(on: req.db)
         
@@ -78,14 +79,12 @@ struct UsersController: RouteCollection {
         
         user.name = userUpdate.name
         user.password = userUpdate.password
-        user.email = userUpdate.email
         user.date = userUpdate.date
         user.avatar = userUpdate.avatar
         user.routes = userUpdate.routes
         user.role = userUpdate.role
         user.likes = userUpdate.likes
         user.themes = userUpdate.themes
-        user.chats = userUpdate.chats
         
         try await user.save(on: req.db)
         

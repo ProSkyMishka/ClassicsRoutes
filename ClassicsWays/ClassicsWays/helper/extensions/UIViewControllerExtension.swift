@@ -11,25 +11,23 @@ import AVFoundation
 import AWSCognito
 import AWSS3
 
-extension UIViewController {
-    
+extension UIViewController {    
     func returnImage(imageView: UIImageView, key: String) {
-        let bucketName = "classicsroutesbucket"
         var contentUrl: URL!
         var s3Url: URL!
         
         let credentialsProvider =
-        AWSCognitoCredentialsProvider(regionType:.USEast1, identityPoolId: "us-east-1:b670d5bd-1bb8-426f-88b8-432b9e78cb63")
+        AWSCognitoCredentialsProvider(regionType:.USEast1, identityPoolId: Constants.identityPoolId)
         let configuration = AWSServiceConfiguration(region:.USEast1, credentialsProvider:credentialsProvider)
         AWSServiceManager.default().defaultServiceConfiguration = configuration
         s3Url = AWSS3.default().configuration.endpoint.url
         
-        contentUrl = s3Url.appendingPathComponent(bucketName).appendingPathComponent("\(key)")
+        contentUrl = s3Url.appendingPathComponent( Constants.bucketName).appendingPathComponent("\(key)")
         URLSession.shared.dataTask(with: contentUrl) { (data, response, error) in
             if error != nil {
                 print(error ?? String.self)
                 DispatchQueue.main.async {
-                    imageView.image = UIImage(named: "pictureError.png")
+                    imageView.image = UIImage(named: Constants.pictureError)
                 }
             }
             
@@ -44,10 +42,8 @@ extension UIViewController {
     }
     
     func uploadFile(with resource: String, path: String) {
-        let bucketName = "classicsroutesbucket"
-        
         let credentialsProvider =
-        AWSCognitoCredentialsProvider(regionType:.USEast1, identityPoolId: "us-east-1:b670d5bd-1bb8-426f-88b8-432b9e78cb63")
+        AWSCognitoCredentialsProvider(regionType:.USEast1, identityPoolId: Constants.identityPoolId)
         let configuration = AWSServiceConfiguration(region:.USEast1, credentialsProvider:credentialsProvider)
         AWSServiceManager.default().defaultServiceConfiguration = configuration
         
@@ -55,7 +51,7 @@ extension UIViewController {
         print(resource)
         let localImageUrl = URL(fileURLWithPath: path)
         let request = AWSS3TransferManagerUploadRequest()!
-        request.bucket = bucketName
+        request.bucket = Constants.bucketName
         request.key = key
         request.body = localImageUrl
         request.acl = .publicReadWrite
@@ -78,17 +74,17 @@ extension UIViewController {
         
         view.addSubview(backGroundImage)
         
-        backGroundImage.image = UIImage(named: "fon.png")
+        backGroundImage.image = UIImage(named: Constants.fon)
         
         backGroundImage.pinCenter(to: view)
         backGroundImage.setWidth(view.bounds.width)
         backGroundImage.setHeight(view.bounds.height)
     }
     
-    func hideKeyboardOnTapAround() {
+    func hideKeyboardOnTapAround(_ thisView: UIView) {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         gesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(gesture)
+        thisView.addGestureRecognizer(gesture)
     }
     
     @objc func dismissKeyboard() {
@@ -97,9 +93,9 @@ extension UIViewController {
     
     func configureBackButton(_ color: UIColor = Constants.color) {
         navigationItem.hidesBackButton = true
-        let largeFont = UIFont.systemFont(ofSize: view.bounds.height * 0.025, weight: .bold)
+        let largeFont = UIFont.systemFont(ofSize: view.bounds.height * Constants.coef8, weight: .bold)
         let configuration = UIImage.SymbolConfiguration(font: largeFont)
-        let image = UIImage(systemName: "chevron.left", withConfiguration: configuration)
+        let image = UIImage(systemName: Constants.backSymbol, withConfiguration: configuration)
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(backButtonTapped))
         navigationItem.leftBarButtonItem?.tintColor = color
     }
@@ -113,23 +109,96 @@ extension UIViewController {
         view.addSubview(errorView)
         
         errorView.backgroundColor = Constants.red
-        errorView.layer.borderWidth = 2
+        errorView.layer.borderWidth = Constants.coef5
         errorView.layer.borderColor = UIColor.black.cgColor
-        errorView.layer.cornerRadius = Constants.radius
+        errorView.layer.cornerRadius = Constants.value
         
-        errorView.pinWidth(to: view, 0.95)
-        errorView.pinHeight(to: view, 0.3)
+        errorView.pinWidth(to: view, Constants.coef9)
+        errorView.pinHeight(to: view, Constants.coef10)
         errorView.pinCenter(to: view)
         
         errorView.addSubview(error)
         
         error.translatesAutoresizingMaskIntoConstraints = false
         error.textColor = .black
-        error.font = UIFont.systemFont(ofSize: view.bounds.height * 0.03)
+        error.font = UIFont.systemFont(ofSize: view.bounds.height * Constants.coef11)
         error.lineBreakMode = .byWordWrapping
         error.numberOfLines = .zero
         
         error.pinCenter(to: errorView)
-        error.setWidth(view.bounds.width * 0.85)
+        error.setWidth(view.bounds.width * Constants.coef12)
+    }
+    
+    func configureTick(tick: UIButton, errorView: UIView, configuration: UIImage.SymbolConfiguration) {
+        tick.isHidden = false
+        let imageTick = UIImage(systemName: Constants.tickSymbol, withConfiguration: configuration)
+        tick.setBackgroundImage(imageTick, for: .normal)
+        
+        errorView.addSubview(tick)
+        tick.tintColor = .black
+        tick.pinRight(to: errorView, view.bounds.width * Constants.coef13)
+        tick.pinBottom(to: errorView, Constants.coef7)
+    }
+    
+    func configureCross(cross: UIButton, errorView: UIView, configuration: UIImage.SymbolConfiguration) {
+        cross.isHidden = false
+        let imageCross = UIImage(systemName: Constants.crossSymbol, withConfiguration: configuration)
+        cross.setBackgroundImage(imageCross, for: .normal)
+        errorView.addSubview(cross)
+        cross.tintColor = .black
+        cross.pinLeft(to: errorView, view.bounds.width * Constants.coef13)
+        cross.pinBottom(to: errorView, Constants.coef7)
+    }
+    
+    func configureThemeLabel(themeView: UIView, themeLabel: UILabel) {
+        themeView.addSubview(themeLabel)
+        
+        themeLabel.text = Constants.themeAsk
+        themeLabel.font = UIFont.boldSystemFont(ofSize: view.bounds.height / Constants.coef2)
+        themeLabel.textColor = .black
+        
+        themeLabel.translatesAutoresizingMaskIntoConstraints = false
+        themeLabel.pinCenterX(to: themeView)
+        themeLabel.pinTop(to: themeView, Constants.coef14)
+    }
+    
+    func configureThemeStack(themeView: UIView, themeLabel: UILabel, themeStack: UIStackView, themeOne: UIButton, themeTwo: UIButton, themeThree: UIButton) {
+        themeView.addSubview(themeStack)
+        
+        themeStack.axis = .vertical
+        themeStack.spacing = view.bounds.height / Constants.coef2
+        
+        for button in [themeOne, themeTwo, themeThree] {
+            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height / Constants.coef2)
+            button.setTitleColor(.black, for: .normal)
+            button.backgroundColor = Constants.color
+            button.layer.cornerRadius = view.bounds.height * Constants.coef8
+            
+            button.layer.borderWidth = CGFloat(Constants.one)
+            button.layer.borderColor = UIColor.black.cgColor
+            
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.setWidth(view.bounds.width * Constants.coef15)
+            button.setHeight(view.bounds.height * Constants.coef16)
+            
+            button.addTarget(self, action: #selector(themeButtonWasPressed), for: .touchUpInside)
+            themeStack.addArrangedSubview(button)
+        }
+        
+        themeOne.setTitle(Constants.themeWriter, for: .normal)
+        themeTwo.setTitle(Constants.themeArtist, for: .normal)
+        themeThree.setTitle(Constants.themeHistorical, for: .normal)
+        
+        themeStack.translatesAutoresizingMaskIntoConstraints = false
+        themeStack.pinTop(to: themeLabel.bottomAnchor, Constants.coef14)
+        themeStack.pinBottom(to: themeView, Constants.coef14)
+        themeStack.pinCenterX(to: themeView)
+    }
+    
+    @objc
+    func themeButtonWasPressed(_ sender: UIButton) { }
+    
+    func returnHeight(thisView: UIView) -> CGFloat {
+        return thisView.sizeThatFits(CGSize(width: view.bounds.width * Constants.coef17, height: CGFloat.greatestFiniteMagnitude)).height
     }
 }

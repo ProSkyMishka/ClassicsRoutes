@@ -51,25 +51,25 @@ final class ChatCell: UITableViewCell {
         
         wrap.addSubview(circle)
         circle.backgroundColor = Constants.color
-        circle.setHeight(80)
-        circle.setWidth(80)
-        circle.layer.cornerRadius = 40
+        circle.setHeight(Constants.coef25)
+        circle.setWidth(Constants.coef25)
+        circle.layer.cornerRadius = Constants.coef26
         circle.translatesAutoresizingMaskIntoConstraints = false
         circle.pinCenterY(to: self)
-        circle.pinLeft(to: self, 10)
+        circle.pinLeft(to: self, Constants.coef14)
         
         circle.addSubview(avatar)
-        avatar.setHeight(40)
-        avatar.setWidth(50)
+        avatar.setHeight(Constants.coef26)
+        avatar.setWidth(Constants.coef27)
         avatar.translatesAutoresizingMaskIntoConstraints = false
         avatar.pinCenter(to: circle)
         
         wrap.addSubview(name)
         name.textColor = .black
-        name.font = UIFont.boldSystemFont(ofSize: 30)
+        name.font = UIFont.boldSystemFont(ofSize: Constants.horiz1)
         name.translatesAutoresizingMaskIntoConstraints = false
-        name.pinLeft(to: circle.trailingAnchor, 25)
+        name.pinLeft(to: circle.trailingAnchor, Constants.coef)
         name.pinCenterY(to: self)
-        name.setWidth(self.bounds.width * 0.8)
+        name.setWidth(self.bounds.width * Constants.avatarCoef1)
     }
 }

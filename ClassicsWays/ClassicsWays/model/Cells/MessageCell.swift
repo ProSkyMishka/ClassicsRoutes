@@ -32,25 +32,25 @@ final class MessageCell: UICollectionViewCell {
         self.name.isHidden = true
         self.message.isHidden = true
         configureUI()
-        self.message.font = UIFont.boldSystemFont(ofSize: height * 0.02)
+        self.message.font = UIFont.boldSystemFont(ofSize: height * Constants.coef20)
         self.name.text = name
 
         if name == Vars.user?.name {
-            self.avatar.pinRight(to: self, 10)
+            self.avatar.pinRight(to: self, Constants.coef14)
             self.name.isHidden = true
-            self.message.pinRight(to: self.avatar.leadingAnchor, 10)
+            self.message.pinRight(to: self.avatar.leadingAnchor, Constants.coef14)
             self.avatar.pinBottom(to: self)
         } else {
-            self.avatar.pinLeft(to: self, 10)
+            self.avatar.pinLeft(to: self, Constants.coef14)
             self.name.isHidden = false
-            self.message.pinLeft(to: self.avatar.trailingAnchor, 10)
-            self.avatar.pinBottom(to: self, 23)
+            self.message.pinLeft(to: self.avatar.trailingAnchor, Constants.coef14)
+            self.avatar.pinBottom(to: self, Constants.coef14)
         }
         self.message.text = message
         let number = numberOfLines()
-        var coef = 1.0
-        if number > 3 {
-            coef = (Double(number) / 3.0)
+        var coef: Double = Double(Constants.one)
+        if number > Int(Constants.coef18) {
+            coef = (Double(number) / Constants.coef18)
             self.message.numberOfLines = number
         }
         UIViewController().returnImage(imageView: self.avatar, key: avatar)
@@ -61,8 +61,8 @@ final class MessageCell: UICollectionViewCell {
         avatar = UIImageView()
         
         avatar.translatesAutoresizingMaskIntoConstraints = false
-        avatar.setHeight(40)
-        avatar.setWidth(50)
+        avatar.setHeight(Constants.coef26)
+        avatar.setWidth(Constants.coef27)
         
         addSubview(avatar)
         
@@ -71,11 +71,11 @@ final class MessageCell: UICollectionViewCell {
         addSubview(name)
         
         name.textColor = Constants.color
-        name.font = UIFont.boldSystemFont(ofSize: 18)
+        name.font = UIFont.boldSystemFont(ofSize: Constants.coef4)
         
         name.translatesAutoresizingMaskIntoConstraints = false
         name.pinCenterX(to: avatar)
-        name.setWidth(50)
+        name.setWidth(Constants.coef27)
         name.pinBottom(to: self)
         
         message = UILabel()
@@ -84,19 +84,19 @@ final class MessageCell: UICollectionViewCell {
         
         message.textColor = .black
         message.lineBreakMode = .byWordWrapping
-        message.numberOfLines = 3
+        message.numberOfLines = Int(Constants.coef18)
         message.translatesAutoresizingMaskIntoConstraints = false
         message.backgroundColor = Constants.color
         
-        message.setWidth(self.bounds.width * 0.6)
-        message.pinBottom(to: self, 5)
+        message.setWidth(self.bounds.width * Constants.coef32)
+        message.pinBottom(to: self, Constants.coef7)
     }
     
     func numberOfLines() -> Int {
-        message.numberOfLines = 200000
-        let size = message.sizeThatFits(CGSize(width: self.bounds.width * 0.6, height: CGFloat.greatestFiniteMagnitude))
+        message.numberOfLines = Int(Constants.coef33)
+        let size = message.sizeThatFits(CGSize(width: self.bounds.width * Constants.coef32, height: CGFloat.greatestFiniteMagnitude))
         let numberOfLines = Int(size.height / message.font.lineHeight)
-        message.numberOfLines = 3
+        message.numberOfLines = Int(Constants.coef18)
         
         return numberOfLines
     }

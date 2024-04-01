@@ -11,8 +11,8 @@ import UIKit
 class NetworkService {
     static let shared = NetworkService(); private init() { }
     
-    let localhost = "http://127.0.0.1:8080"
-    let localSocketHost = "ws://127.0.0.1:8080/echo"
+    let localhost = Constants.localhost
+    let localSocketHost = Constants.localSocketHost
     var webSocketTask: URLSessionWebSocketTask?
     
     func auth(name: String, password: String) async throws -> User {
@@ -23,8 +23,8 @@ class NetworkService {
         }
         
         var request = URLRequest(url: url)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "POST"
+        request.addValue(Constants.applicationJSON, forHTTPHeaderField: Constants.contentType)
+        request.httpMethod = HTTPMethod.post.rawValue
         let encoder = JSONEncoder()
         let data = try encoder.encode(dto)
         request.httpBody = data
@@ -48,6 +48,13 @@ enum APIMethod: String {
     case getAllRoutes = "/routes"
     case getAllMessages = "/messages"
     case getAllChats = "/chats"
+}
+
+enum HTTPMethod: String {
+    case post = "POST"
+    case put = "PUT"
+    case get = "GET"
+    case delete = "DELETE"
 }
 
 enum NetworkError: Error {

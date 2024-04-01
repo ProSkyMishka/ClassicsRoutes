@@ -35,13 +35,13 @@ final class ChangeNameViewController: UIViewController {
         nameView.addSubview(nameField)
         
         nameView.backgroundColor = Constants.color
-        nameView.layer.borderWidth = 2
+        nameView.layer.borderWidth = Constants.coef5
         nameView.layer.borderColor = UIColor.black.cgColor
-        nameView.layer.cornerRadius = Constants.radius
+        nameView.layer.cornerRadius = Constants.value
         
         nameView.translatesAutoresizingMaskIntoConstraints = false
-        nameView.pinWidth(to: view, 0.9)
-        nameView.pinHeight(to: view, 0.15)
+        nameView.pinWidth(to: view, Constants.coef17)
+        nameView.pinHeight(to: view, Constants.coef40)
         nameView.pinCenter(to: view)
         
         configureNameLabel()
@@ -49,23 +49,23 @@ final class ChangeNameViewController: UIViewController {
     }
     
     private func configureNameLabel() {
-        nameLabel.text = "Новое имя:"
-        nameLabel.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.04)
+        nameLabel.text = Constants.newName
+        nameLabel.font = UIFont.boldSystemFont(ofSize: view.bounds.height * Constants.coef29)
         nameLabel.textColor = .black
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.pinCenterX(to: nameView)
-        nameLabel.pinTop(to: nameView, view.bounds.height * 0.02)
+        nameLabel.pinTop(to: nameView, view.bounds.height * Constants.coef20)
     }
     
     private func configureNameField() {
-        nameField.attributedPlaceholder = NSAttributedString(string: "введите новое имя", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+        nameField.attributedPlaceholder = NSAttributedString(string: Constants.inputNewName, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
         nameField.returnKeyType = UIReturnKeyType.done
         
         nameField.font = UIFont.boldSystemFont(ofSize: view.bounds.height / Constants.coef2)
         nameField.textColor = .black
         nameField.backgroundColor = .white
-        nameField.layer.cornerRadius = view.bounds.height * 0.02
+        nameField.layer.cornerRadius = view.bounds.height * Constants.coef20
         
         nameField.leftView = UIView(frame: CGRect(x: .zero, y: .zero, width: Constants.offset, height: Constants.offset))
         nameField.rightView = UIView(frame: CGRect(x: .zero, y: .zero, width: Constants.offset, height: Constants.offset))
@@ -76,26 +76,26 @@ final class ChangeNameViewController: UIViewController {
         
         nameField.translatesAutoresizingMaskIntoConstraints = false
         nameField.pinCenterX(to: nameView)
-        nameField.pinTop(to: nameLabel.bottomAnchor, view.bounds.height * 0.02)
-        nameField.setHeight(view.bounds.height * 0.04)
-        nameField.setWidth(view.bounds.width * 0.8)
+        nameField.pinTop(to: nameLabel.bottomAnchor, view.bounds.height * Constants.coef20)
+        nameField.setHeight(view.bounds.height * Constants.coef29)
+        nameField.setWidth(view.bounds.width * Constants.avatarCoef1)
     }
     
     private func configureReadyButton() {
         view.addSubview(readyButton)
         
         readyButton.isEnabled = false
-        readyButton.setTitle("ГОТОВО", for: .normal)
-        readyButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.04)
+        readyButton.setTitle(Constants.ready.uppercased(), for: .normal)
+        readyButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * Constants.coef29)
         readyButton.setTitleColor(.black, for: .normal)
         readyButton.setTitleColor(.lightGray, for: .disabled)
         readyButton.layer.borderColor = UIColor.black.cgColor
-        readyButton.layer.borderWidth = 2
+        readyButton.layer.borderWidth = Constants.coef5
         readyButton.backgroundColor = Constants.color
         
         readyButton.translatesAutoresizingMaskIntoConstraints = false
         readyButton.pinWidth(to: view)
-        readyButton.pinHeight(to: view, 0.07)
+        readyButton.pinHeight(to: view, Constants.avatarCoef3)
         readyButton.pinBottom(to: view)
         
         readyButton.addTarget(self, action: #selector(readyButtonWasPressed), for: .touchUpInside)
@@ -103,20 +103,20 @@ final class ChangeNameViewController: UIViewController {
     
     @objc
     private func readyButtonWasPressed() {
-        var countLetters = 0
+        var countLetters: Int = .zero
         var flag = true
         for i in nameField.text! {
             if Constants.letters.contains(i) {
-                countLetters += 1
+                countLetters += Constants.one
             }
             if !Constants.letters.contains(i) && !Constants.digits.contains(i) {
                 flag = false
             }
         }
-        if countLetters == 0 || !flag {
-            let text = "error - Имя пользователя должно содержать хотя бы одну латинскую букву, специальные символы не допускаются"
+        if countLetters == .zero || !flag {
+            let text = Constants.nameFormatError
             error(text: text)
-        } else if nameField.text != "" {
+        } else if nameField.text != Constants.nilString {
             readyButton.isEnabled = false
             var users: [User] = []
             Task {
@@ -125,14 +125,14 @@ final class ChangeNameViewController: UIViewController {
                     DispatchQueue.main.async {
                         for user in users {
                             if self.nameField.text == user.name {
-                                self.error(text: "error - Пользователь с таким именем уже существует")
-                                self.nameField.attributedPlaceholder = NSAttributedString(string: "имя занято", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+                                self.error(text: Constants.nameError)
+                                self.nameField.attributedPlaceholder = NSAttributedString(string: Constants.nameTaken, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
                                 return
                             }
                         }
                         Task {
                             do {
-                                Vars.user = try await NetworkService.shared.updateUser(id: Vars.user!.id, name: self.nameField.text!, email: Vars.user!.email, date: Vars.user!.date, avatar: Vars.user!.avatar, routes: Vars.user!.routes, role: Vars.user!.role, likes: Vars.user!.likes, themes: Vars.user!.themes, chats: Vars.user!.chats, password: Vars.password)
+                                Vars.user = try await NetworkService.shared.updateUser(id: Vars.user!.id, name: self.nameField.text!, date: Vars.user!.date, avatar: Vars.user!.avatar, routes: Vars.user!.routes, role: Vars.user!.role, likes: Vars.user!.likes, themes: Vars.user!.themes, password: Vars.password)
                                 DispatchQueue.main.async {
                                     self.navigationController?.pushViewController(ProfileViewController(), animated: true)
                                 }
@@ -153,7 +153,7 @@ final class ChangeNameViewController: UIViewController {
     func error(text: String) {
         nameView.backgroundColor = Constants.red
         nameField.text = nil
-        nameField.attributedPlaceholder = NSAttributedString(string: "неверный формат", attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+        nameField.attributedPlaceholder = NSAttributedString(string: Constants.formatError, attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray])
         readyButton.isEnabled = false
         configureErrorView(errorView: errorView, error: error)
         error.text = text
@@ -169,7 +169,7 @@ final class ChangeNameViewController: UIViewController {
     @objc func dismissKeyboardAndEnabledButton() {
         errorView.isHidden = true
         view.endEditing(true)
-        if nameField.text != "" {
+        if nameField.text != Constants.nilString {
             readyButton.isEnabled = true
         } else {
             readyButton.isEnabled = false

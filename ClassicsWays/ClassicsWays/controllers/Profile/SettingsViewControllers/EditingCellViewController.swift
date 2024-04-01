@@ -12,7 +12,7 @@ class EditingCellViewController: UIViewController {
     private let text = UITextField()
     private let ok = UIButton()
     private let back = UIButton()
-    private var status = 0
+    private var status: Int = .zero
     
     var didAdd: ((_ item: String) -> Void)?
     
@@ -35,18 +35,18 @@ class EditingCellViewController: UIViewController {
         view.addSubview(text)
         
         text.textColor = .black
-        text.pinTop(to: ok.bottomAnchor, 10)
-        text.pinHorizontal(to: view, 10)
+        text.pinTop(to: ok.bottomAnchor, Constants.coef14)
+        text.pinHorizontal(to: view, Constants.coef14)
     }
     
     private func configureButtons() {
         view.addSubview(ok)
         view.addSubview(back)
         
-        let largeFont = UIFont.systemFont(ofSize: view.bounds.height * 0.03, weight: .bold)
+        let largeFont = UIFont.systemFont(ofSize: view.bounds.height * Constants.coef11, weight: .bold)
         let configuration = UIImage.SymbolConfiguration(font: largeFont)
-        let imageTick = UIImage(systemName: "checkmark", withConfiguration: configuration)
-        let imageCross = UIImage(systemName: "xmark", withConfiguration: configuration)
+        let imageTick = UIImage(systemName: Constants.tickSymbol, withConfiguration: configuration)
+        let imageCross = UIImage(systemName: Constants.crossSymbol, withConfiguration: configuration)
         
         ok.setBackgroundImage(imageTick, for: .normal)
         back.setBackgroundImage(imageCross, for: .normal)
@@ -54,10 +54,10 @@ class EditingCellViewController: UIViewController {
         ok.tintColor = .green
         back.tintColor = .red
         
-        ok.pinTop(to: view, 5)
-        ok.pinRight(to: view, 5)
-        back.pinTop(to: view, 5)
-        back.pinLeft(to: view, 5)
+        ok.pinTop(to: view, Constants.coef7)
+        ok.pinRight(to: view, Constants.coef7)
+        back.pinTop(to: view, Constants.coef7)
+        back.pinLeft(to: view, Constants.coef7)
         
         ok.addTarget(self, action: #selector(buttonOkWasPressed), for: .touchUpInside)
         back.addTarget(self, action: #selector(buttonBackWasPressed), for: .touchUpInside)
@@ -65,15 +65,15 @@ class EditingCellViewController: UIViewController {
     
     @objc
     func buttonOkWasPressed() {
-        if text.text != "" {
-            if status == 1 {
-                guard let coordinates = text.text?.split(separator: " ") else {
+        if text.text != Constants.nilString {
+            if status == Constants.one {
+                guard let coordinates = text.text?.split(separator: Constants.space) else {
                     text.backgroundColor = Constants.red
                     return
                 }
                 
-                if coordinates.count == 2 {
-                    guard (Double(coordinates[0]) != nil) && (Double(coordinates[1]) != nil) else {
+                if coordinates.count == Int(Constants.coef5) {
+                    guard (Double(coordinates[.zero]) != nil) && (Double(coordinates[Constants.one]) != nil) else {
                         text.backgroundColor = Constants.red
                         return
                     }

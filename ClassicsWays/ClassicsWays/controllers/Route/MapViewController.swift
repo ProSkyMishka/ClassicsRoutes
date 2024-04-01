@@ -17,8 +17,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     private var coordinatesArray = [CLLocationCoordinate2D]()
     private var annotationsArray = [MKAnnotation]()
     private var overlaysArray = [MKOverlay]()
-    private var startLocation = ""
-    private var finishLocation = ""
+    private var startLocation = Constants.nilString
+    private var finishLocation = Constants.nilString
     private var continueButton = UIButton()
     private var backButton = UIButton()
     private var endButton = UIButton()
@@ -44,16 +44,16 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         
         infoView.isScrollEnabled = true
         infoView.backgroundColor = Constants.color
-        infoView.layer.cornerRadius = Constants.radius
-        infoView.layer.borderWidth = 2
+        infoView.layer.cornerRadius = Constants.value
+        infoView.layer.borderWidth = Constants.coef5
         infoView.layer.borderColor = UIColor.black.cgColor
         
         infoView.contentSize = CGSize(width: view.bounds.width, height: view.bounds.height)
         
         infoView.translatesAutoresizingMaskIntoConstraints = false
-        infoView.pinTop(to: mapView.bottomAnchor, view.bounds.height * 0.01)
+        infoView.pinTop(to: mapView.bottomAnchor, view.bounds.height * Constants.coef34)
         infoView.pinWidth(to: view)
-        infoView.pinBottom(to: stackButton.topAnchor, view.bounds.height * 0.01)
+        infoView.pinBottom(to: stackButton.topAnchor, view.bounds.height * Constants.coef34)
         infoView.pinCenterX(to: view)
         
         configureContentView()
@@ -72,13 +72,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         
         desc.translatesAutoresizingMaskIntoConstraints = false
         desc.textColor = .black
-        desc.font = UIFont.systemFont(ofSize: view.bounds.height * 0.025)
+        desc.font = UIFont.systemFont(ofSize: view.bounds.height * Constants.coef8)
         desc.lineBreakMode = .byWordWrapping
         desc.numberOfLines = .zero
         
         desc.pinCenterX(to: contentView)
-        desc.setWidth(view.bounds.width * 0.9)
-        desc.pinTop(to: contentView, 10)
+        desc.setWidth(view.bounds.width * Constants.coef17)
+        desc.pinTop(to: contentView, Constants.coef14)
     }
     
     let mapView: MKMapView = {
@@ -112,7 +112,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
                 
                 if showRegion {
                     self.mapView.centerCoordinate = coordinates
-                    let span = MKCoordinateSpan(latitudeDelta: 0.9, longitudeDelta: 0.9)
+                    let span = MKCoordinateSpan(latitudeDelta: Constants.coef17, longitudeDelta: Constants.coef17)
                     let region = MKCoordinateRegion(center: coordinates, span: span)
                     self.mapView.setRegion(region, animated: showRegion)
                 }
@@ -126,15 +126,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     private func showCurrent(coordinates: CLLocationCoordinate2D, showRegion: Bool = false, completion: @escaping () -> Void ) {
         let point = MKPointAnnotation()
         point.coordinate = coordinates
-        point.title = ""
-        point.subtitle = ""
+        point.title = Constants.nilString
+        point.subtitle = Constants.nilString
         
         self.mapView.addAnnotation(point)
         self.annotationsArray.append(point)
         
         if showRegion {
             self.mapView.centerCoordinate = coordinates
-            let span = MKCoordinateSpan(latitudeDelta: 0.9, longitudeDelta: 0.9)
+            let span = MKCoordinateSpan(latitudeDelta: Constants.coef17, longitudeDelta: Constants.coef17)
             let region = MKCoordinateRegion(center: coordinates, span: span)
             self.mapView.setRegion(region, animated: showRegion)
         }
@@ -149,7 +149,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     }
     
     private func findLocations() {
-        if self.coordinatesArray.count < 2 {
+        if self.coordinatesArray.count < Int(Constants.coef5) {
             return
         }
         
@@ -177,7 +177,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
                     let rect = a.boundingMapRect
                     self.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
                     
-                    self.mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 40, left: 40, bottom: 40, right: 40), animated: true)
+                    self.mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: Constants.coef26, left: Constants.coef26, bottom: Constants.coef26, right: Constants.coef26), animated: true)
                 }
             }
         }
@@ -185,7 +185,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        largeFont = UIFont.systemFont(ofSize: view.bounds.height * 0.06, weight: .bold)
+        largeFont = UIFont.systemFont(ofSize: view.bounds.height * Constants.coef16, weight: .bold)
         configuration = UIImage.SymbolConfiguration(font: largeFont!)
         setupUI()
     }
@@ -208,7 +208,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         manager.stopUpdatingLocation()
         
         let location = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
-        let span = MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
+        let span = MKCoordinateSpan(latitudeDelta: Constants.coef38, longitudeDelta: Constants.coef38)
         let region = MKCoordinateRegion(center: location, span: span)
         mapView.setRegion(region, animated: true)
     }
@@ -217,11 +217,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     private func setupUI() {
         locationManager.delegate = self
         mapView.delegate = self
-        hideKeyboardOnTapAround()
         configureBackButton()
         configureBackGroundImage()
         configureEndButton()
         configureStackButton()
+        hideKeyboardOnTapAround(view)
         
         self.view.addSubview(mapView)
         
@@ -230,7 +230,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         mapView.pinLeft(to: view)
         mapView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
         mapView.pinRight(to: view)
-        mapView.pinHeight(to: view, 0.5)
+        mapView.pinHeight(to: view, Constants.coef38)
         
         configureInfoView()
         
@@ -246,7 +246,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
         if overlay is MKPolyline {
             polylineRenderer.strokeColor = UIColor.green
-            polylineRenderer.lineWidth = 4
+            polylineRenderer.lineWidth = Constants.coef1
         }
         return polylineRenderer
     }
@@ -254,9 +254,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     private func configureEndButton() {
         view.addSubview(endButton)
         
-        endButton.setTitle("ЗАВЕРШИТЬ", for: .normal)
+        endButton.setTitle(Constants.end, for: .normal)
         endButton.backgroundColor = Constants.red
-        endButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * 0.03)
+        endButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: view.bounds.height * Constants.coef11)
         endButton.setTitleColor(.black, for: .normal)
         endButton.setTitleColor(.darkGray, for: .disabled)
         
@@ -264,7 +264,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         endButton.layer.borderColor = UIColor.black.cgColor
         
         endButton.translatesAutoresizingMaskIntoConstraints = false
-        endButton.setHeight(view.bounds.height * 0.05)
+        endButton.setHeight(view.bounds.height * Constants.coef16)
         endButton.setWidth(view.bounds.width)
         endButton.pinBottom(to: view)
         
@@ -273,14 +273,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     
     
     private func configureContinueButton() {
-        let imageTick = UIImage(systemName: "arrowshape.right.fill", withConfiguration: configuration)
+        let imageTick = UIImage(systemName: Constants.arrowRightSymbol, withConfiguration: configuration)
         continueButton.setBackgroundImage(imageTick, for: .normal)
         
         continueButton.addTarget(self, action: #selector(getYourRoute), for: .touchUpInside)
     }
     
     private func configureThisBackButton() {
-        let imageTick = UIImage(systemName: "arrowshape.left.fill", withConfiguration: configuration)
+        let imageTick = UIImage(systemName: Constants.arrowLeftSymbol, withConfiguration: configuration)
         backButton.setBackgroundImage(imageTick, for: .normal)
         
         backButton.addTarget(self, action: #selector(thisBackButtonWasTapped), for: .touchUpInside)
@@ -290,7 +290,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         view.addSubview(stackButton)
         
         stackButton.axis = .horizontal
-        stackButton.spacing = view.bounds.width * 0.6
+        stackButton.spacing = view.bounds.width * Constants.coef32
         
         for button in [backButton, continueButton] {
             button.tintColor = .black
@@ -300,9 +300,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
             button.layer.borderColor = UIColor.black.cgColor
             
             button.translatesAutoresizingMaskIntoConstraints = false
-            button.setHeight(view.bounds.height * 0.07)
-            button.setWidth(view.bounds.height * 0.07)
-            button.layer.cornerRadius = view.bounds.height * 0.035
+            button.setHeight(view.bounds.height * Constants.avatarCoef3)
+            button.setWidth(view.bounds.height * Constants.avatarCoef3)
+            button.layer.cornerRadius = view.bounds.height * Constants.coef37
             stackButton.addArrangedSubview(button)
         }
         
@@ -316,11 +316,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     
     @objc
     private func thisBackButtonWasTapped() {
-        if currentIndex == 3 {
-            currentIndex = 0
-            startLocation = ""
+        if currentIndex == Int(Constants.coef18) {
+            currentIndex = .zero
+            startLocation = Constants.nilString
         } else {
-            currentIndex -= 4
+            currentIndex -= Int(Constants.coef1)
         }
         getYourRoute()
     }
@@ -338,7 +338,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
             self.annotationsArray = []
         }
         
-        if self.overlaysArray.count > 0 {
+        if self.overlaysArray.count > .zero {
             self.mapView.removeOverlays(self.overlaysArray)
             self.overlaysArray = []
         }
@@ -347,13 +347,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         
         if startLocation.count == .zero {
             desc.text = locations[currentIndex]
-            currentIndex += 1
+            currentIndex += Constants.one
             finishLocation = locations[currentIndex]
         } else {
             startLocation = locations[currentIndex]
-            currentIndex += 1
+            currentIndex += Constants.one
             desc.text = locations[currentIndex]
-            currentIndex += 1
+            currentIndex += Constants.one
             finishLocation = locations[currentIndex]
         }
         setSize()
@@ -373,10 +373,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     }
     
     private func blockButtons() {
-        if locations.count <= 2 {
+        if locations.count <= Int(Constants.coef5) {
             backButton.isEnabled = false
             continueButton.isEnabled = false
-        } else if currentIndex + 1 == locations.count {
+        } else if currentIndex + Constants.one == locations.count {
             backButton.isEnabled = true
             continueButton.isEnabled = false
         } else if currentIndex == Constants.one {
@@ -396,58 +396,45 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         errorView.isHidden = false
         configureErrorView(errorView: errorView, error: error)
         
-        if currentIndex + 1 < locations.count {
-            tick.isHidden = false
-            cross.isHidden = false
+        if currentIndex + Constants.one < locations.count {
             like.isHidden = true
             dislike.isHidden = true
             
             error.pinTop(to: errorView)
-            error.text = "Вы уверены, что хотите завершить маршрут преждевременно?"
+            error.text = Constants.routeEnd
             error.textAlignment = .center
             
             errorView.backgroundColor = Constants.red
             
-            let imageTick = UIImage(systemName: "checkmark", withConfiguration: configuration)
-            tick.setBackgroundImage(imageTick, for: .normal)
+            configureTick(tick: tick, errorView: errorView, configuration: configuration!)
             tick.addTarget(self, action: #selector(tickWaspressed), for: .touchUpInside)
-            errorView.addSubview(tick)
-            tick.tintColor = .black
-            tick.pinRight(to: errorView, view.bounds.width * 0.19)
-            tick.pinBottom(to: errorView, 5)
             
-            let imageCross = UIImage(systemName: "xmark", withConfiguration: configuration)
-            cross.setBackgroundImage(imageCross, for: .normal)
+            configureCross(cross: cross, errorView: errorView, configuration: configuration!)
             cross.addTarget(self, action: #selector(crossWaspressed), for: .touchUpInside)
-            errorView.addSubview(cross)
-            cross.tintColor = .black
-            cross.pinLeft(to: errorView, view.bounds.width * 0.95 * 0.2)
-            cross.pinBottom(to: errorView, 5)
         } else {
             tick.isHidden = true
             cross.isHidden = true
             like.isHidden = false
             dislike.isHidden = false
-            
-            error.text = "Вам понравился маршрут?"
+            error.text = Constants.routeLike
             
             errorView.backgroundColor = Constants.color
             
-            let imageLike = UIImage(systemName: "hand.thumbsup.circle", withConfiguration: configuration)
+            let imageLike = UIImage(systemName: Constants.likeSymbol, withConfiguration: configuration)
             like.setBackgroundImage(imageLike, for: .normal)
             like.addTarget(self, action: #selector(likeWaspressed), for: .touchUpInside)
             errorView.addSubview(like)
             like.tintColor = .green
-            like.pinLeft(to: errorView, view.bounds.width * 0.95 * 0.2)
-            like.pinBottom(to: errorView, 5)
+            like.pinLeft(to: errorView, view.bounds.width * Constants.coef9 * Constants.coef36)
+            like.pinBottom(to: errorView, Constants.coef7)
             
-            let imageDislike = UIImage(systemName: "hand.thumbsdown.circle", withConfiguration: configuration)
+            let imageDislike = UIImage(systemName: Constants.dislikeSymbol, withConfiguration: configuration)
             dislike.setBackgroundImage(imageDislike, for: .normal)
             dislike.addTarget(self, action: #selector(dislikeWaspressed), for: .touchUpInside)
             errorView.addSubview(dislike)
             dislike.tintColor = .red
-            dislike.pinRight(to: errorView, view.bounds.width * 0.95 * 0.2)
-            dislike.pinBottom(to: errorView, 5)
+            dislike.pinRight(to: errorView, view.bounds.width * Constants.coef9 * Constants.coef36)
+            dislike.pinBottom(to: errorView, Constants.coef7)
         }
     }
     
@@ -470,10 +457,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         errorView.isHidden = true
         if routes.contains(id) && !likes.contains(id) {
             likes.append(id)
-            let index = raiting.firstIndex(of: "-")
-            raiting[index!] = "+"
+            let index = raiting.firstIndex(of: Constants.minus)
+            raiting[index!] = Constants.plus
         } else if !routes.contains(id) {
-            raiting.append("+")
+            raiting.append(Constants.plus)
             likes.append(id)
         }
         end()
@@ -485,10 +472,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         if routes.contains(id) && likes.contains(id) {
             let likeIndex = likes.firstIndex(of: id)
             likes.remove(at: likeIndex!)
-            let index = raiting.firstIndex(of: "+")
-            raiting[index!] = "-"
+            let index = raiting.firstIndex(of: Constants.plus)
+            raiting[index!] = Constants.minus
         } else if !routes.contains(id) {
-            raiting.append("-")
+            raiting.append(Constants.minus)
         }
         end()
     }
@@ -499,8 +486,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
         }
         Task {
             do {
+                Vars.route = try await NetworkService.shared.getRoute(id: Vars.route!.route!.id)
+                DispatchQueue.main.async { [self] in
+                    let newRaiting = Vars.route!.route!.raiting
+                    if raiting.count - Constants.one < newRaiting.count {
+                        for i in (raiting.count - Constants.one)...(newRaiting.count - Constants.one) {
+                            raiting.append(newRaiting[i])
+                        }
+                    }
+                }
                 Vars.route!.route = try await NetworkService.shared.updateRoute(id: Vars.route!.route!.id, avatar: Vars.route!.route!.avatar, person: Vars.route!.route!.person, name: Vars.route!.route!.name, description: Vars.route!.route!.description, theme: Vars.route!.route!.theme, time: Vars.route!.route!.time, start: Vars.route!.route!.start, pictures: Vars.route!.route!.pictures, raiting: raiting, locations: Vars.route!.route!.locations)
-                Vars.user = try await NetworkService.shared.updateUser(id: Vars.user!.id, name: Vars.user!.name, email: Vars.user!.email, date: Vars.user!.date, avatar: Vars.user!.avatar, routes: routes, role: Vars.user!.role, likes: likes, themes: Vars.user!.themes, chats: Vars.user!.chats, password: Vars.password)
+                Vars.user = try await NetworkService.shared.updateUser(id: Vars.user!.id, name: Vars.user!.name, date: Vars.user!.date, avatar: Vars.user!.avatar, routes: routes, role: Vars.user!.role, likes: likes, themes: Vars.user!.themes, password: Vars.password)
                 DispatchQueue.main.async {
                     self.navigationController?.pushViewController(RoutesViewController(), animated: true)
                 }
@@ -512,10 +508,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UITextFiel
     }
     
     private func setSize() {
-        desc.numberOfLines = 200000
-        let sizeDesc = desc.sizeThatFits(CGSize(width: view.bounds.width * 0.9, height: CGFloat.greatestFiniteMagnitude))
+        desc.numberOfLines = Int(Constants.coef33)
+        let sizeDesc = desc.sizeThatFits(CGSize(width: view.bounds.width * Constants.coef17, height: CGFloat.greatestFiniteMagnitude))
         desc.numberOfLines = .zero
-        let size = CGSize(width: view.bounds.width, height: sizeDesc.height * 1.1)
+        let size = CGSize(width: view.bounds.width, height: sizeDesc.height * Constants.coef39)
         infoView.contentSize = size
         contentView.frame.size = size
     }

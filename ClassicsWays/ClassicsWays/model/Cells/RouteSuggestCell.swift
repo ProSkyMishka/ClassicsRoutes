@@ -1,23 +1,23 @@
 //
-//  RouteCell.swift
+//  RouteSuggestCell.swift
 //  ClassicsWays
 //
-//  Created by Михаил Прозорский on 28.02.2024.
+//  Created by Михаил Прозорский on 01.04.2024.
 //
 
 import UIKit
 
-final class RouteCell: UITableViewCell {
-    static let reuseId: String = "RouteCellId"
+final class RouteSuggestCell: UICollectionViewCell {
+    static let reuseId: String = "RouteSuggestCellId"
     
     private let person = UILabel()
     private let name = UILabel()
-    private let avatar = UIImageView()
+    private var avatar = UIImageView()
     private let wrap: UIView = UIView()
     
     // MARK: - Lifecycle
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
         configureUI()
     }
@@ -27,20 +27,24 @@ final class RouteCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with person: String, with name: String, with avatar: String, with id: String, with height: Double) {
-        self.person.text = person
-        if Vars.user!.routes.contains(id) {
-            wrap.layer.borderColor = Constants.gold.cgColor
-            wrap.layer.borderWidth = Constants.coef14
+    func configure(with routeId: String, with height: Double) {
+        Task {
+            do {
+                let route = try await NetworkService.shared.getRoute(id: routeId).route!
+                DispatchQueue.main.async {
+                    UIViewController().returnImage(imageView: self.avatar, key: route.avatar)
+                    self.person.text = route.person
+                    self.name.text = route.name
+                }
+            } catch {
+                
+            }
         }
-        self.name.text = name
-        UIViewController().returnImage(imageView: self.avatar, key: avatar)
         self.name.font = UIFont.boldSystemFont(ofSize: height * Constants.coef28)
         self.person.font = UIFont.boldSystemFont(ofSize: height * Constants.coef29)
     }
     
     private func configureUI() {
-        selectionStyle = .none
         backgroundColor = .clear
         
         addSubview(wrap)
@@ -53,20 +57,13 @@ final class RouteCell: UITableViewCell {
         wrap.pinWidth(to: widthAnchor, Constants.coef17)
         wrap.pinCenter(to: self)
         
-        wrap.addSubview(avatar)
-        avatar.layer.cornerRadius = Constants.value
-        avatar.layer.masksToBounds = true
-        avatar.pinHeight(to: heightAnchor, Constants.coef30)
-        avatar.pinWidth(to: widthAnchor, Constants.coef31)
-        avatar.translatesAutoresizingMaskIntoConstraints = false
-        avatar.pinRight(to: wrap, Constants.coef14)
-        avatar.pinTop(to: wrap, Constants.coef14)
+        configureAvatar()
         
         wrap.addSubview(person)
         person.textColor = .black
         person.translatesAutoresizingMaskIntoConstraints = false
         person.lineBreakMode = .byWordWrapping
-        person.numberOfLines = Int(Constants.coef18)
+        person.numberOfLines = Int(Constants.coef5)
         person.pinLeft(to: wrap, Constants.coef14)
         person.pinRight(to: avatar.leadingAnchor, Constants.coef14)
         person.pinTop(to: wrap, Constants.coef14)
@@ -75,10 +72,22 @@ final class RouteCell: UITableViewCell {
         name.textColor = .black
         name.translatesAutoresizingMaskIntoConstraints = false
         name.lineBreakMode = .byWordWrapping
-        name.numberOfLines = Int(Constants.coef5)
+        name.numberOfLines = Constants.one
         name.pinCenterX(to: wrap)
         name.pinWidth(to: widthAnchor, Constants.coef12)
         name.pinBottom(to: wrap, Constants.coef14)
         name.textAlignment = .center
+    }
+    
+    private func configureAvatar() {
+        wrap.addSubview(avatar)
+        
+        avatar.layer.cornerRadius = Constants.value
+        avatar.layer.masksToBounds = true
+        avatar.pinHeight(to: heightAnchor, Constants.coef30)
+        avatar.pinWidth(to: widthAnchor, Constants.coef31)
+        avatar.translatesAutoresizingMaskIntoConstraints = false
+        avatar.pinRight(to: wrap, Constants.coef14)
+        avatar.pinTop(to: wrap, Constants.coef14)
     }
 }

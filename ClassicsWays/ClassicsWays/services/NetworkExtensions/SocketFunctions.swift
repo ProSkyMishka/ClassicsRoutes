@@ -24,7 +24,7 @@ extension NetworkService {
         }
     }
     
-    func receiveMessagesChat(collection: UICollectionView) async throws {
+    func receiveMessagesChat(collection: UICollectionView, vc: ChatViewController) async throws {
         webSocketTask!.receive { result in
             switch result {
             case .failure(let error):
@@ -37,26 +37,30 @@ extension NetworkService {
                     else {
                         return
                     }
-                    let newMessageDB = MessageDate(id: newMessageSocket.id, user: newMessageSocket.user, route: newMessageSocket.route, routeSuggest: newMessageSocket.routeSuggest, time: newMessageSocket.time, text: newMessageSocket.text)
+                    let newMessageDB = MessageDate(id: newMessageSocket.id, user: newMessageSocket.user, route: newMessageSocket.route, time: newMessageSocket.time, text: newMessageSocket.text)
                     DispatchQueue.main.async {
-                        if newMessageDB.id != "" && !Vars.messages.contains(where: {$0.id == newMessageDB.id}) {
+                        if newMessageDB.id != Constants.nilString && !Vars.messages.contains(where: {$0.id == newMessageDB.id}) {
                             Vars.messages.append(newMessageDB)
                         }
                         collection.reloadData()
-                        collection.scrollToItem(at: IndexPath(row: Vars.messages.count - 1, section: 0), at: .bottom, animated: false)
+                        collection.scrollToItem(at: IndexPath(row: Vars.messages.count - Constants.one, section: .zero), at: .bottom, animated: false)
                         Task {
-                            try await Task.sleep(nanoseconds: 5_000_000)
-                            collection.scrollToItem(at: IndexPath(row: Vars.messages.count - 1, section: 0), at: .bottom, animated: true)
+                            try await Task.sleep(nanoseconds: Constants.messageWait)
+                            collection.scrollToItem(at: IndexPath(row: Vars.messages.count - Constants.one, section: .zero), at: .bottom, animated: true)
                             collection.reloadData()
+                            if Vars.chat != nil {
+                                Vars.chat = try await NetworkService.shared.getChat(id: Vars.chat!.id)
+                                vc.configureStackButtons()
+                            }
                         }
                     }
                 case .string(let message):
                     print(message)
                 default:
-                    print("unknown case")
+                    print(Constants.unknownCase)
                 }
                 Task {
-                    try await self.receiveMessagesChat(collection: collection)
+                    try await self.receiveMessagesChat(collection: collection, vc: vc)
                 }
             }
         }

@@ -27,7 +27,7 @@ class RatingViewController: TemplateViewController {
                 print("Произошла ошибка: \(error)")
             }
         }
-        status = 2
+        status = Int(Constants.coef5)
         configureUI()
     }
     
@@ -41,7 +41,7 @@ class RatingViewController: TemplateViewController {
     private func configureLabel() {
         view.addSubview(txtLabel)
         
-        txtLabel.text = "Рейтинг"
+        txtLabel.text = Constants.ratingString
         txtLabel.font = UIFont.boldSystemFont(ofSize: view.bounds.height / Constants.coef)
         txtLabel.textColor = .black
         
@@ -57,9 +57,9 @@ class RatingViewController: TemplateViewController {
         
         stick.translatesAutoresizingMaskIntoConstraints = false
         stick.pinWidth(to: view)
-        stick.setHeight(2)
+        stick.setHeight(Constants.coef5)
         stick.pinCenterX(to: view)
-        stick.pinTop(to: txtLabel.bottomAnchor, 5)
+        stick.pinTop(to: txtLabel.bottomAnchor, Constants.coef7)
     }
     
     private func configureTable() {
@@ -71,9 +71,9 @@ class RatingViewController: TemplateViewController {
         table.delegate = self
         table.backgroundColor = Constants.color
         table.separatorStyle = .none
-        table.rowHeight = 100
+        table.rowHeight = Constants.rowHeight
         
-        table.pinTop(to: stick.bottomAnchor, view.bounds.height * 0.05)
+        table.pinTop(to: stick.bottomAnchor, view.bounds.height * Constants.coef16)
         table.pinWidth(to: view)
         table.pinBottom(to: bar.topAnchor)
     }
@@ -92,7 +92,7 @@ extension RatingViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: RatingCell.reuseId, for: indexPath)
         guard let raitingCell = cell as? RatingCell else { return cell }
-        raitingCell.configure(with: users[indexPath.row].name, with: "Пройдено маршрутов: \(users[indexPath.row].routes.count)", with: users[indexPath.row].avatar)
+        raitingCell.configure(with: users[indexPath.row].name, with: Constants.gone + String(users[indexPath.row].routes.count), with: users[indexPath.row].avatar)
         return raitingCell
     }
 }
@@ -110,15 +110,15 @@ extension RatingViewController: UITableViewDelegate {
                     DispatchQueue.main.async {
                         Vars.chat = nil
                         for chat in chats {
-                            if chat.users.count == 2 && chat.users.contains(userId) && chat.users.contains(Vars.user!.id) {
+                            if chat.users.count == Int(Constants.coef5) && chat.users.contains(userId) && chat.users.contains(Vars.user!.id) {
                                 Vars.chat = chat
                                 break
                             }
                         }
                         if Vars.chat == nil {
                             Task {
-                                let chat = try await NetworkService.shared.createChat(users: [Vars.user!.id, userId], messages: [], last: "01.01.0001 01:00:00")
-                                Vars.chat = ChatDate(id: chat.id, users: chat.users, messages: chat.messages, last: Constants.format.date(from: chat.last)!)
+                                let chat = try await NetworkService.shared.createChat(users: [Vars.user!.id, userId], messages: [], last: Constants.nilDate)
+                                Vars.chat = ChatDate(id: chat.id, users: chat.users, messages: chat.messages, last: Constants.format.date(from: chat.last)!, routeSuggest: chat.routeSuggest)
                                 DispatchQueue.main.async {
                                     self.navigationController?.pushViewController(ChatViewController(), animated: true)
                                 }

@@ -12,7 +12,6 @@ struct MessageSocket: Identifiable, Codable {
     let id: String
     var user: String
     let route: String
-    let routeSuggest: String
     let time: Date
     let text: String
 }
