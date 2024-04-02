@@ -59,6 +59,7 @@ struct Constants {
     static let coef46: CGFloat = 0.08
     static let coef47: CGFloat = 0.425
     static let coef48: CGFloat = 32
+    static let coef49: CGFloat = 0.9499
     
     static let avatarCoef1: CGFloat = 0.8
     static let avatarCoef2: CGFloat = 0.25

@@ -106,7 +106,7 @@ class SuggestViewController: UIViewController {
         infoView.layer.borderWidth = Constants.coef5
         infoView.layer.borderColor = UIColor.black.cgColor
         
-        infoView.contentSize = CGSize(width: view.bounds.width * Constants.coef9, height: view.bounds.height * Constants.coef5)
+        infoView.contentSize = CGSize(width: view.bounds.width * Constants.coef49, height: view.bounds.height * Constants.coef5)
         
         infoView.translatesAutoresizingMaskIntoConstraints = false
         infoView.pinTop(to: view.safeAreaLayoutGuide.topAnchor)
@@ -119,7 +119,7 @@ class SuggestViewController: UIViewController {
     
     private func configureContentView() {
         infoView.addSubview(contentView)
-        contentView.frame.size = CGSize(width: view.bounds.width * Constants.coef9, height: view.bounds.height * Constants.coef5)
+        contentView.frame.size = CGSize(width: view.bounds.width * Constants.coef49, height: view.bounds.height * Constants.coef5)
         contentView.backgroundColor = Constants.color
         
         configureAvatarLabel()
