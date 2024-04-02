@@ -49,7 +49,7 @@
 		2E50DB622B971BCA000DB071 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DB612B971BCA000DB071 /* MessageCell.swift */; };
 		2E540D0C2BB6847B00B96E59 /* MessageSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E540D0B2BB6847B00B96E59 /* MessageSocket.swift */; };
 		2E722D6E2BA48AC80032561A /* AddingPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E722D6D2BA48AC80032561A /* AddingPlaceViewController.swift */; };
-		2E921DA62BB76F3A0021E9E6 /* E.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E921DA52BB76F3A0021E9E6 /* E.swift */; };
+		2E921DA62BB76F3A0021E9E6 /* SocketFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E921DA52BB76F3A0021E9E6 /* SocketFunctions.swift */; };
 		2EA940FE2BAD8421004E103F /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA940FD2BAD8421004E103F /* LocationCell.swift */; };
 		2EA941002BAD9C44004E103F /* EditingCellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA940FF2BAD9C44004E103F /* EditingCellViewController.swift */; };
 		2EA941282BB3279D004E103F /* MakePictureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA941272BB3279D004E103F /* MakePictureCell.swift */; };
@@ -126,7 +126,7 @@
 		2E50DB612B971BCA000DB071 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		2E540D0B2BB6847B00B96E59 /* MessageSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSocket.swift; sourceTree = "<group>"; };
 		2E722D6D2BA48AC80032561A /* AddingPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddingPlaceViewController.swift; sourceTree = "<group>"; };
-		2E921DA52BB76F3A0021E9E6 /* E.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = E.swift; sourceTree = "<group>"; };
+		2E921DA52BB76F3A0021E9E6 /* SocketFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketFunctions.swift; sourceTree = "<group>"; };
 		2EA940FD2BAD8421004E103F /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
 		2EA940FF2BAD9C44004E103F /* EditingCellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingCellViewController.swift; sourceTree = "<group>"; };
 		2EA941272BB3279D004E103F /* MakePictureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakePictureCell.swift; sourceTree = "<group>"; };
@@ -374,7 +374,7 @@
 				2E50DB522B933F35000DB071 /* RouteFunctions.swift */,
 				2E50DB562B933FF7000DB071 /* MessageFunctions.swift */,
 				2E50DB542B933F81000DB071 /* ChatFunctions.swift */,
-				2E921DA52BB76F3A0021E9E6 /* E.swift */,
+				2E921DA52BB76F3A0021E9E6 /* SocketFunctions.swift */,
 			);
 			path = NetworkExtensions;
 			sourceTree = "<group>";
@@ -609,7 +609,7 @@
 				2EB58ABD2BB922EC008D6A24 /* ChatCell.swift in Sources */,
 				2E50DB242B8E8812000DB071 /* ChangePasswordViewController.swift in Sources */,
 				2EEFB0FA2BA1CA7400D370BA /* ImagePicker.swift in Sources */,
-				2E921DA62BB76F3A0021E9E6 /* E.swift in Sources */,
+				2E921DA62BB76F3A0021E9E6 /* SocketFunctions.swift in Sources */,
 				2E50DA8E2B8AB45A000DB071 /* UIView+Pin.swift in Sources */,
 				2E50DB602B967C80000DB071 /* ChatDate.swift in Sources */,
 				2E50DA942B8B98E2000DB071 /* ChatsViewController.swift in Sources */,
