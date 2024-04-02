@@ -225,12 +225,12 @@
 			isa = PBXGroup;
 			children = (
 				2EA941292BB332B2004E103F /* extensions */,
-				2E50DB2C2B8EC425000DB071 /* Route */,
-				2E50DB2B2B8EC402000DB071 /* Other */,
-				2E50DB282B8EC3B8000DB071 /* Start */,
-				2E50DB272B8EC3A5000DB071 /* Profile */,
-				2E50DB2A2B8EC3E7000DB071 /* Chat */,
-				2E50DB292B8EC3DE000DB071 /* Rating */,
+				2E50DB2C2B8EC425000DB071 /* route */,
+				2E50DB2B2B8EC402000DB071 /* other */,
+				2E50DB282B8EC3B8000DB071 /* start */,
+				2E50DB272B8EC3A5000DB071 /* profile */,
+				2E50DB2A2B8EC3E7000DB071 /* chat */,
+				2E50DB292B8EC3DE000DB071 /* rating */,
 			);
 			path = controllers;
 			sourceTree = "<group>";
@@ -239,9 +239,9 @@
 			isa = PBXGroup;
 			children = (
 				2EEFB0F92BA1CA7400D370BA /* ImagePicker.swift */,
-				2E50DB4B2B933E64000DB071 /* EntitiesNotFromDB */,
-				2E50DB392B900188000DB071 /* Global */,
-				2E50DB362B8F6A9B000DB071 /* Entities */,
+				2E50DB4B2B933E64000DB071 /* entitiesNotFromDB */,
+				2E50DB392B900188000DB071 /* global */,
+				2E50DB362B8F6A9B000DB071 /* entities */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -255,7 +255,7 @@
 			path = services;
 			sourceTree = "<group>";
 		};
-		2E50DB202B8CB930000DB071 /* SettingsViewControllers */ = {
+		2E50DB202B8CB930000DB071 /* settingsViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DB1E2B8CB21A000DB071 /* ChangeAvatarViewController.swift */,
@@ -265,61 +265,61 @@
 				2E722D6D2BA48AC80032561A /* AddingPlaceViewController.swift */,
 				2EA940FF2BAD9C44004E103F /* EditingCellViewController.swift */,
 			);
-			path = SettingsViewControllers;
+			path = settingsViewControllers;
 			sourceTree = "<group>";
 		};
-		2E50DB272B8EC3A5000DB071 /* Profile */ = {
+		2E50DB272B8EC3A5000DB071 /* profile */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA7D2B8AB28F000DB071 /* ProfileViewController.swift */,
-				2E50DB202B8CB930000DB071 /* SettingsViewControllers */,
+				2E50DB202B8CB930000DB071 /* settingsViewControllers */,
 			);
-			path = Profile;
+			path = profile;
 			sourceTree = "<group>";
 		};
-		2E50DB282B8EC3B8000DB071 /* Start */ = {
+		2E50DB282B8EC3B8000DB071 /* start */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA792B8AB20C000DB071 /* RootViewController.swift */,
 				2E50DA7B2B8AB275000DB071 /* MainRegistrationViewController.swift */,
 			);
-			path = Start;
+			path = start;
 			sourceTree = "<group>";
 		};
-		2E50DB292B8EC3DE000DB071 /* Rating */ = {
+		2E50DB292B8EC3DE000DB071 /* rating */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA952B8BC07D000DB071 /* RatingViewController.swift */,
 			);
-			path = Rating;
+			path = rating;
 			sourceTree = "<group>";
 		};
-		2E50DB2A2B8EC3E7000DB071 /* Chat */ = {
+		2E50DB2A2B8EC3E7000DB071 /* chat */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA932B8B98E2000DB071 /* ChatsViewController.swift */,
 				2E50DB5B2B951D7C000DB071 /* ChatViewController.swift */,
 			);
-			path = Chat;
+			path = chat;
 			sourceTree = "<group>";
 		};
-		2E50DB2B2B8EC402000DB071 /* Other */ = {
+		2E50DB2B2B8EC402000DB071 /* other */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DB252B8EB345000DB071 /* ServerErrorViewController.swift */,
 				2E50DA912B8AC55E000DB071 /* TemplateViewController.swift */,
 			);
-			path = Other;
+			path = other;
 			sourceTree = "<group>";
 		};
-		2E50DB2C2B8EC425000DB071 /* Route */ = {
+		2E50DB2C2B8EC425000DB071 /* route */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DB2D2B8EC442000DB071 /* RoutesViewController.swift */,
 				2E50DB372B8FC080000DB071 /* RouteViewController.swift */,
 				2E50DB442B91FE40000DB071 /* MapViewController.swift */,
 			);
-			path = Route;
+			path = route;
 			sourceTree = "<group>";
 		};
 		2E50DB352B8F6A8E000DB071 /* Cells */ = {
@@ -336,7 +336,7 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		2E50DB362B8F6A9B000DB071 /* Entities */ = {
+		2E50DB362B8F6A9B000DB071 /* entities */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA842B8AB35D000DB071 /* User.swift */,
@@ -344,19 +344,19 @@
 				2E50DB4E2B933E95000DB071 /* Message.swift */,
 				2E50DB2F2B8F4327000DB071 /* Route.swift */,
 			);
-			path = Entities;
+			path = entities;
 			sourceTree = "<group>";
 		};
-		2E50DB392B900188000DB071 /* Global */ = {
+		2E50DB392B900188000DB071 /* global */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA862B8AB36C000DB071 /* Vars.swift */,
 				2E50DA822B8AB327000DB071 /* Constants.swift */,
 			);
-			path = Global;
+			path = global;
 			sourceTree = "<group>";
 		};
-		2E50DB4B2B933E64000DB071 /* EntitiesNotFromDB */ = {
+		2E50DB4B2B933E64000DB071 /* entitiesNotFromDB */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DB3A2B900EB2000DB071 /* RouteWithGrade.swift */,
@@ -364,7 +364,7 @@
 				2E50DB5F2B967C80000DB071 /* ChatDate.swift */,
 				2E540D0B2BB6847B00B96E59 /* MessageSocket.swift */,
 			);
-			path = EntitiesNotFromDB;
+			path = entitiesNotFromDB;
 			sourceTree = "<group>";
 		};
 		2E50DB582B935359000DB071 /* NetworkExtensions */ = {
