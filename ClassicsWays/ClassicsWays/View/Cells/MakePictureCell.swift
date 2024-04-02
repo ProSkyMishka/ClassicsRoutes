@@ -11,7 +11,6 @@ class MakePictureCell: UICollectionViewCell {
     static let reuseIdentifier: String = "MakePictureCell"
     
     private var picture = UIImageView()
-    private let trash = UIButton()
     
     // MARK: - Lifecycle
     override init(frame: CGRect) {

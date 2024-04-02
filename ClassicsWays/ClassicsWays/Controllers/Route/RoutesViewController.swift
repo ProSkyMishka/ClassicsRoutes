@@ -8,7 +8,6 @@
 import UIKit
 
 class RoutesViewController: TemplateViewController {
-    private var txtLabel = UILabel()
     private var stick = UIView()
     private var table: UITableView = UITableView(frame: .zero)
     private var routes: [Route] = []
