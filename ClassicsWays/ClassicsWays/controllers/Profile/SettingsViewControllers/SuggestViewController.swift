@@ -505,7 +505,7 @@ class SuggestViewController: UIViewController {
                                     self.uploadPictures()
                                     try await Task.sleep(nanoseconds:  Constants.chatWait)
                                     DispatchQueue.main.async {
-                                        self.navigationController?.pushViewController(RoutesViewController(), animated: true)
+                                        self.navigationController?.pushViewController(ProfileViewController(), animated: true)
                                     }
                                 } catch {
                                     print("Произошла ошибка: \(error)")
@@ -523,7 +523,7 @@ class SuggestViewController: UIViewController {
                         _ = try await NetworkService.shared.updateRoute(id: id, avatar: self.avatarResource, person: self.person.text!, name: self.name.text!, description: self.desc.text!, theme: self.theme, time: timeInt, start: self.place.text!, pictures: self.picturesResource, raiting: self.raiting, locations: self.locations)
                         uploadPictures()
                         DispatchQueue.main.async {
-                            self.navigationController?.pushViewController(RoutesViewController(), animated: true)
+                            self.navigationController?.pushViewController(ProfileViewController(), animated: true)
                         }
                     }
                 } catch {
