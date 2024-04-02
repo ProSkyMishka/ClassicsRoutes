@@ -49,7 +49,7 @@
 		2E50DB622B971BCA000DB071 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E50DB612B971BCA000DB071 /* MessageCell.swift */; };
 		2E540D0C2BB6847B00B96E59 /* MessageSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E540D0B2BB6847B00B96E59 /* MessageSocket.swift */; };
 		2E722D6E2BA48AC80032561A /* AddingPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E722D6D2BA48AC80032561A /* AddingPlaceViewController.swift */; };
-		2E921DA62BB76F3A0021E9E6 /* SocketFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E921DA52BB76F3A0021E9E6 /* SocketFunctions.swift */; };
+		2E921DA62BB76F3A0021E9E6 /* E.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E921DA52BB76F3A0021E9E6 /* E.swift */; };
 		2EA940FE2BAD8421004E103F /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA940FD2BAD8421004E103F /* LocationCell.swift */; };
 		2EA941002BAD9C44004E103F /* EditingCellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA940FF2BAD9C44004E103F /* EditingCellViewController.swift */; };
 		2EA941282BB3279D004E103F /* MakePictureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA941272BB3279D004E103F /* MakePictureCell.swift */; };
@@ -126,7 +126,7 @@
 		2E50DB612B971BCA000DB071 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		2E540D0B2BB6847B00B96E59 /* MessageSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSocket.swift; sourceTree = "<group>"; };
 		2E722D6D2BA48AC80032561A /* AddingPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddingPlaceViewController.swift; sourceTree = "<group>"; };
-		2E921DA52BB76F3A0021E9E6 /* SocketFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketFunctions.swift; sourceTree = "<group>"; };
+		2E921DA52BB76F3A0021E9E6 /* E.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = E.swift; sourceTree = "<group>"; };
 		2EA940FD2BAD8421004E103F /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
 		2EA940FF2BAD9C44004E103F /* EditingCellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingCellViewController.swift; sourceTree = "<group>"; };
 		2EA941272BB3279D004E103F /* MakePictureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakePictureCell.swift; sourceTree = "<group>"; };
@@ -192,11 +192,11 @@
 		2E50DA3D2B8AAEB5000DB071 /* ClassicsWays */ = {
 			isa = PBXGroup;
 			children = (
-				2EEFB0F62B98B8E300D370BA /* delegate */,
-				2E50DA812B8AB2C7000DB071 /* model */,
-				2EB58AC22BBC2B75008D6A24 /* view */,
-				2E50DA782B8AB1F9000DB071 /* controllers */,
-				2E50DA882B8AB3C6000DB071 /* services */,
+				2EEFB0F62B98B8E300D370BA /* Delegate */,
+				2E50DA812B8AB2C7000DB071 /* Model */,
+				2EB58AC22BBC2B75008D6A24 /* View */,
+				2E50DA782B8AB1F9000DB071 /* Controllers */,
+				2E50DA882B8AB3C6000DB071 /* Services */,
 				2E50DA472B8AAEB7000DB071 /* Assets.xcassets */,
 				2E50DA492B8AAEB7000DB071 /* LaunchScreen.storyboard */,
 				2E50DA4C2B8AAEB7000DB071 /* Info.plist */,
@@ -221,41 +221,41 @@
 			path = ClassicsWaysUITests;
 			sourceTree = "<group>";
 		};
-		2E50DA782B8AB1F9000DB071 /* controllers */ = {
+		2E50DA782B8AB1F9000DB071 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				2EA941292BB332B2004E103F /* extensions */,
-				2E50DB2C2B8EC425000DB071 /* route */,
-				2E50DB2B2B8EC402000DB071 /* other */,
-				2E50DB282B8EC3B8000DB071 /* start */,
-				2E50DB272B8EC3A5000DB071 /* profile */,
-				2E50DB2A2B8EC3E7000DB071 /* chat */,
-				2E50DB292B8EC3DE000DB071 /* rating */,
+				2EA941292BB332B2004E103F /* Extensions */,
+				2E50DB2C2B8EC425000DB071 /* Route */,
+				2E50DB2B2B8EC402000DB071 /* Other */,
+				2E50DB282B8EC3B8000DB071 /* Start */,
+				2E50DB272B8EC3A5000DB071 /* Profile */,
+				2E50DB2A2B8EC3E7000DB071 /* Chat */,
+				2E50DB292B8EC3DE000DB071 /* Rating */,
 			);
-			path = controllers;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
-		2E50DA812B8AB2C7000DB071 /* model */ = {
+		2E50DA812B8AB2C7000DB071 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				2EEFB0F92BA1CA7400D370BA /* ImagePicker.swift */,
-				2E50DB4B2B933E64000DB071 /* entitiesNotFromDB */,
-				2E50DB392B900188000DB071 /* global */,
-				2E50DB362B8F6A9B000DB071 /* entities */,
+				2E50DB4B2B933E64000DB071 /* EntitiesNotFromDB */,
+				2E50DB392B900188000DB071 /* Global */,
+				2E50DB362B8F6A9B000DB071 /* Entities */,
 			);
-			path = model;
+			path = Model;
 			sourceTree = "<group>";
 		};
-		2E50DA882B8AB3C6000DB071 /* services */ = {
+		2E50DA882B8AB3C6000DB071 /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA892B8AB3EA000DB071 /* NetworkService.swift */,
 				2E50DB582B935359000DB071 /* NetworkExtensions */,
 			);
-			path = services;
+			path = Services;
 			sourceTree = "<group>";
 		};
-		2E50DB202B8CB930000DB071 /* settingsViewControllers */ = {
+		2E50DB202B8CB930000DB071 /* SettingsViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DB1E2B8CB21A000DB071 /* ChangeAvatarViewController.swift */,
@@ -265,61 +265,61 @@
 				2E722D6D2BA48AC80032561A /* AddingPlaceViewController.swift */,
 				2EA940FF2BAD9C44004E103F /* EditingCellViewController.swift */,
 			);
-			path = settingsViewControllers;
+			path = SettingsViewControllers;
 			sourceTree = "<group>";
 		};
-		2E50DB272B8EC3A5000DB071 /* profile */ = {
+		2E50DB272B8EC3A5000DB071 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA7D2B8AB28F000DB071 /* ProfileViewController.swift */,
-				2E50DB202B8CB930000DB071 /* settingsViewControllers */,
+				2E50DB202B8CB930000DB071 /* SettingsViewControllers */,
 			);
-			path = profile;
+			path = Profile;
 			sourceTree = "<group>";
 		};
-		2E50DB282B8EC3B8000DB071 /* start */ = {
+		2E50DB282B8EC3B8000DB071 /* Start */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA792B8AB20C000DB071 /* RootViewController.swift */,
 				2E50DA7B2B8AB275000DB071 /* MainRegistrationViewController.swift */,
 			);
-			path = start;
+			path = Start;
 			sourceTree = "<group>";
 		};
-		2E50DB292B8EC3DE000DB071 /* rating */ = {
+		2E50DB292B8EC3DE000DB071 /* Rating */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA952B8BC07D000DB071 /* RatingViewController.swift */,
 			);
-			path = rating;
+			path = Rating;
 			sourceTree = "<group>";
 		};
-		2E50DB2A2B8EC3E7000DB071 /* chat */ = {
+		2E50DB2A2B8EC3E7000DB071 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA932B8B98E2000DB071 /* ChatsViewController.swift */,
 				2E50DB5B2B951D7C000DB071 /* ChatViewController.swift */,
 			);
-			path = chat;
+			path = Chat;
 			sourceTree = "<group>";
 		};
-		2E50DB2B2B8EC402000DB071 /* other */ = {
+		2E50DB2B2B8EC402000DB071 /* Other */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DB252B8EB345000DB071 /* ServerErrorViewController.swift */,
 				2E50DA912B8AC55E000DB071 /* TemplateViewController.swift */,
 			);
-			path = other;
+			path = Other;
 			sourceTree = "<group>";
 		};
-		2E50DB2C2B8EC425000DB071 /* route */ = {
+		2E50DB2C2B8EC425000DB071 /* Route */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DB2D2B8EC442000DB071 /* RoutesViewController.swift */,
 				2E50DB372B8FC080000DB071 /* RouteViewController.swift */,
 				2E50DB442B91FE40000DB071 /* MapViewController.swift */,
 			);
-			path = route;
+			path = Route;
 			sourceTree = "<group>";
 		};
 		2E50DB352B8F6A8E000DB071 /* Cells */ = {
@@ -336,7 +336,7 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		2E50DB362B8F6A9B000DB071 /* entities */ = {
+		2E50DB362B8F6A9B000DB071 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA842B8AB35D000DB071 /* User.swift */,
@@ -344,19 +344,19 @@
 				2E50DB4E2B933E95000DB071 /* Message.swift */,
 				2E50DB2F2B8F4327000DB071 /* Route.swift */,
 			);
-			path = entities;
+			path = Entities;
 			sourceTree = "<group>";
 		};
-		2E50DB392B900188000DB071 /* global */ = {
+		2E50DB392B900188000DB071 /* Global */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA862B8AB36C000DB071 /* Vars.swift */,
 				2E50DA822B8AB327000DB071 /* Constants.swift */,
 			);
-			path = global;
+			path = Global;
 			sourceTree = "<group>";
 		};
-		2E50DB4B2B933E64000DB071 /* entitiesNotFromDB */ = {
+		2E50DB4B2B933E64000DB071 /* EntitiesNotFromDB */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DB3A2B900EB2000DB071 /* RouteWithGrade.swift */,
@@ -364,7 +364,7 @@
 				2E50DB5F2B967C80000DB071 /* ChatDate.swift */,
 				2E540D0B2BB6847B00B96E59 /* MessageSocket.swift */,
 			);
-			path = entitiesNotFromDB;
+			path = EntitiesNotFromDB;
 			sourceTree = "<group>";
 		};
 		2E50DB582B935359000DB071 /* NetworkExtensions */ = {
@@ -374,37 +374,37 @@
 				2E50DB522B933F35000DB071 /* RouteFunctions.swift */,
 				2E50DB562B933FF7000DB071 /* MessageFunctions.swift */,
 				2E50DB542B933F81000DB071 /* ChatFunctions.swift */,
-				2E921DA52BB76F3A0021E9E6 /* SocketFunctions.swift */,
+				2E921DA52BB76F3A0021E9E6 /* E.swift */,
 			);
 			path = NetworkExtensions;
 			sourceTree = "<group>";
 		};
-		2EA941292BB332B2004E103F /* extensions */ = {
+		2EA941292BB332B2004E103F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA8B2B8AB431000DB071 /* UIViewControllerExtension.swift */,
 				2EB58AC02BBAF6F5008D6A24 /* ChatViewControllerExtension.swift */,
 				2EA9412A2BB332EC004E103F /* SuggestViewControllerExtension.swift */,
 			);
-			path = extensions;
+			path = Extensions;
 			sourceTree = "<group>";
 		};
-		2EB58AC22BBC2B75008D6A24 /* view */ = {
+		2EB58AC22BBC2B75008D6A24 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA8D2B8AB45A000DB071 /* UIView+Pin.swift */,
 				2E50DB352B8F6A8E000DB071 /* Cells */,
 			);
-			path = view;
+			path = View;
 			sourceTree = "<group>";
 		};
-		2EEFB0F62B98B8E300D370BA /* delegate */ = {
+		2EEFB0F62B98B8E300D370BA /* Delegate */ = {
 			isa = PBXGroup;
 			children = (
 				2E50DA3E2B8AAEB5000DB071 /* AppDelegate.swift */,
 				2E50DA402B8AAEB5000DB071 /* SceneDelegate.swift */,
 			);
-			path = delegate;
+			path = Delegate;
 			sourceTree = "<group>";
 		};
 		5885FB9051304EAD5D002275 /* Frameworks */ = {
@@ -609,7 +609,7 @@
 				2EB58ABD2BB922EC008D6A24 /* ChatCell.swift in Sources */,
 				2E50DB242B8E8812000DB071 /* ChangePasswordViewController.swift in Sources */,
 				2EEFB0FA2BA1CA7400D370BA /* ImagePicker.swift in Sources */,
-				2E921DA62BB76F3A0021E9E6 /* SocketFunctions.swift in Sources */,
+				2E921DA62BB76F3A0021E9E6 /* E.swift in Sources */,
 				2E50DA8E2B8AB45A000DB071 /* UIView+Pin.swift in Sources */,
 				2E50DB602B967C80000DB071 /* ChatDate.swift in Sources */,
 				2E50DA942B8B98E2000DB071 /* ChatsViewController.swift in Sources */,
