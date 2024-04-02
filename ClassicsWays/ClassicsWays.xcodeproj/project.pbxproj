@@ -192,12 +192,11 @@
 		2E50DA3D2B8AAEB5000DB071 /* ClassicsWays */ = {
 			isa = PBXGroup;
 			children = (
-				2EB58AC22BBC2B75008D6A24 /* view */,
 				2EEFB0F62B98B8E300D370BA /* delegate */,
-				2EEFB0F52B97BCA000D370BA /* helper */,
-				2E50DA882B8AB3C6000DB071 /* services */,
 				2E50DA812B8AB2C7000DB071 /* model */,
+				2EB58AC22BBC2B75008D6A24 /* view */,
 				2E50DA782B8AB1F9000DB071 /* controllers */,
+				2E50DA882B8AB3C6000DB071 /* services */,
 				2E50DA472B8AAEB7000DB071 /* Assets.xcassets */,
 				2E50DA492B8AAEB7000DB071 /* LaunchScreen.storyboard */,
 				2E50DA4C2B8AAEB7000DB071 /* Info.plist */,
@@ -225,6 +224,7 @@
 		2E50DA782B8AB1F9000DB071 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				2EA941292BB332B2004E103F /* extensions */,
 				2E50DB2C2B8EC425000DB071 /* Route */,
 				2E50DB2B2B8EC402000DB071 /* Other */,
 				2E50DB282B8EC3B8000DB071 /* Start */,
@@ -238,6 +238,7 @@
 		2E50DA812B8AB2C7000DB071 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				2EEFB0F92BA1CA7400D370BA /* ImagePicker.swift */,
 				2E50DB4B2B933E64000DB071 /* EntitiesNotFromDB */,
 				2E50DB392B900188000DB071 /* Global */,
 				2E50DB362B8F6A9B000DB071 /* Entities */,
@@ -391,19 +392,10 @@
 		2EB58AC22BBC2B75008D6A24 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				2E50DA8D2B8AB45A000DB071 /* UIView+Pin.swift */,
 				2E50DB352B8F6A8E000DB071 /* Cells */,
 			);
 			path = view;
-			sourceTree = "<group>";
-		};
-		2EEFB0F52B97BCA000D370BA /* helper */ = {
-			isa = PBXGroup;
-			children = (
-				2EA941292BB332B2004E103F /* extensions */,
-				2EEFB0F92BA1CA7400D370BA /* ImagePicker.swift */,
-				2E50DA8D2B8AB45A000DB071 /* UIView+Pin.swift */,
-			);
-			path = helper;
 			sourceTree = "<group>";
 		};
 		2EEFB0F62B98B8E300D370BA /* delegate */ = {
