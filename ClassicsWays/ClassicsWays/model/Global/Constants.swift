@@ -7,7 +7,7 @@
 
 import UIKit
 
-class Constants {
+struct Constants {
     static let usersKey = ""
     
     static let coef: CGFloat = 24

@@ -192,6 +192,7 @@
 		2E50DA3D2B8AAEB5000DB071 /* ClassicsWays */ = {
 			isa = PBXGroup;
 			children = (
+				2EB58AC22BBC2B75008D6A24 /* view */,
 				2EEFB0F62B98B8E300D370BA /* delegate */,
 				2EEFB0F52B97BCA000D370BA /* helper */,
 				2E50DA882B8AB3C6000DB071 /* services */,
@@ -240,7 +241,6 @@
 				2E50DB4B2B933E64000DB071 /* EntitiesNotFromDB */,
 				2E50DB392B900188000DB071 /* Global */,
 				2E50DB362B8F6A9B000DB071 /* Entities */,
-				2E50DB352B8F6A8E000DB071 /* Cells */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -386,6 +386,14 @@
 				2EA9412A2BB332EC004E103F /* SuggestViewControllerExtension.swift */,
 			);
 			path = extensions;
+			sourceTree = "<group>";
+		};
+		2EB58AC22BBC2B75008D6A24 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				2E50DB352B8F6A8E000DB071 /* Cells */,
+			);
+			path = view;
 			sourceTree = "<group>";
 		};
 		2EEFB0F52B97BCA000D370BA /* helper */ = {

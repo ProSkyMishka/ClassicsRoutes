@@ -7,7 +7,7 @@
 
 import UIKit
 
-class Vars {
+struct Vars {
     static var password: String = Constants.nilString
     static var user: User?
     static var chat: ChatDate?
